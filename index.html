@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hafız | Portfolyo</title>
+    <title>Yuşa Çiloğlan | Kişisel Portfolyo</title>
     <style>
+        /* Genel Sıfırlama ve Font */
         * {
             margin: 0;
             padding: 0;
@@ -12,155 +13,219 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
+        /* Canlı Neon Arka Plan Animasyonu */
+        @keyframes bgPulse {
+            0% { background-color: #030712; }
+            50% { background-color: #0b1528; }
+            100% { background-color: #030712; }
+        }
+
         body {
-            background-color: #0f172a;
-            color: #e2e8f0;
+            animation: bgPulse 8s ease-in-out infinite;
+            color: #f1f5f9;
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
+        /* Header Kısmı */
         header {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            padding: 3rem 1rem;
+            background: linear-gradient(180deg, #020617 0%, rgba(15, 23, 42, 0.8) 100%);
+            padding: 4rem 1rem 3rem 1rem;
             text-align: center;
-            border-bottom: 2px solid #38bdf8;
+            border-bottom: 2px solid #06b6d4;
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
         }
 
-        .profile-img {
-            width: 120px;
-            height: 120px;
+        /* Parlayan Neon Profil Çemberi */
+        .profile-icon {
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
-            background-color: #38bdf8;
-            margin: 0 auto 1rem;
+            background-color: #0f172a;
+            border: 3px solid #00f2fe;
+            box-shadow: 0 0 15px #00f2fe, inset 0 0 15px #00f2fe;
+            margin: 0 auto 1.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3rem;
-            color: #0f172a;
+            font-size: 2.5rem;
         }
 
+        /* Neon Yazı Efektleri */
         h1 {
             font-size: 2.5rem;
             color: #fff;
+            text-shadow: 0 0 10px #00f2fe, 0 0 20px #00f2fe;
             margin-bottom: 0.5rem;
+            letter-spacing: 1px;
         }
 
         .subtitle {
             color: #38bdf8;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 600;
-            letter-spacing: 1px;
+            text-shadow: 0 0 5px rgba(56, 189, 248, 0.5);
         }
 
+        /* Ana Konteyner */
         .container {
-            max-width: 800px;
+            max-width: 750px;
             margin: 2rem auto;
-            padding: 0 1rem;
+            padding: 0 1.2rem;
         }
 
+        /* Kartlar / Bölümler */
         section {
-            background-color: #1e293b;
-            padding: 2rem;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            background: rgba(15, 23, 42, 0.9);
+            padding: 2.2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border: 1px solid #1e293b;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        section:hover {
+            transform: translateY(-2px);
+            border-color: #06b6d4;
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);
         }
 
         h2 {
-            color: #38bdf8;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid #334155;
-            padding-bottom: 0.5rem;
+            color: #00f2fe;
+            font-size: 1.5rem;
+            margin-bottom: 1.2rem;
+            text-shadow: 0 0 8px rgba(0, 242, 254, 0.6);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .skills-grid {
+        p {
+            color: #cbd5e1;
+            font-size: 1.1rem;
+            text-align: justify;
+        }
+
+        /* Başarılar ve İlgi Alanları Listesi */
+        .grid-list {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            grid-template-columns: 1fr;
             gap: 1rem;
             margin-top: 1rem;
         }
 
-        .skill-card {
-            background-color: #334155;
-            padding: 0.75rem;
-            text-align: center;
-            border-radius: 6px;
-            font-weight: 500;
+        @media(min-width: 480px) {
+            .grid-list {
+                grid-template-columns: 1fr 1fr;
+            }
         }
 
-        .contact-links {
+        .grid-item {
+            background: #1e293b;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #38bdf8;
+            font-weight: 600;
+            color: #f8fafc;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        /* Özel Vurgulu Kart (Umre İçin) */
+        .highlight-card {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            border: 1px dashed #f43f5e;
+            border-left: 4px solid #f43f5e;
+            box-shadow: 0 0 10px rgba(244, 63, 94, 0.2);
+        }
+
+        .highlight-card h2 {
+            color: #f43f5e;
+            text-shadow: 0 0 8px rgba(244, 63, 94, 0.6);
+        }
+
+        /* İletişim Butonları */
+        .btn-group {
             display: flex;
             gap: 1rem;
             justify-content: center;
-            margin-top: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
         }
 
         .btn {
-            background-color: #38bdf8;
-            color: #0f172a;
-            padding: 0.75rem 1.5rem;
+            background: transparent;
+            color: #00f2fe;
+            border: 2px solid #00f2fe;
+            padding: 0.8rem 2rem;
             text-decoration: none;
-            border-radius: 5px;
+            border-radius: 30px;
             font-weight: bold;
-            transition: background 0.3s ease;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+            transition: all 0.3s ease;
         }
 
         .btn:hover {
-            background-color: #0ea5e9;
+            background: #00f2fe;
+            color: #020617;
+            box-shadow: 0 0 20px #00f2fe;
         }
 
         footer {
             text-align: center;
-            padding: 2rem;
-            color: #64748b;
+            padding: 3rem 1rem;
+            color: #475569;
             font-size: 0.9rem;
+            letter-spacing: 1px;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="profile-img">📖</div>
-        <h1>Hafız</h1>
-        <p class="subtitle">Yazılım Geliştirici & Tasarımcı</p>
+        <div class="profile-icon">🌙</div>
+        <h1>Yuşa Çiloğlan</h1>
+        <p class="subtitle">Hafız & Müezzin</p>
     </header>
 
     <div class="container">
 
-        <section id="about">
-            <h2>Hakkımda</h2>
-            <p>Merhaba! Ben Hafız. Kelamın hafızasıyla modern teknolojinin dinamizmini bir araya getirmeyi seven, projeler üreten ve sürekli kendini geliştiren biriyim. HTML5, CSS3 ve JavaScript başta olmak üzere web teknolojileri ve yazılım çözümleri üzerinde çalışıyorum.</p>
+        <section id="hakkimda">
+            <h2>✨ Hakkımda</h2>
+            <p>Selamun Aleyküm, ben Yuşa Çiloğlan. Hayatını Kur'an-ı Kerim'in rehberliğiyle şekillendiren, kelamın hafızasını kalbinde taşıyan bir hafızım. Manevi değerlere hizmet etmeyi, ezan-ı muhammediyi en güzel sadayla gökyüzüne ulaştırmayı kendime gaye edindim. Kendimi bu yolda sürekli geliştirmeye ve güzel ahlak üzere yürümeye gayret ediyorum.</p>
         </section>
 
-        <section id="skills">
-            <h2>Yetenekler & İlgi Alanları</h2>
-            <div class="skills-grid">
-                <div class="skill-card">HTML5 & CSS3</div>
-                <div class="skill-card">JavaScript</div>
-                <div class="skill-card">Siber Güvenlik</div>
-                <div class="skill-card">Scripting</div>
-                <div class="skill-card">Web Otomasyon</div>
-                <div class="skill-card">Veritabanı</div>
+        <section id="ilgi-alanlari">
+            <h2>🕌 İlgi Alanları & Başarılar</h2>
+            <div class="grid-list">
+                <div class="grid-item">📖 Kur'an-ı Kerim Hıfzedilmesi</div>
+                <div class="grid-item">🎙️ Ezanı Güzel Okuma Çalışmaları</div>
+                <div class="grid-item">🏆 Ezan Okuma Yarışması İl 3.'lüğü</div>
+                <div class="grid-item">📚 Dini ve Manevi Rehberlik</div>
             </div>
         </section>
 
-        <section id="projects">
-            <h2>Projeler</h2>
-            <p>Yakında buraya üzerinde çalıştığım güncel web panellerini, Discord bot projelerini ve simülasyon araçlarını ekleyeceğim.</p>
+        <section id="umre" class="highlight-card">
+            <h2>🕋 Umre Yolculuğu</h2>
+            <p>Manevi hayatımın en dönüm noktası ve en kıymetli dilimlerinden biri, kutsal topraklara gerçekleştirdiğim Umre yolculuğudur. Beytullah'ın gölgesinde geçirilen o huzur dolu günler, Efendimiz'in (S.A.V.) izinde yürümek, ruhuma bambaşka bir ufuk ve derinlik kattı.</p>
         </section>
 
-        <section id="contact">
-            <h2>İletişim</h2>
-            <p>Benimle iletişime geçmek, projelerimde yer almak veya iş birliği yapmak için aşağıdaki bağlantıları kullanabilirsiniz.</p>
-            <div class="contact-links">
-                <a href="#" class="btn">E-posta Gönder</a>
-                <a href="#" class="btn" style="background-color: #475569; color: #fff;">Instagram</a>
+        <section id="iletisim">
+            <h2>💬 İletişim</h2>
+            <p style="text-align: center; margin-bottom: 1rem;">Benimle manevi projeler, sohbetler veya iş birlikleri için iletişime geçebilirsiniz.</p>
+            <div class="btn-group">
+                <a href="#" class="btn">Instagram</a>
+                <a href="#" class="btn" style="color: #f43f5e; border-color: #f43f5e; box-shadow: 0 0 10px rgba(244,63,94,0.2);">Mesaj Gönder</a>
             </div>
         </section>
 
     </div>
 
     <footer>
-        <p>&copy; 2026 Hafız. Tüm Hakları Saklıdır.</p>
+        <p>&copy; 2026 Yuşa Çiloğlan. Tüm Hakları Saklıdır.</p>
     </footer>
 
 </body>
