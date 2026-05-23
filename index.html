@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yuşa Çiloğlan | Hafızlık Portfolyosu</title>
+    <title>Yuşa Çiloğlan | Resmi Portfolyo</title>
     <style>
+        /* Temel Ayarlar ve Font Seçimi */
         * {
             margin: 0;
             padding: 0;
@@ -12,15 +13,15 @@
             font-family: 'Times New Roman', Times, serif, 'Segoe UI';
         }
 
-        /* Mat Siyah ve Derin Gece Mavisi Geçişi */
-        @keyframes darkBg {
-            0% { background-color: #05070a; }
-            50% { background-color: #0c111c; }
-            100% { background-color: #05070a; }
+        /* Ağırbaşlı Mat Siyah ve Loş Lacivert Geçişi */
+        @keyframes portfolioBg {
+            0% { background-color: #04060a; }
+            50% { background-color: #0b111e; }
+            100% { background-color: #04060a; }
         }
 
         body {
-            animation: darkBg 12s ease-in-out infinite;
+            animation: portfolioBg 12s ease-in-out infinite;
             color: #d1d5db;
             line-height: 1.8;
             padding: 0 1rem;
@@ -32,7 +33,7 @@
             border-bottom: 1px solid #1e293b;
         }
 
-        .arabic-main {
+        .arabic-banner {
             font-size: 1.8rem;
             color: #38bdf8;
             margin-bottom: 0.8rem;
@@ -40,7 +41,7 @@
         }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: 2.6rem;
             color: #ffffff;
             font-weight: 500;
             letter-spacing: 1px;
@@ -57,13 +58,14 @@
             margin: 3rem auto;
         }
 
+        /* Kurumsal Portfolyo Kartları */
         section {
-            background: rgba(13, 18, 30, 0.95);
+            background: rgba(11, 15, 26, 0.95);
             padding: 2.5rem;
             border-radius: 4px;
             margin-bottom: 2rem;
             border: 1px solid #1e293b;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
         }
 
         h2 {
@@ -78,7 +80,7 @@
             letter-spacing: 1px;
         }
 
-        .arabic-sub {
+        .arabic-tag {
             color: #38bdf8;
             font-size: 1.2rem;
         }
@@ -90,12 +92,13 @@
             text-indent: 1.5rem;
         }
 
-        .history-list {
+        /* Nitelik ve Başarı Listesi */
+        .portfolio-list {
             margin-top: 1.2rem;
             list-style: none;
         }
 
-        .history-list li {
+        .portfolio-list li {
             position: relative;
             padding-left: 1.5rem;
             margin-bottom: 1rem;
@@ -103,7 +106,7 @@
             font-size: 1.05rem;
         }
 
-        .history-list li::before {
+        .portfolio-list li::before {
             content: "▪";
             color: #38bdf8;
             position: absolute;
@@ -112,13 +115,13 @@
             top: 2px;
         }
 
-        .btn-holder {
+        .btn-wrapper {
             display: flex;
             justify-content: center;
             margin-top: 2rem;
         }
 
-        .btn-link {
+        .portfolio-btn {
             background: transparent;
             color: #ffffff;
             border: 1px solid #475569;
@@ -130,9 +133,9 @@
             transition: all 0.3s ease;
         }
 
-        .btn-link:hover {
+        .portfolio-btn:hover {
             background: #ffffff;
-            color: #05070a;
+            color: #04060a;
             border-color: #ffffff;
         }
 
@@ -147,39 +150,39 @@
 </head>
 <body>
 
-    <!-- Başlık Alanı -->
+    <!-- Başlık Paneli -->
     <header>
-        <div class="arabic-main">بِسْمِ اللهِ الرَّحْمٰnِ الرَّحِيمِ</div>
+        <div class="arabic-banner">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ</div>
         <h1>Yuşa Çiloğlan</h1>
-        <p class="subtitle">Hafızlık Dönemi ve Kurs Hatıraları</p>
+        <p class="subtitle">Hafızlık ve Kıraat Portfolyosu</p>
     </header>
 
     <div class="container">
 
-        <!-- Biyografi / Kurstaki Günler -->
+        <!-- Hakkımda / Kurumsal Özet -->
         <section>
-            <h2>I. Kurs Yılları ve Mücadele <span class="arabic-sub">‌[ أَيَّامُ الدِّرَاسَةِ ]</span></h2>
-            <p>Ben Yuşa Çiloğlan. Hayatımın en mühim ve kıymetli dönemini, Kur'an kursunun o manevi ikliminde geçirdiğim hafızlık yılları teşkil etmektedir. Erken vakitlerde rahle başına geçerek başladığımız ezber mesaileri, hocalarımızın huzurunda verdiğimiz sayfalar ve her bir ayeti zihnimize nakşetmek için sarf ettiğimiz emekler, bugünkü şahsiyetimizin en sağlam temelini oluşturmuştur.</p>
-            <p style="margin-top: 1rem;">Bu yolda tek başıma değildim; kurstaki kardeşlerimle, kankalarımla omuz omuza vererek acısıyla tatlısıyla koca bir dönemi paylaştık. Zorlandığımız anlarda birbirimize verdiğimiz destek, beraber yaptığımız tekrarlar ve o samimi dostluk bağları, hafızlık mücadelesini bizim için unutulmaz bir hâtıraya dönüştürdü.</p>
+            <h2>I. Kurumsal Özet <span class="arabic-tag">‌[ الْحَافِظُ ]</span></h2>
+            <p>Ben Yuşa Çiloğlan. Erken yaşlarda başladığım ve Kur'an kursu eğitimi çatısı altında tamamladığım hıfzü'l-Kur'an süreciyle birlikte Hafızlık unvanını ihraz ettim. Hafızlık eğitimim boyunca kazandığım yüksek disiplin, ezber yeteneği, ses ve makam kontrolü gibi alanlardaki niteliklerimi kurumsal bir zeminde sürdürmekteyim. Eğitimin gereklerini başarıyla yerine getirmiş bir hafız olarak, tilavet, ezan icrası ve manevi rehberlik alanlarında yetkinlik sahibiyim.</p>
         </section>
 
-        <!-- Kronoloji ve Başarılar -->
+        <!-- Yetkinlikler ve Başarılar -->
         <section>
-            <h2>II. Elde Edilen Kazanımlar <span class="arabic-sub">‌[ الذِّكْرَيَاتُ ]</span></h2>
-            <ul class="history-list">
-                <li><strong>Kelâmın Hıfzedilmesi:</strong> Kur'an kursu disiplini içerisinde hıfzü'l-Kur'an sürecinin başarıyla tamamlanması.</li>
-                <li><strong>Ezan-ı Muhammedî İcrası:</strong> Kursta temelleri atılan makam ve seda çalışmalarının neticesinde elde edilen Ezan Okuma Yarışması İl Üçüncülüğü.</li>
-                <li><strong>Dostluk ve Beraberlik:</strong> Kurs ortamında kankalarımızla kurulan, hafızlık rahlesinin samimiyetini ve manevi disiplinini taşıyan köklü dostluklar.</li>
-                <li><strong>Manevi Seyahat:</strong> Bu sabırlı ve meşakkatli sürecin bir meyvesi olarak nasip olan mukaddes Umre yolculuğu deneyimi.</li>
+            <h2>II. Nitelikler & Başarılar <span class="arabic-tag">‌[ الْبَيَانُ ]</span></h2>
+            <p>Eğitim dönemi ve sonrasında gerçekleştirilen faaliyetler ile resmi başarılar şu şekildedir:</p>
+            <ul class="portfolio-list">
+                <li><strong>Hıfzü'l-Kur'an Gelişimi:</strong> Kurs disiplini içerisinde tamamlanan, güçlü ezber ve mushaf hakimiyeti yetkinliği.</li>
+                <li><strong>Ezanı Güzel Okuma Yarışması:</strong> Makam, seda ve icra performansı neticesinde elde edilen İl Üçüncülüğü derecesi.</li>
+                <li><strong>Makam ve Ses İcrası:</strong> Dini musiki kurallarına uygun olarak ezan ve kıraat alanlarında profesyonel çalışma disiplini.</li>
+                <li><strong>Saha Deneyimi ve Vizyon:</strong> Sürecin getirdiği manevi donanımın bir parçası olarak tamamlanan mukaddes Umre seyahati ve saha tetkikleri.</li>
             </ul>
         </section>
 
         <!-- İletişim / Instagram -->
         <section>
-            <h2>III. İrtibat Paneli <span class="arabic-sub">‌[ التَّوَاصُلُ ]</span></h2>
-            <p style="text-align: center; text-indent: 0; margin-bottom: 1rem;">Geçmişe dair bağları koparmamak ve ortak manevi çalışmalarda bir araya gelmek adına doğrudan alt taraftaki resmi kanal üzerinden irtibat kurabilirsiniz.</p>
-            <div class="btn-holder">
-                <a href="https://instagram.com/yusa_cn" target="_blank" class="btn-link">Instagram (@yusa_cn)</a>
+            <h2>III. Resmi İrtibat Kanalları <span class="arabic-tag">‌[ التَّوَاصُلُ ]</span></h2>
+            <p style="text-align: center; text-indent: 0; margin-bottom: 1rem;">Projeler, kurumsal çalışmalar veya iş birlikleri hakkında detaylı görüşme sağlamak üzere resmi sosyal medya hesabı üzerinden iletişime geçebilirsiniz.</p>
+            <div class="btn-wrapper">
+                <a href="https://instagram.com/yusa_cn" target="_blank" class="portfolio-btn">Instagram (@yusa_cn)</a>
             </div>
         </section>
 
@@ -187,7 +190,7 @@
 
     <!-- Alt Bilgi -->
     <footer>
-        <p>YÜŞA ÇİLOĞLAN &copy; 2026</p>
+        <p>YÜŞA ÇİLOĞLAN &copy; 2026 | RESMİ PORTFOLYO SEYFESİ</p>
     </footer>
 
 </body>
