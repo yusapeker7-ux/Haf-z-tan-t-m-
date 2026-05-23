@@ -2,28 +2,76 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hikâyem | Hafız Yuşa</title><style>
+<title>Hikâyem | Hafız Yuşa Çiloğlan</title><style>
 body{
   margin:0;
   font-family: Arial;
-  background:#050505;
   color:#e5e7eb;
+  overflow-x:hidden;
 
+  background: linear-gradient(-45deg, #020617, #0b1b3a, #020617, #0a2a5e);
+  background-size: 400% 400%;
+  animation: gradientMove 12s ease infinite;
+}
+
+@keyframes gradientMove{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
   background-image:
-    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
   background-size:40px 40px;
+  pointer-events:none;
+  opacity:0.35;
 }
 
 header{
   text-align:center;
   padding:30px 20px;
-  border-bottom:1px solid #1f2937;
+  border-bottom:1px solid rgba(147,197,253,0.2);
 }
 
 h1{
   margin:0;
+  font-size:34px;
   color:#60a5fa;
+  text-shadow:0 0 20px #2563eb;
+}
+
+.subtitle{
+  opacity:0.8;
+}
+
+.topbar{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:15px;
+}
+
+.btn{
+  padding:10px 14px;
+  border-radius:12px;
+  border:1px solid rgba(147,197,253,0.3);
+  background:rgba(2,6,23,0.6);
+  color:white;
+  cursor:pointer;
+  transition:0.3s;
+  backdrop-filter: blur(10px);
+}
+
+.btn:hover{
+  transform:scale(1.05);
+  border-color:#60a5fa;
+  box-shadow:0 0 15px #2563eb;
 }
 
 .container{
@@ -32,38 +80,16 @@ h1{
   padding:20px;
 }
 
-.topbar{
-  display:flex;
-  justify-content:center;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-bottom:20px;
-}
-
-.btn{
-  padding:10px 14px;
-  border-radius:10px;
-  border:1px solid #1f2937;
-  background:#0b0f1a;
-  color:white;
-  cursor:pointer;
-  transition:0.3s;
-}
-
-.btn:hover{
-  border-color:#3b82f6;
-  transform:scale(1.05);
-}
-
 .card{
-  background:#0b0f1a;
-  border:1px solid #1f2937;
-  border-radius:14px;
+  background:rgba(2,6,23,0.75);
+  border:1px solid rgba(147,197,253,0.2);
+  border-radius:16px;
   padding:22px;
   margin-bottom:20px;
+  box-shadow:0 0 20px rgba(37,99,235,0.15);
 
   opacity:0;
-  transform:translateY(20px);
+  transform:translateY(25px);
   transition:1s;
 }
 
@@ -86,9 +112,24 @@ h1{
   margin-top:10px;
 }
 
+.particle{
+  position:fixed;
+  width:6px;
+  height:6px;
+  background:#60a5fa;
+  border-radius:50%;
+  opacity:0.4;
+  animation:floatUp 10s linear infinite;
+}
+
+@keyframes floatUp{
+  from{transform:translateY(100vh); opacity:0}
+  50%{opacity:0.6}
+  to{transform:translateY(-10vh); opacity:0}
+}
 </style></head><body><header>
-  <h1>Hafız Yuşa Çiloğlan</h1>
-  <p>Hafız • Umre Yolcusu • İlim Talebesi</p>  <div class="topbar">
+  <h1>HAFIZ YUŞA</h1>
+  <div class="subtitle">Kur’an • İlim • Yolculuk • Yazılım</div>  <div class="topbar">
     <button class="btn" onclick="scrollToCard(0)">Hakkımda</button>
     <button class="btn" onclick="scrollToCard(1)">Hafızlık</button>
     <button class="btn" onclick="scrollToCard(2)">Ezan</button>
@@ -98,44 +139,28 @@ h1{
   </div>
 </header><div class="container"><div class="card">
   <div class="title">Hakkımda</div>
-  <p>
-    Ben Hafız Yuşa Çiloğlan. Kur’an-ı Kerim ile büyümüş, ilim ve yazılım alanında kendini geliştirmeye çalışan bir öğrenciyim.
-    Hayatım sabır, tekrar ve disiplin üzerine kurulu.
-  </p>
+  <p>Ben Hafız Yuşa Çiloğlan. Kur’an ile büyümüş, ilim ve yazılım alanında kendini geliştiren bir öğrenciyim. Hayatım disiplin ve sabır üzerine kurulu.</p>
   <div class="arabic">وَقُل رَّبِّ زِدْنِي عِلْمًا</div>
 </div><div class="card">
   <div class="title">Hafızlık</div>
-  <p>
-    Hafızlık benim için sadece ezber değil, bir hayat eğitimi oldu. Zamanla sabır ve disiplin kazandım.
-  </p>
+  <p>Hafızlık benim için sadece ezber değil, karakter inşasıdır. Zorlandım ama devam ettim.</p>
 </div><div class="card">
   <div class="title">Ezan Yolculuğu</div>
-  <p>
-    Küçük yaşlardan itibaren makam eğitimi aldım ve İl Ezan 3.’lüğü elde ettim.
-    Ezan benim için bir ses değil, bir ruh halidir.
-  </p>
+  <p>Küçük yaşlardan itibaren makam eğitimi aldım ve İl Ezan 3.’lüğü elde ettim.</p>
   <div class="arabic">إِنَّ مَعَ ٱلْعُسْرِ يُسْرًا</div>
 </div><div class="card">
   <div class="title">Umre Yolculuğum 🕋</div>
-  <p>
-    Umre benim hayatımda bir dönüm noktası oldu. Kâbe’yi ilk gördüğüm an anlatılamaz bir huzurdu.
-    Orada insan kendini yeniden tanıyor.
-  </p>
+  <p>Umre benim için bir dönüşüm oldu. Kâbe’yi ilk gördüğüm an hayatım değişti.</p>
+  <p>Orada insan kendini yeniden tanır ve dünya bağlarını farklı görür.</p>
   <div class="arabic">رَبِّ اجْعَلْنِي مُقِيمَ ٱلصَّلَاةِ</div>
 </div><div class="card">
   <div class="title">İlim ve Kitap</div>
-  <p>
-    Kitaplar bana sadece bilgi değil, düşünme disiplini kazandırdı.
-  </p>
   <ul>
-    <li>Kur’an-ı Kerim → sabır ve teslimiyet</li>
+    <li>Kur’an-ı Kerim → sabır</li>
     <li>Riyazus-Salihin → ahlak</li>
     <li>İslam tarihi → bilinç</li>
   </ul>
-</div></div><!-- QURAN AMBIENCE --><audio autoplay loop>
-  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_7b5a4c2b6c.mp3" type="audio/mpeg">
-</audio><script>
-// scroll animation
+</div></div><script>
 const cards = document.querySelectorAll('.card');
 
 const observer = new IntersectionObserver(entries => {
@@ -148,9 +173,16 @@ const observer = new IntersectionObserver(entries => {
 
 cards.forEach(c => observer.observe(c));
 
-// smooth scroll
 function scrollToCard(i){
   cards[i].scrollIntoView({behavior:'smooth'});
+}
+
+for(let i=0;i<25;i++){
+  let p=document.createElement('div');
+  p.className='particle';
+  p.style.left=Math.random()*100+'vw';
+  p.style.animationDuration=(5+Math.random()*10)+'s';
+  document.body.appendChild(p);
 }
 </script></body>
 </html>
