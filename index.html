@@ -6,12 +6,11 @@
 <title>Hafız Yuşa Çiloğlan</title>
 
 <style>
-/* ===== GLOBAL ===== */
 body{
   margin:0;
   font-family:Arial;
   color:#e5e7eb;
-  overflow-x:hidden;
+  overflow:hidden;
 
   background:#05060a;
   background-image:
@@ -29,7 +28,7 @@ body::before{
   pointer-events:none;
 }
 
-/* ===== INTRO SCREEN ===== */
+/* INTRO (FAST) */
 #intro{
   position:fixed;
   inset:0;
@@ -39,56 +38,44 @@ body::before{
   justify-content:center;
   flex-direction:column;
   z-index:999;
-  animation:fadeOut 1.5s ease forwards;
-  animation-delay:2.2s;
+  animation:fadeOut 1s ease forwards;
+  animation-delay:0.8s; /* 🔥 hızlı geçiş */
 }
 
 #intro h1{
   color:#93c5fd;
   text-shadow:0 0 20px #2563eb;
-  font-size:28px;
   letter-spacing:2px;
-}
-
-#intro p{
-  opacity:0.6;
 }
 
 @keyframes fadeOut{
   to{opacity:0; visibility:hidden;}
 }
 
-/* ===== HEADER ===== */
+/* HEADER */
 header{
   text-align:center;
-  padding:40px 20px 15px;
-  animation:drop 1s ease;
-}
-
-@keyframes drop{
-  from{transform:translateY(-20px); opacity:0}
-  to{transform:translateY(0); opacity:1}
+  padding:30px 20px 10px;
 }
 
 h1{
   margin:0;
-  font-size:40px;
+  font-size:38px;
   color:#93c5fd;
   text-shadow:0 0 18px #2563eb;
 }
 
 .subtitle{
   opacity:0.7;
-  margin-top:5px;
 }
 
-/* NAV BOXES */
+/* NAV */
 .nav{
   display:flex;
   justify-content:center;
   flex-wrap:wrap;
   gap:10px;
-  margin-top:18px;
+  margin-top:15px;
 }
 
 .nav button{
@@ -109,45 +96,40 @@ h1{
 
 .nav button.active{
   background:#1d4ed8;
-  box-shadow:0 0 15px #2563eb;
 }
 
-/* CONTENT */
+/* FIXED CONTENT BOX (SPAWN POINT) */
 .container{
-  max-width:850px;
-  margin:auto;
-  padding:20px;
+  height:calc(100vh - 160px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 
-/* CARD */
+/* SINGLE SPAWN CARD */
 .card{
+  width:90%;
+  max-width:750px;
   background:rgba(2,6,23,0.75);
   border:1px solid rgba(59,130,246,0.2);
-  border-radius:16px;
-  padding:25px;
-  margin-top:20px;
+  border-radius:18px;
+  padding:28px;
 
   opacity:0;
-  transform:translateY(25px);
-  transition:0.6s ease;
+  transform:scale(0.95);
+  transition:0.5s ease;
+  position:absolute;
 }
 
 .card.show{
   opacity:1;
-  transform:translateY(0);
+  transform:scale(1);
 }
 
 .title{
   color:#93c5fd;
   font-size:22px;
   margin-bottom:10px;
-}
-
-.arabic{
-  text-align:right;
-  direction:rtl;
-  color:#93c5fd;
-  margin-top:10px;
 }
 
 /* particles */
@@ -165,12 +147,6 @@ h1{
   from{transform:translateY(100vh);}
   to{transform:translateY(-10vh);}
 }
-
-/* MOBILE */
-@media(max-width:600px){
-  h1{font-size:28px;}
-  .card{padding:18px;}
-}
 </style>
 </head>
 
@@ -179,12 +155,11 @@ h1{
 <!-- INTRO -->
 <div id="intro">
   <h1>HAFIZ YUŞA</h1>
-  <p>Kur’an • İlim • Yolculuk</p>
 </div>
 
 <header>
   <h1>HAFIZ YUŞA ÇİLOĞLAN</h1>
-  <div class="subtitle">Kur’an • İlim • Umre • Ezan</div>
+  <div class="subtitle">Kur’an • İlim • Yolculuk</div>
 
   <div class="nav">
     <button class="active" onclick="go(0)">Hakkımda</button>
@@ -192,76 +167,80 @@ h1{
     <button onclick="go(2)">Ezan</button>
     <button onclick="go(3)">Umre</button>
     <button onclick="go(4)">İlim</button>
-    <a href="https://instagram.com" target="_blank" class="navbtn">
-      <button>Instagram</button>
-    </a>
   </div>
 </header>
 
 <div class="container">
 
-<div class="card show" id="c0">
+<!-- SINGLE SPAWN BOX -->
+<div class="card show" id="box">
+
   <div class="title">Hakkımda</div>
   <p>
-    Ben Hafız Yuşa Çiloğlan. Kur’an ile büyümüş, ilim ve disiplin üzerine hayat kurmuş bir öğrenciyim.
-    Hayatım sabır, tekrar ve öğrenme üzerine şekillenmiştir.
+    Bir yol vardı… sessiz, sabırlı ve derin.  
+    Ben o yolun içinde Kur’an’la büyüdüm.
   </p>
-  <div class="arabic">وَقُل رَّبِّ زِدْنِي عِلْمًا</div>
-</div>
 
-<div class="card" id="c1">
-  <div class="title">Hafızlık</div>
-  <p>
-    Hafızlık benim için sadece ezber değil, bir karakter eğitimidir.
-    Zorlandım ama devam ettim.
-  </p>
-</div>
-
-<div class="card" id="c2">
-  <div class="title">Ezan Yolculuğu</div>
-  <p>
-    Küçük yaşlardan itibaren makam eğitimi aldım ve İl Ezan 3.’lüğü elde ettim.
-    Ezan benim için bir sestir ama aynı zamanda bir ruhtur.
-  </p>
-  <div class="arabic">إِنَّ مَعَ ٱلْعُسْرِ يُسْرًا</div>
-</div>
-
-<div class="card" id="c3">
-  <div class="title">Umre Yolculuğum 🕋</div>
-  <p>
-    Umre benim hayatımda bir dönüm noktası oldu.
-    Kâbe’yi ilk gördüğüm an hayatım değişti.
-  </p>
-  <div class="arabic">رَبِّ اجْعَلْنِي مُقِيمَ ٱلصَّلَاةِ</div>
-</div>
-
-<div class="card" id="c4">
-  <div class="title">İlim ve Kitaplar</div>
-  <ul>
-    <li>Kur’an-ı Kerim → sabır</li>
-    <li>Riyazus-Salihin → ahlak</li>
-    <li>İslam tarihi → bilinç</li>
-  </ul>
 </div>
 
 </div>
 
 <script>
 
-/* PAGE SWITCH */
-let cards=document.querySelectorAll(".card");
-let btns=document.querySelectorAll(".nav button");
+const box=document.getElementById("box");
+const btns=document.querySelectorAll(".nav button");
 
+/* ROMAN STYLE TEXTS */
+const texts=[
+{
+title:"Hakkımda",
+text:`Bir çocuk düşün… sessiz bir gecede Kur’an sesiyle büyüyen.  
+Ben o sessizliğin içinden geldim.`
+},
+
+{
+title:"Hafızlık",
+text:`Ezber değildi bu…  
+kendini yeniden inşa etmekti.`
+},
+
+{
+title:"Ezan",
+text:`Bir ses değil… göğe açılan bir kapıydı benim için.`
+},
+
+{
+title:"Umre",
+text:`Kâbe’yi gördüğüm an, dünya geride kaldı.  
+Zaman sustu.`
+},
+
+{
+title:"İlim",
+text:`Kitaplar bana bilgi değil, yön verdi.  
+Her sayfa bir iz bıraktı.`
+}
+];
+
+/* SPAWN CHANGE */
 function go(i){
-  cards.forEach(c=>c.classList.remove("show"));
-  setTimeout(()=>cards[i].classList.add("show"),80);
+
+  box.classList.remove("show");
+
+  setTimeout(()=>{
+    box.innerHTML=`
+      <div class="title">${texts[i].title}</div>
+      <p>${texts[i].text}</p>
+    `;
+    box.classList.add("show");
+  },150);
 
   btns.forEach(b=>b.classList.remove("active"));
   btns[i].classList.add("active");
 }
 
 /* particles */
-for(let i=0;i<35;i++){
+for(let i=0;i<30;i++){
   let p=document.createElement("div");
   p.className="p";
   p.style.left=Math.random()*100+"vw";
