@@ -1,109 +1,107 @@
-<!DOCTYPE html><html lang="tr">
+<!DOCTYPE html>
+<html lang="tr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hikâyem | Hafız Yuşa Çiloğlan</title><style>
+<title>Hafız Yuşa | Hikâye</title>
+
+<style>
+/* ===== BACKGROUND ===== */
 body{
   margin:0;
-  font-family: Arial;
+  font-family:Arial;
   color:#e5e7eb;
-  overflow-x:hidden;
+  overflow:hidden;
 
-  background: linear-gradient(-45deg, #020617, #0b1b3a, #020617, #0a2a5e);
-  background-size: 400% 400%;
-  animation: gradientMove 12s ease infinite;
+  background:#05060a;
+  background-image:
+    linear-gradient(rgba(59,130,246,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59,130,246,0.08) 1px, transparent 1px);
+  background-size:42px 42px;
 }
 
-@keyframes gradientMove{
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
-}
-
+/* glow overlay */
 body::before{
   content:"";
   position:fixed;
   inset:0;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-  background-size:40px 40px;
+  background:radial-gradient(circle at top, rgba(59,130,246,0.18), transparent 60%);
   pointer-events:none;
-  opacity:0.35;
 }
 
-header{
-  text-align:center;
-  padding:30px 20px;
-  border-bottom:1px solid rgba(147,197,253,0.2);
-}
-
-h1{
-  margin:0;
-  font-size:34px;
-  color:#60a5fa;
-  text-shadow:0 0 20px #2563eb;
-}
-
-.subtitle{
-  opacity:0.8;
-}
-
-.topbar{
+/* ===== LAYOUT ===== */
+.wrapper{
   display:flex;
-  justify-content:center;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-top:15px;
+  height:100vh;
 }
 
-.btn{
-  padding:10px 14px;
-  border-radius:12px;
-  border:1px solid rgba(147,197,253,0.3);
+/* CONTENT */
+.content{
+  flex:1;
+  padding:50px;
+  overflow:auto;
+}
+
+/* SIDE MENU (RIGHT) */
+.menu{
+  width:220px;
   background:rgba(2,6,23,0.6);
-  color:white;
-  cursor:pointer;
-  transition:0.3s;
+  border-left:1px solid rgba(59,130,246,0.2);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:10px;
+  padding:20px;
   backdrop-filter: blur(10px);
 }
 
-.btn:hover{
+.menu button{
+  padding:12px;
+  border-radius:12px;
+  border:1px solid rgba(59,130,246,0.25);
+  background:transparent;
+  color:white;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.menu button:hover{
   transform:scale(1.05);
-  border-color:#60a5fa;
-  box-shadow:0 0 15px #2563eb;
+  box-shadow:0 0 15px rgba(59,130,246,0.3);
 }
 
-.container{
-  max-width:900px;
-  margin:auto;
-  padding:20px;
+.menu button.active{
+  background:#1d4ed8;
+  box-shadow:0 0 20px #2563eb;
 }
 
+/* ===== CARD ===== */
 .card{
-  background:rgba(2,6,23,0.75);
-  border:1px solid rgba(147,197,253,0.2);
-  border-radius:16px;
-  padding:22px;
-  margin-bottom:20px;
-  box-shadow:0 0 20px rgba(37,99,235,0.15);
+  max-width:800px;
+  margin:auto;
+  background:rgba(2,6,23,0.7);
+  border:1px solid rgba(59,130,246,0.2);
+  border-radius:18px;
+  padding:25px;
+  box-shadow:0 0 25px rgba(59,130,246,0.15);
 
   opacity:0;
-  transform:translateY(25px);
-  transition:1s;
+  transform:translateX(40px);
+  transition:0.6s ease;
 }
 
 .card.show{
   opacity:1;
-  transform:translateY(0);
+  transform:translateX(0);
 }
 
 .title{
   color:#93c5fd;
-  font-size:22px;
+  font-size:24px;
   margin-bottom:10px;
 }
 
+/* ARABIC */
 .arabic{
   text-align:right;
   direction:rtl;
@@ -112,77 +110,125 @@ h1{
   margin-top:10px;
 }
 
-.particle{
+/* particles */
+.p{
   position:fixed;
-  width:6px;
-  height:6px;
+  width:4px;
+  height:4px;
   background:#60a5fa;
   border-radius:50%;
-  opacity:0.4;
-  animation:floatUp 10s linear infinite;
+  opacity:0.3;
+  animation:up 10s linear infinite;
 }
 
-@keyframes floatUp{
-  from{transform:translateY(100vh); opacity:0}
-  50%{opacity:0.6}
-  to{transform:translateY(-10vh); opacity:0}
+@keyframes up{
+  from{transform:translateY(100vh);}
+  to{transform:translateY(-10vh);}
 }
-</style></head><body><header>
-  <h1>HAFIZ YUŞA</h1>
-  <div class="subtitle">Kur’an • İlim • Yolculuk • Yazılım</div>  <div class="topbar">
-    <button class="btn" onclick="scrollToCard(0)">Hakkımda</button>
-    <button class="btn" onclick="scrollToCard(1)">Hafızlık</button>
-    <button class="btn" onclick="scrollToCard(2)">Ezan</button>
-    <button class="btn" onclick="scrollToCard(3)">Umre</button>
-    <button class="btn" onclick="scrollToCard(4)">Kitaplar</button>
-    <a class="btn" href="https://instagram.com/" target="_blank">Instagram</a>
-  </div>
-</header><div class="container"><div class="card">
+
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<!-- CONTENT -->
+<div class="content">
+
+<!-- HAKKIMDA -->
+<div class="card show" id="c0">
   <div class="title">Hakkımda</div>
-  <p>Ben Hafız Yuşa Çiloğlan. Kur’an ile büyümüş, ilim ve yazılım alanında kendini geliştiren bir öğrenciyim. Hayatım disiplin ve sabır üzerine kurulu.</p>
+  <p>
+    Ben Hafız Yuşa Çiloğlan. Kur’an ile büyümüş, ilim ve disiplin üzerine hayat kurmuş bir öğrenciyim.
+    Hayatımın temeli sabır, tekrar ve öğrenmedir.
+  </p>
+  <p>
+    Kendimi hem dini ilimlerde hem de kişisel gelişimde ilerletmeye çalışıyorum.
+  </p>
   <div class="arabic">وَقُل رَّبِّ زِدْنِي عِلْمًا</div>
-</div><div class="card">
-  <div class="title">Hafızlık</div>
-  <p>Hafızlık benim için sadece ezber değil, karakter inşasıdır. Zorlandım ama devam ettim.</p>
-</div><div class="card">
-  <div class="title">Ezan Yolculuğu</div>
-  <p>Küçük yaşlardan itibaren makam eğitimi aldım ve İl Ezan 3.’lüğü elde ettim.</p>
+</div>
+
+<!-- HAFIZLIK + EZAN -->
+<div class="card" id="c1">
+  <div class="title">Hafızlık & Ezan</div>
+  <p>
+    Hafızlık benim için sadece ezber değil, karakter inşasıdır.
+    Zorlandığım zamanlar oldu ama her tekrar beni güçlendirdi.
+  </p>
+  <p>
+    Ezan çalışmalarında makam eğitimi aldım ve İl Ezan 3.’lüğü elde ettim.
+    Ezan benim için bir ses değil, bir ruh halidir.
+  </p>
   <div class="arabic">إِنَّ مَعَ ٱلْعُسْرِ يُسْرًا</div>
-</div><div class="card">
+</div>
+
+<!-- UMRE -->
+<div class="card" id="c2">
   <div class="title">Umre Yolculuğum 🕋</div>
-  <p>Umre benim için bir dönüşüm oldu. Kâbe’yi ilk gördüğüm an hayatım değişti.</p>
-  <p>Orada insan kendini yeniden tanır ve dünya bağlarını farklı görür.</p>
+  <p>
+    Umre benim hayatımda bir kırılma noktasıydı.
+    Kâbe’yi ilk gördüğüm an, dünyadaki her şeyin anlamı değişti.
+  </p>
+  <p>
+    Orada insan sadece ibadet etmez, kendini yeniden keşfeder.
+  </p>
   <div class="arabic">رَبِّ اجْعَلْنِي مُقِيمَ ٱلصَّلَاةِ</div>
-</div><div class="card">
-  <div class="title">İlim ve Kitap</div>
+</div>
+
+<!-- İLİM -->
+<div class="card" id="c3">
+  <div class="title">İlim, Kitap & Ayetler</div>
+
+  <p>
+    Okuduğum kitaplar ve ayetler benim düşünce yapımı şekillendirdi.
+  </p>
+
   <ul>
-    <li>Kur’an-ı Kerim → sabır</li>
-    <li>Riyazus-Salihin → ahlak</li>
-    <li>İslam tarihi → bilinç</li>
+    <li>Kur’an-ı Kerim → sabır ve teslimiyet</li>
+    <li>Riyazus-Salihin → ahlak ve davranış</li>
+    <li>İslam tarihi → bilinç ve perspektif</li>
   </ul>
-</div></div><script>
-const cards = document.querySelectorAll('.card');
 
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if(entry.isIntersecting){
-      entry.target.classList.add('show');
-    }
-  });
-},{threshold:0.2});
+  <div class="arabic">فَإِنَّ مَعَ ٱلْعُسْرِ يُسْرًا</div>
+</div>
 
-cards.forEach(c => observer.observe(c));
+</div>
 
-function scrollToCard(i){
-  cards[i].scrollIntoView({behavior:'smooth'});
+<!-- MENU -->
+<div class="menu">
+  <button class="active" onclick="go(0)">Hakkımda</button>
+  <button onclick="go(1)">Hafız & Ezan</button>
+  <button onclick="go(2)">Umre</button>
+  <button onclick="go(3)">İlim</button>
+</div>
+
+</div>
+
+<script>
+let cards=document.querySelectorAll(".card");
+let btns=document.querySelectorAll(".menu button");
+
+function go(i){
+
+  cards.forEach(c=>c.classList.remove("show"));
+  setTimeout(()=>{
+    cards[i].classList.add("show");
+  },50);
+
+  btns.forEach(b=>b.classList.remove("active"));
+  btns[i].classList.add("active");
 }
 
-for(let i=0;i<25;i++){
-  let p=document.createElement('div');
-  p.className='particle';
-  p.style.left=Math.random()*100+'vw';
-  p.style.animationDuration=(5+Math.random()*10)+'s';
+/* particles */
+for(let i=0;i<35;i++){
+  let p=document.createElement("div");
+  p.className="p";
+  p.style.left=Math.random()*100+"vw";
+  p.style.animationDuration=(5+Math.random()*10)+"s";
   document.body.appendChild(p);
 }
-</script></body>
+</script>
+
+</body>
 </html>
