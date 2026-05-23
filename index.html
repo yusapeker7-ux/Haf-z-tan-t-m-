@@ -3,57 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yuşa Çiloğlan | Portfolyo</title>
+    <title>Yuşa Çiloğlan | Kişisel</title>
     <style>
-        body { background: #050505; color: #d1d1d1; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 15px; line-height: 1.6; }
-        .container { max-width: 500px; margin: auto; }
-        .pfp { width: 140px; height: 140px; border-radius: 50%; border: 2px solid #00d4ff; display: block; margin: 20px auto; }
-        .card { background: #111; padding: 20px; border-radius: 15px; margin-bottom: 15px; border: 1px solid #222; }
-        h2 { color: #00d4ff; font-size: 1.1rem; margin-top: 0; }
-        .tag { display: inline-block; background: #222; padding: 5px 10px; border-radius: 5px; font-size: 0.8rem; margin: 3px; color: #00ff9f; }
-        input, textarea { width: 100%; padding: 10px; margin: 10px 0; background: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 8px; box-sizing: border-box; }
-        .btn { width: 100%; padding: 12px; background: #00d4ff; border: none; color: #000; font-weight: bold; border-radius: 8px; cursor: pointer; }
+        body { background: #050505; color: #eee; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
+        .nav { display: flex; justify-content: space-around; background: #111; padding: 15px; border-bottom: 1px solid #333; position: sticky; top: 0; }
+        .nav-btn { cursor: pointer; color: #888; font-weight: bold; }
+        .nav-btn:hover { color: #00d4ff; }
+        
+        .container { max-width: 700px; margin: auto; padding: 20px; }
+        .tab-content { display: none; padding: 20px 0; animation: fadeIn 0.5s; }
+        .active { display: block; }
+        
+        .pfp { width: 120px; height: 120px; border-radius: 50%; border: 3px solid #00d4ff; display: block; margin: 20px auto; }
+        .card { background: #111; padding: 25px; border-radius: 15px; border: 1px solid #222; margin-bottom: 20px; }
+        h2 { color: #00d4ff; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
+<div class="nav">
+    <span class="nav-btn" onclick="showTab('hakkimda')">Hakkımda</span>
+    <span class="nav-btn" onclick="showTab('taktikler')">Taktikler</span>
+    <span class="nav-btn" onclick="showTab('iletisim')">İletişim</span>
+</div>
+
 <div class="container">
-    <div style="text-align: center;">
+    <div id="hakkimda" class="tab-content active">
         <img src="https://images.weserv.nl/?url=https://www.instagram.com/yusa.ciloglan/profilepic&w=400" class="pfp">
         <h1>Yuşa Çiloğlan</h1>
-        <p>Hafız | Yazılımcı | Araştırmacı</p>
+        <div class="card">
+            <h2>Vizyonum</h2>
+            <p>Hafızlık disiplini ile akademik araştırmaları harmanlayan bir yapıdayım. 101 Evliya, İhya-u Ulumiddin gibi temel eserlerin ışığında ilmi bir derinlik hedefliyorum. Medine yolculuklarımda kazandığım o manevi huzur, hayatımın her anına yansıyan bir sükûnet kaynağıdır.</p>
+        </div>
     </div>
 
-    <div class="card">
-        <h2>Dijital Hafızlık & Osmanlı Disiplini</h2>
-        <p>Hafızlık sürecimde <b>"33 Tekrar Taktiği"</b> ve klasik Osmanlı ezber yöntemlerini modern zaman yönetimiyle birleştirdim. Kur'an ilmi, sadece bir ezber değil; zihinsel bir mimaridir.</p>
+    <div id="taktikler" class="tab-content">
+        <div class="card">
+            <h2>33 Tekrar Taktiği</h2>
+            <p>Osmanlı usulü ezber disiplinidir. Bir sayfayı 33 defa okumak, zihne kalıcı bir mühür vurur. Bu yöntemle Kur'an'ı ezberlemek, sadece hafıza değil, bir zihin antrenmanıdır.</p>
+        </div>
+        <div class="card">
+            <h2>İlmi Kütüphanem</h2>
+            <p>Risale-i Nur, Siyer-i Nebi ve tasavvufi kaynaklar... Okumalarımı bu merkezde derinleştiriyorum.</p>
+        </div>
     </div>
 
-    <div class="card">
-        <h2>Okuma Listem (İlmi Kütüphanem)</h2>
-        <div class="tag">101 Evliya</div> <div class="tag">Risale-i Nur</div> <div class="tag">İhya-u Ulumiddin</div> <div class="tag">Siyer-i Nebi</div>
-    </div>
-
-    <div class="card">
-        <h2>Yazılım & Lab</h2>
-        <p>Siber güvenlik analizleri, VDS yönetimi ve otomasyon. Kod yazmak benim için manevi disiplinin dijital dünyaya yansımasıdır.</p>
-    </div>
-
-    <div class="card">
-        <h2>Medine Yolcusu</h2>
-        <p>Manevi iklimin merkezinde geçen o günler, sadeliğin en büyük sanat olduğunu öğretti.</p>
-    </div>
-
-    <div class="card">
-        <h2>İletişim & Fikir Alışverişi</h2>
-        <form action="https://formspree.io/f/KENDI_MAIL_ID_BURAYA" method="POST">
-            <input type="email" name="email" placeholder="E-posta adresin" required>
-            <textarea name="message" placeholder="Mesajın..." required></textarea>
-            <button type="submit" class="btn">Gönder</button>
-        </form>
+    <div id="iletisim" class="tab-content">
+        <div class="card">
+            <h2>Mesaj Gönder</h2>
+            <form action="https://formspree.io/f/KENDI_MAIL_ID_BURAYA" method="POST">
+                <input type="email" name="email" placeholder="E-postan" style="width:100%; padding:10px; margin-bottom:10px; background:#222; color:#fff; border:none;">
+                <textarea name="message" placeholder="Mesajın..." style="width:100%; padding:10px; height:100px; background:#222; color:#fff; border:none;"></textarea>
+                <button type="submit" style="width:100%; padding:10px; background:#00d4ff; border:none; margin-top:10px; font-weight:bold;">Gönder</button>
+            </form>
+        </div>
     </div>
 </div>
 
+<script>
+    function showTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+    }
+</script>
+
 </body>
 </html>
-
