@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yuşa Çiloğlan | Hafızlık Günlüğü</title>
+    <title>Yuşa Çiloğlan | Hafızlık Portfolyosu</title>
     <style>
         * {
             margin: 0;
@@ -12,35 +12,37 @@
             font-family: 'Times New Roman', Times, serif, 'Segoe UI';
         }
 
-        /* Akıcı Renk Değiştiren Gece Mavisi Arka Plan */
-        @keyframes bgChange {
-            0% { background-color: #0a1128; }
-            50% { background-color: #101f42; }
-            100% { background-color: #0a1128; }
+        /* Mat Siyah ve Derin Gece Mavisi Geçişi */
+        @keyframes darkBg {
+            0% { background-color: #05070a; }
+            50% { background-color: #0c111c; }
+            100% { background-color: #05070a; }
         }
 
         body {
-            animation: bgChange 10s ease-in-out infinite;
-            color: #e2e8f0;
-            line-height: 1.7;
+            animation: darkBg 12s ease-in-out infinite;
+            color: #d1d5db;
+            line-height: 1.8;
             padding: 0 1rem;
         }
 
         header {
             text-align: center;
-            padding: 4rem 1rem 2.5rem 1rem;
+            padding: 5rem 1rem 3rem 1rem;
             border-bottom: 1px solid #1e293b;
         }
 
-        .arabic-txt {
-            font-size: 1.6rem;
+        .arabic-main {
+            font-size: 1.8rem;
             color: #38bdf8;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
+            letter-spacing: 1px;
         }
 
         h1 {
-            font-size: 2.3rem;
+            font-size: 2.5rem;
             color: #ffffff;
+            font-weight: 500;
             letter-spacing: 1px;
         }
 
@@ -51,127 +53,139 @@
         }
 
         .container {
-            max-width: 700px;
-            margin: 2rem auto;
+            max-width: 750px;
+            margin: 3rem auto;
         }
 
         section {
-            background: rgba(15, 23, 42, 0.9);
-            padding: 2rem;
-            border-radius: 8px;
-            margin-bottom: 1.8rem;
+            background: rgba(13, 18, 30, 0.95);
+            padding: 2.5rem;
+            border-radius: 4px;
+            margin-bottom: 2rem;
             border: 1px solid #1e293b;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
         h2 {
             color: #ffffff;
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             font-weight: normal;
             border-bottom: 1px solid #233554;
-            padding-bottom: 0.4rem;
-            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.2rem;
             display: flex;
             justify-content: space-between;
+            letter-spacing: 1px;
         }
 
-        .arabic-side {
+        .arabic-sub {
             color: #38bdf8;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
         }
 
         p {
             color: #cbd5e1;
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             text-align: justify;
+            text-indent: 1.5rem;
         }
 
-        .kurs-list {
-            margin-top: 1rem;
+        .history-list {
+            margin-top: 1.2rem;
             list-style: none;
         }
 
-        .kurs-list li {
+        .history-list li {
             position: relative;
-            padding-left: 1.3rem;
-            margin-bottom: 0.8rem;
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
             color: #cbd5e1;
+            font-size: 1.05rem;
         }
 
-        .kurs-list li::before {
-            content: "✦";
+        .history-list li::before {
+            content: "▪";
             color: #38bdf8;
             position: absolute;
             left: 0;
+            font-size: 0.9rem;
+            top: 2px;
         }
 
-        .btn-container {
+        .btn-holder {
             display: flex;
             justify-content: center;
-            margin-top: 1.5rem;
+            margin-top: 2rem;
         }
 
-        .insta-btn {
+        .btn-link {
             background: transparent;
             color: #ffffff;
-            border: 1px solid #38bdf8;
-            padding: 0.6rem 2rem;
+            border: 1px solid #475569;
+            padding: 0.7rem 2.5rem;
             text-decoration: none;
-            border-radius: 4px;
+            border-radius: 3px;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
             transition: all 0.3s ease;
         }
 
-        .insta-btn:hover {
-            background: #38bdf8;
-            color: #0a1128;
+        .btn-link:hover {
+            background: #ffffff;
+            color: #05070a;
+            border-color: #ffffff;
         }
 
         footer {
             text-align: center;
-            padding: 3rem;
+            padding: 4rem 1rem;
             color: #475569;
             font-size: 0.85rem;
+            letter-spacing: 1px;
         }
     </style>
 </head>
 <body>
 
+    <!-- Başlık Alanı -->
     <header>
-        <div class="arabic-txt">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ</div>
+        <div class="arabic-main">بِسْمِ اللهِ الرَّحْمٰnِ الرَّحِيمِ</div>
         <h1>Yuşa Çiloğlan</h1>
-        <p class="subtitle">Hafızlık Yılları ve Kurs Hatıraları</p>
+        <p class="subtitle">Hafızlık Dönemi ve Kurs Hatıraları</p>
     </header>
 
     <div class="container">
 
-        <!-- Kurs Günleri -->
+        <!-- Biyografi / Kurstaki Günler -->
         <section>
-            <h2>Kurstaki Günler <span class="arabic-side">‌[ أَيَّامُ الدِّرَاسَةِ ]</span></h2>
-            <p>Ben Yuşa Çiloğlan. Benim hikayemin en samimi, en çok emek verilen kısmı o unutulmaz Kur'an kursu yıllarıydı. Sabahın seherinde uyanıp rahle başına geçtiğimiz, sayfaları yetiştirmek için hocanın kapısında sıra beklediğimiz, o tatlı telaşların yaşandığı günler... Hafızlık, sadece bir ezber süreci değil; kurstaki o dostlukları, hüzünleri, duaları ve her bir ayeti kalbe nakşetmek için verilen o uykusuz mücadeleyi paylaşmaktı.</p>
+            <h2>I. Kurs Yılları ve Mücadele <span class="arabic-sub">‌[ أَيَّامُ الدِّرَاسَةِ ]</span></h2>
+            <p>Ben Yuşa Çiloğlan. Hayatımın en mühim ve kıymetli dönemini, Kur'an kursunun o manevi ikliminde geçirdiğim hafızlık yılları teşkil etmektedir. Erken vakitlerde rahle başına geçerek başladığımız ezber mesaileri, hocalarımızın huzurunda verdiğimiz sayfalar ve her bir ayeti zihnimize nakşetmek için sarf ettiğimiz emekler, bugünkü şahsiyetimizin en sağlam temelini oluşturmuştur.</p>
+            <p style="margin-top: 1rem;">Bu yolda tek başıma değildim; kurstaki kardeşlerimle, kankalarımla omuz omuza vererek acısıyla tatlısıyla koca bir dönemi paylaştık. Zorlandığımız anlarda birbirimize verdiğimiz destek, beraber yaptığımız tekrarlar ve o samimi dostluk bağları, hafızlık mücadelesini bizim için unutulmaz bir hâtıraya dönüştürdü.</p>
         </section>
 
-        <!-- Kurs Hatıraları ve Başarılar -->
+        <!-- Kronoloji ve Başarılar -->
         <section>
-            <h2>Neler Kaldı O Günlerden? <span class="arabic-side">‌[ الذِّكْرَيَاتُ ]</span></h2>
-            <ul class="kurs-list">
-                <li><strong>Seher Vakti Mesaisi:</strong> Gözümüzden uyku akarken rahle başında ezber tazelediğimiz o huzurlu sabahlar.</li>
-                <li><strong>Hoca Önünde Çiğ Verme:</strong> Heyecanla oturduğumuz o diz dövmeler, hatasız geçilen sayfaların verdiği o büyük hafiflik.</li>
-                <li><strong>Ezan Yarışması:</strong> Kursta hocalarımızın teşvikiyle başlayan o güzel seda arayışı ve neticesinde gelen İl 3.'lüğü gururu.</li>
-                <li><strong>Büyük Ödül:</strong> Emeğin, sabrın ve kurstaki duaların bir nişanesi olarak nasip olan mukaddes Umre seyahati.</li>
+            <h2>II. Elde Edilen Kazanımlar <span class="arabic-sub">‌[ الذِّكْرَيَاتُ ]</span></h2>
+            <ul class="history-list">
+                <li><strong>Kelâmın Hıfzedilmesi:</strong> Kur'an kursu disiplini içerisinde hıfzü'l-Kur'an sürecinin başarıyla tamamlanması.</li>
+                <li><strong>Ezan-ı Muhammedî İcrası:</strong> Kursta temelleri atılan makam ve seda çalışmalarının neticesinde elde edilen Ezan Okuma Yarışması İl Üçüncülüğü.</li>
+                <li><strong>Dostluk ve Beraberlik:</strong> Kurs ortamında kankalarımızla kurulan, hafızlık rahlesinin samimiyetini ve manevi disiplinini taşıyan köklü dostluklar.</li>
+                <li><strong>Manevi Seyahat:</strong> Bu sabırlı ve meşakkatli sürecin bir meyvesi olarak nasip olan mukaddes Umre yolculuğu deneyimi.</li>
             </ul>
         </section>
 
-        <!-- Sosyal Medya İletişim -->
+        <!-- İletişim / Instagram -->
         <section>
-            <h2>İrtibat <span class="arabic-side">‌[ التَّوَاصُلُ ]</span></h2>
-            <p style="text-align: center; margin-bottom: 1rem;">O günlerin samimiyetini, dostluklarını ve manevi bağlarını koparmamak için bana Instagram üzerinden ulaşabilirsiniz.</p>
-            <div class="btn-container">
-                <a href="https://instagram.com/yusa_cn" target="_blank" class="insta-btn">Instagram (@yusa_cn)</a>
+            <h2>III. İrtibat Paneli <span class="arabic-sub">‌[ التَّوَاصُلُ ]</span></h2>
+            <p style="text-align: center; text-indent: 0; margin-bottom: 1rem;">Geçmişe dair bağları koparmamak ve ortak manevi çalışmalarda bir araya gelmek adına doğrudan alt taraftaki resmi kanal üzerinden irtibat kurabilirsiniz.</p>
+            <div class="btn-holder">
+                <a href="https://instagram.com/yusa_cn" target="_blank" class="btn-link">Instagram (@yusa_cn)</a>
             </div>
         </section>
 
     </div>
 
+    <!-- Alt Bilgi -->
     <footer>
         <p>YÜŞA ÇİLOĞLAN &copy; 2026</p>
     </footer>
