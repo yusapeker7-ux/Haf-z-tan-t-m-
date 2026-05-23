@@ -3,55 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yuşa Çiloğlan | Akademik Portfolyo</title>
+    <title>Yuşa Çiloğlan | Kişisel Portfolyo</title>
     <style>
-        /* Akademik & Minimalist Temel Ayarlar */
+        /* Genel Tipografi ve Sıfırlama */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Times New Roman', Times, serif, 'Segoe UI', Georgia;
+            font-family: 'Times New Roman', Times, serif, 'Georgia', 'Segoe UI';
+        }
+
+        /* Akıcı Değişen Gece Mavisi & Lacivert Animasyonu */
+        @keyframes subtleBg {
+            0% { background-color: #080f1d; }
+            50% { background-color: #111a2e; }
+            100% { background-color: #080f1d; }
         }
 
         body {
-            background-color: #05070c;
+            animation: subtleBg 12s ease-in-out infinite;
             color: #e2e8f0;
             line-height: 1.8;
             overflow-x: hidden;
         }
 
-        /* Ağırbaşlı ve Derin Header */
+        /* Üst Başlık Alanı - Halka Tamamen Kaldırıldı */
         header {
-            background: linear-gradient(180deg, #020306 0%, #0b0f17 100%);
+            background: linear-gradient(180deg, #040814 0%, rgba(13, 22, 41, 0.8) 100%);
             padding: 5rem 1rem 4rem 1rem;
             text-align: center;
             border-bottom: 1px solid #1e293b;
-            position: relative;
         }
 
-        /* Asil, Yavaşça Dönen İnce Çerçeve Animasyonu */
-        @keyframes borderGlow {
-            0% { border-color: #1e293b; box-shadow: 0 0 15px rgba(30, 41, 59, 0.2); }
-            50% { border-color: #1d4ed8; box-shadow: 0 0 25px rgba(29, 78, 216, 0.4); }
-            100% { border-color: #1e293b; box-shadow: 0 0 15px rgba(30, 41, 59, 0.2); }
-        }
-
-        .academic-crest {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            background-color: #0b0f17;
-            border: 2px solid #1e293b;
-            margin: 0 auto 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.2rem;
-            animation: borderGlow 6s infinite ease-in-out;
+        .arabic-header {
+            font-size: 1.8rem;
+            color: #38bdf8;
+            margin-bottom: 1rem;
+            font-family: 'Times New Roman', serif;
+            letter-spacing: 1px;
         }
 
         h1 {
-            font-size: 2.4rem;
+            font-size: 2.6rem;
             color: #ffffff;
             font-weight: 500;
             letter-spacing: 2px;
@@ -65,27 +58,27 @@
             letter-spacing: 1px;
         }
 
-        /* Konteyner Düzeni */
+        /* Konteyner */
         .main-container {
             max-width: 800px;
             margin: 3rem auto;
             padding: 0 1.5rem;
         }
 
-        /* Ciddi ve Mat Kart Tasarımları */
+        /* Akademik ve Mat Kartlar */
         section {
-            background: #0b0f17;
+            background: rgba(13, 22, 41, 0.95);
             padding: 2.5rem;
             border-radius: 6px;
             margin-bottom: 2.5rem;
             border: 1px solid #1e293b;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
             transition: all 0.4s ease;
         }
 
         section:hover {
-            border-color: #2563eb;
-            box-shadow: 0 0 20px rgba(37, 99, 235, 0.15);
+            border-color: #3b82f6;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.15);
         }
 
         h2 {
@@ -93,22 +86,28 @@
             font-size: 1.4rem;
             font-weight: 400;
             margin-bottom: 1.5rem;
-            border-bottom: 1px solid #1e293b;
+            border-bottom: 1px solid #233554;
             padding-bottom: 0.5rem;
             letter-spacing: 1px;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 12px;
+        }
+
+        .arabic-inline {
+            font-size: 1.2rem;
+            color: #38bdf8;
+            font-weight: normal;
         }
 
         p {
-            color: #94a3b8;
-            font-size: 1.05rem;
+            color: #cbd5e1;
+            font-size: 1.1rem;
             text-align: justify;
             text-indent: 1.5rem;
         }
 
-        /* Akademik Kronoloji ve Detay Listesi */
+        /* Akademik Liste */
         .academic-list {
             margin-top: 1.5rem;
             list-style: none;
@@ -124,14 +123,14 @@
 
         .academic-list li::before {
             content: "•";
-            color: #3b82f6;
+            color: #38bdf8;
             font-weight: bold;
             position: absolute;
             left: 0;
             top: 0;
         }
 
-        /* İletişim & Sosyal Medya Butonları */
+        /* İletişim Butonları */
         .meta-links {
             display: flex;
             justify-content: center;
@@ -153,7 +152,7 @@
 
         .academic-btn:hover {
             background-color: #ffffff;
-            color: #05070c;
+            color: #080f1d;
             border-color: #ffffff;
         }
 
@@ -163,30 +162,29 @@
             color: #475569;
             font-size: 0.85rem;
             letter-spacing: 2px;
-            border-top: 1px solid #0b0f17;
         }
     </style>
 </head>
 <body>
 
-    <!-- Akademik Üst Alan -->
+    <!-- Üst Başlık Alanı (Halkasız, Doğrudan Giriş) -->
     <header>
-        <div class="academic-crest">📜</div>
+        <div class="arabic-header">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
         <h1>Yuşa Çiloğlan</h1>
         <p class="title-sub">Kelam Araştırmaları & Kıraat Çalışmaları</p>
     </header>
 
     <div class="main-container">
 
-        <!-- Hakkımda (Ciddi Ton) -->
+        <!-- Biyografi -->
         <section id="biografi">
-            <h2>I. Biyografi ve Misyon</h2>
+            <h2>I. Biyografi ve Misyon <span class="arabic-inline">‌[ الْحَافِظُ ]</span></h2>
             <p>Ben Yuşa Çiloğlan. Erken yaşlarda başladığım Kur'an-ı Kerim eğitimi ve hıfzü'l-Kur'an sürecini başarıyla tamamlayarak Hafızlık unvanını ihraz ettim. Çalışmalarımı sadece ezber pratiğiyle sınırlı tutmayıp, İslam sanatlarının en nadide şubelerinden biri olan Tilavet ve Ezan ilmi üzerinde akademik hassasiyetle sürdürmekteyim. Temel gayem; geleneksel kodları muhafaza ederek, ilahi kelamın estetik ve lafzi derinliğini yeni nesil platformlar vasıtasıyla geniş kitlelere ulaştırmaktır.</p>
         </section>
 
-        <!-- Çalışma Alanları & Başarılar -->
+        <!-- Çalışma Alanları -->
         <section id="akademik-faaliyet">
-            <h2>II. İnceleme Alanları & Başarılar</h2>
+            <h2>II. İnceleme Alanları & Başarılar <span class="arabic-inline">‌[ الْبَيَانُ ]</span></h2>
             <p>Yürütülen çalışmalar ve elde edilen kurumsal başarılar kronolojik ve tematik olarak aşağıda kayıt altına alınmıştır:</p>
             <ul class="academic-list">
                 <li><strong>Kıraat ve Mushaf İncelenmesi:</strong> Kur'an-ı Kerim metni üzerinde hıfız doğrulaması ve tilavet disiplinleri.</li>
@@ -196,20 +194,20 @@
             </ul>
         </section>
 
-        <!-- Kutsal Topraklar Deneyimi -->
+        <!-- Umre Notları -->
         <section id="manevi-seyahat">
-            <h2>III. Umre Tetkikleri ve Seyahat Notları</h2>
+            <h2>III. Umre Tetkikleri ve Seyahat Notları <span class="arabic-inline">‌[ الرِّحْلَةُ ]</span></h2>
             <p>Manevi ve ilmi tekamül sürecinin en mühim aşamalarından birini teşkil eden Umre ziyareti, kutsal toprakların tarihi, mimarisi ve sosyo-kültürel yapısı üzerine bizzat yerinde gözlem yapma imkanı tanımıştır. Hicaz bölgesinde gerçekleştirilen bu seyahat, hem şahsi dünyamda bir dönüm noktası olmuş hem de ilmi faaliyetlerime köklü bir vizyon kazandırmıştır.</p>
         </section>
 
-        <!-- İletişim Paneli -->
+        <!-- İletişim -->
         <section id="iletisim-akademik">
-            <h2>IV. İrtibat & Dijital Portfolyo</h2>
+            <h2>IV. İrtibat & Dijital Portfolyo <span class="arabic-inline">‌[ التَّوَاصُلُ ]</span></h2>
             <p style="text-align: center; text-indent: 0; margin-bottom: 1.5rem;">Çalışmaları yakından takip etmek, akademik ve manevi projelerde ortak zemin oluşturmak adına doğrudan resmi kanallar üzerinden iletişime geçebilirsiniz.</p>
             <div class="meta-links">
-                <!-- İstediğin yusa_cn hesabı buraya entegre edildi -->
+                <!-- yusa_cn Hesabı Buraya Bağlandı -->
                 <a href="https://instagram.com/yusa_cn" target="_blank" class="academic-btn">Instagram (@yusa_cn)</a>
-                <a href="mailto:ornek@eposta.com" class="academic-btn">E-Posta İrtibat</a>
+                <a href="mailto:iletisim@yusa.com" class="academic-btn">E-Posta İrtibat</a>
             </div>
         </section>
 
