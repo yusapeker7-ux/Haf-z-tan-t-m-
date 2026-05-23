@@ -3,60 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yuşa Çiloğlan | Kişisel Portfolyo</title>
+    <title>Yuşa Çiloğlan | Portfolyo</title>
     <style>
-        :root { --bg: #050505; --neon-mavi: #00d4ff; --neon-pembe: #ff0080; --neon-yesil: #00ff9f; }
-        body { background: var(--bg); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; line-height: 1.8; }
-        .container { max-width: 800px; margin: auto; }
-        
-        /* Neon Profil Bölümü */
-        .header { text-align: center; padding: 60px 0; }
-        .pfp { width: 180px; height: 180px; border-radius: 50%; border: 4px solid var(--neon-mavi); box-shadow: 0 0 30px var(--neon-mavi); transition: 0.4s; }
-        .pfp:hover { transform: scale(1.1); box-shadow: 0 0 50px var(--neon-mavi); }
-        
-        /* Uzun Kart Tasarımları */
-        .card { background: #0a0a0a; padding: 40px; border-radius: 25px; margin-bottom: 30px; border: 1px solid #333; transition: 0.3s; position: relative; }
-        .card:hover { border-color: var(--neon-yesil); box-shadow: 0 0 20px rgba(0, 255, 159, 0.1); }
-        h2 { color: var(--neon-yesil); margin-top: 0; font-size: 1.8rem; }
-        
-        /* Efektler */
-        .divider { height: 2px; background: linear-gradient(90deg, transparent, var(--neon-pembe), transparent); margin: 40px 0; }
-        .btn { display: block; width: 250px; margin: 40px auto; text-align: center; padding: 20px; border-radius: 50px; border: 2px solid var(--neon-pembe); color: var(--neon-pembe); text-decoration: none; font-weight: bold; font-size: 1.2rem; transition: 0.3s; }
-        .btn:hover { background: var(--neon-pembe); color: white; box-shadow: 0 0 30px var(--neon-pembe); }
+        body { background: #050505; color: #d1d1d1; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 15px; line-height: 1.6; }
+        .container { max-width: 500px; margin: auto; }
+        .pfp { width: 140px; height: 140px; border-radius: 50%; border: 2px solid #00d4ff; display: block; margin: 20px auto; }
+        .card { background: #111; padding: 20px; border-radius: 15px; margin-bottom: 15px; border: 1px solid #222; }
+        h2 { color: #00d4ff; font-size: 1.1rem; margin-top: 0; }
+        .tag { display: inline-block; background: #222; padding: 5px 10px; border-radius: 5px; font-size: 0.8rem; margin: 3px; color: #00ff9f; }
+        input, textarea { width: 100%; padding: 10px; margin: 10px 0; background: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 8px; box-sizing: border-box; }
+        .btn { width: 100%; padding: 12px; background: #00d4ff; border: none; color: #000; font-weight: bold; border-radius: 8px; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header">
-        <img src="https://www.instagram.com/yuşa.ciloglan/profilepic" onerror="this.src='https://via.placeholder.com/180'" class="pfp">
+    <div style="text-align: center;">
+        <img src="https://images.weserv.nl/?url=https://www.instagram.com/yusa.ciloglan/profilepic&w=400" class="pfp">
         <h1>Yuşa Çiloğlan</h1>
-        <p style="color: #888;">Hafız | Yazılımcı | İl Ezan 3.sü</p>
+        <p>Hafız | Yazılımcı | Araştırmacı</p>
     </div>
 
     <div class="card">
-        <h2>Hafızlık: Hayatımın Pusulası</h2>
-        <p>Hafızlık serüvenim, sadece bir metni ezberlemek değil, Kur'an'ın o eşsiz nizamını ruhumun en derinlerine işleme sanatıydı. Genç yaşımda başladığım bu disiplinli eğitim süreci, bana sabrın aslında en güçlü silah olduğunu gösterdi. Ayetlerin arasından akan maneviyat, bugün hem teknik projelerimde hem de hayata bakış açımda en temel rehberim. Hafız olmak, her an O'nun huzurunda olduğunun bilinciyle yaşamak demektir.</p>
+        <h2>Dijital Hafızlık & Osmanlı Disiplini</h2>
+        <p>Hafızlık sürecimde <b>"33 Tekrar Taktiği"</b> ve klasik Osmanlı ezber yöntemlerini modern zaman yönetimiyle birleştirdim. Kur'an ilmi, sadece bir ezber değil; zihinsel bir mimaridir.</p>
     </div>
 
     <div class="card">
-        <h2>Medine-i Münevvere ve Manevi Derinlik</h2>
-        <p>Medine'nin o mistik ve huzur dolu sokaklarında, Mescid-i Nebevi'nin gölgesinde geçirdiğim her an, ruhumun tazelenmesini sağladı. Umre yolculukları, dünyevi hırslarımdan arınmamı ve sadeliğin ne kadar estetik olduğunu anlamamı sağladı. Kutsal topraklarda attığım her adımda, gelecekteki projelerim için manevi bir vizyon inşa ettim. Sadelik ve teslimiyet, benim için sadece bir inanç değil, yaşam stratejimin temelidir.</p>
+        <h2>Okuma Listem (İlmi Kütüphanem)</h2>
+        <div class="tag">101 Evliya</div> <div class="tag">Risale-i Nur</div> <div class="tag">İhya-u Ulumiddin</div> <div class="tag">Siyer-i Nebi</div>
     </div>
 
     <div class="card">
-        <h2>Makamın Gücü: İl Ezan 3.lüğü</h2>
-        <p>Ezan, İslam'ın sesli bayrağıdır. İl Ezan yarışmasında elde ettiğim 3.lük derecesi, bu ağır sorumluluğun verdiği motivasyonla gerçekleşti. Makam çalışmaları, nefes kontrolü ve tecvid ilmiyle harmanladığım bu süreçte, sesi kalpten çıkarmayı öğrendim. Ezan okurken kurduğum o manevi bağ, aslında kod yazarken kurduğum o mantıksal bağla aynı tutkuya sahip.</p>
+        <h2>Yazılım & Lab</h2>
+        <p>Siber güvenlik analizleri, VDS yönetimi ve otomasyon. Kod yazmak benim için manevi disiplinin dijital dünyaya yansımasıdır.</p>
     </div>
 
     <div class="card">
-        <h2>Yazılım ve Dijital Evren</h2>
-        <p>Hafızlığın zihinsel keskinliğini kodların soğuk ama kusursuz mantığıyla birleştiriyorum. VDS yönetim sistemleri, ağ güvenliği, otomasyon araçları ve OSINT analizleri üzerinde çalışıyorum. Benim için bir kod bloğu, tıpkı kıraat ilmindeki kurallar gibi hatasız ve estetik olmalıdır. Karmaşık sistemleri parçalara ayırıp yeniden inşa etmeyi, dijital dünyada yeni bir "düzen" kurmayı seviyorum.</p>
+        <h2>Medine Yolcusu</h2>
+        <p>Manevi iklimin merkezinde geçen o günler, sadeliğin en büyük sanat olduğunu öğretti.</p>
     </div>
 
-    <div class="divider"></div>
-
-    <a href="https://instagram.com/yuşa.ciloglan" class="btn">Instagram'da Beni Takip Et</a>
+    <div class="card">
+        <h2>İletişim & Fikir Alışverişi</h2>
+        <form action="https://formspree.io/f/KENDI_MAIL_ID_BURAYA" method="POST">
+            <input type="email" name="email" placeholder="E-posta adresin" required>
+            <textarea name="message" placeholder="Mesajın..." required></textarea>
+            <button type="submit" class="btn">Gönder</button>
+        </form>
+    </div>
 </div>
 
 </body>
