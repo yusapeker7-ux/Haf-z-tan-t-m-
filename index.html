@@ -1,177 +1,206 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Hafız Yuşa Portfolio</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hafız Yuşa | Akademik Portfolio</title>
 
 <style>
 body{
   margin:0;
   font-family: Arial;
-  background:#050b1a;
-  color:white;
+  color:#e5e7eb;
+  background-color:#050505;
+
+  /* kareli grid arka plan */
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size:40px 40px;
 }
 
 /* HEADER */
 header{
   text-align:center;
   padding:30px;
+  border-bottom:1px solid #1f2937;
 }
 
 h1{
   margin:0;
-  font-size:34px;
-  color:#7dd3fc;
-  text-shadow:0 0 10px #1d4ed8;
+  font-size:32px;
+  color:#60a5fa;
 }
 
-p{
-  opacity:0.8;
-}
-
-/* NAV */
 nav{
   display:flex;
   justify-content:center;
   gap:10px;
-  margin-bottom:20px;
+  padding:15px;
+  flex-wrap:wrap;
 }
 
 nav button{
-  background:#0b1b3a;
-  border:1px solid #1d4ed8;
+  background:#0f172a;
   color:white;
+  border:1px solid #1f2937;
   padding:10px 15px;
-  border-radius:10px;
+  border-radius:8px;
   cursor:pointer;
-  box-shadow:0 0 10px #0ea5e9;
-  transition:0.3s;
 }
 
 nav button:hover{
-  transform:scale(1.05);
-  box-shadow:0 0 15px #38bdf8;
+  border-color:#3b82f6;
 }
 
-/* BOX */
 .container{
   max-width:900px;
   margin:auto;
   padding:20px;
 }
 
-.box{
-  background:#07142e;
-  border:1px solid #1d4ed8;
+.card{
+  background:#0b0f1a;
+  border:1px solid #1f2937;
+  border-radius:12px;
   padding:20px;
-  border-radius:15px;
-  box-shadow:0 0 20px #0ea5e9;
   margin-bottom:20px;
 }
 
-/* NEON TITLE */
-.neon{
-  color:#38bdf8;
-  text-shadow:0 0 10px #0ea5e9;
+.title{
+  color:#93c5fd;
+  margin-bottom:10px;
 }
 
-/* ARABIC */
+/* kutular */
+.box{
+  border-left:3px solid #3b82f6;
+  padding:10px 15px;
+  margin-top:10px;
+  background:#0a0f1f;
+}
+
+/* arapça */
 .arabic{
   text-align:right;
-  font-size:20px;
   direction:rtl;
-  margin-top:10px;
+  font-size:20px;
   color:#93c5fd;
-}
-
-/* BOOK CARD */
-.book{
-  border:1px solid #2563eb;
-  padding:15px;
-  border-radius:12px;
   margin-top:10px;
-  background:#0a1a3a;
-  box-shadow:0 0 10px #1d4ed8;
 }
 
 .hidden{display:none;}
 </style>
+
 </head>
 
 <body>
 
 <header>
   <h1>Hafız Yuşa Çiloğlan</h1>
-  <p>Hafız • İlim Talebesi • Yolunda Bir Kul</p>
+  <p>Hafız • Akademik İslam Çalışmaları • Yazılım Öğrencisi</p>
 </header>
 
 <nav>
   <button onclick="show('about')">Hakkımda</button>
+  <button onclick="show('ezan')">Ezan Çalışmaları</button>
   <button onclick="show('books')">İlim ve Kitap</button>
 </nav>
 
 <div class="container">
 
-  <!-- ABOUT -->
-  <div id="about" class="box">
-    <h2 class="neon">Hakkımda</h2>
+<!-- ABOUT -->
+<div id="about" class="card">
 
-    <p>
-      Ben Hafız Yuşa. Kur’an ile büyüyen, ilim yolunda ilerlemeye çalışan bir öğrenciyim.
-      Hayatımın merkezinde sabır, tekrar ve öğrenme var.
-    </p>
+  <h2 class="title">Hakkımda</h2>
 
-    <p>
-      Küçük yaşlardan beri Kur’an-ı Kerim ile iç içeyim.
-      Kendimi hem dini ilimlerde hem de karakter olarak geliştirmeye çalışıyorum.
-    </p>
+  <p>
+    Ben Hafız Yuşa Çiloğlan. Kur’an-ı Kerim hafızlığı yapmış, aynı zamanda yazılım ve İslami ilimlere ilgi duyan bir öğrenciyim.
+    Hayatımın merkezinde disiplin, tekrar ve öğrenme vardır.
+  </p>
 
-    <div class="arabic">
-      وَقُل رَّبِّ زِدْنِي عِلْمًا
-    </div>
+  <p>
+    Akademik olarak hem dini ilimlerde hem de modern teknoloji alanında kendimi geliştirmeye çalışıyorum.
+    Amacım bilgi birikimini sadece öğrenmek değil, aynı zamanda analiz ederek anlamaktır.
+  </p>
+
+  <div class="arabic">
+    وَقُل رَّبِّ زِدْنِي عِلْمًا
   </div>
 
-  <!-- BOOKS -->
-  <div id="books" class="box hidden">
-    <h2 class="neon">İlim ve Kitap</h2>
-
-    <p>
-      Okuduğum kitaplar sadece bilgi değil, bana yön veren kaynaklardır.
-      Her kitapta farklı bir ders ve anlam çıkarmaya çalışırım.
-    </p>
-
-    <div class="book">
-      <b>📖 Kur’an-ı Kerim</b>
-      <p>
-        Anladığım şey: Sabır, teslimiyet ve Allah’a güven hayatın temelidir.
-      </p>
-    </div>
-
-    <div class="book">
-      <b>📖 Riyazus-Salihin</b>
-      <p>
-        Anladığım şey: Ahlak ve davranış insanın en büyük değeridir.
-      </p>
-    </div>
-
-    <div class="book">
-      <b>📖 İslam Tarihi Notları</b>
-      <p>
-        Anladığım şey: Geçmişi bilmek geleceği doğru kurmamı sağlar.
-      </p>
-    </div>
-
-    <div class="arabic">
-      إِنَّ مَعَ ٱلْعُسْرِ يُسْرًا
-    </div>
+  <div class="box">
+    <b>Akademik Not:</b>
+    İlim sadece bilgi değildir, aynı zamanda karakter ve sabır eğitimidir.
   </div>
+
+</div>
+
+<!-- EZAN -->
+<div id="ezan" class="card hidden">
+
+  <h2 class="title">Ezan Çalışmaları</h2>
+
+  <p>
+    Ezan üzerine yaptığım çalışmalar makam, ses kontrolü ve nefes teknikleri üzerine yoğunlaşmaktadır.
+    Bu alan sadece teknik değil, aynı zamanda manevi bir disiplindir.
+  </p>
+
+  <p>
+    Katıldığım ezan yarışmalarında İl seviyesinde derece elde ettim.
+    Bu süreç bana hem özgüven hem de disiplin kazandırdı.
+  </p>
+
+  <div class="box">
+    <b>Analiz:</b>
+    Ezanın makam yapısı, insan psikolojisi üzerinde derin bir etki bırakır.
+    Her makam farklı bir duygu frekansı taşır.
+  </div>
+
+  <div class="arabic">
+    إِنَّ مَعَ ٱلْعُسْرِ يُسْرًا
+  </div>
+
+</div>
+
+<!-- BOOKS -->
+<div id="books" class="card hidden">
+
+  <h2 class="title">İlim ve Kitap</h2>
+
+  <p>
+    Okuduğum kitaplar benim için sadece bilgi kaynağı değil, aynı zamanda düşünce yapımı şekillendiren kaynaklardır.
+  </p>
+
+  <div class="box">
+    <b>Kur’an-ı Kerim</b>
+    <p>Analiz: Hayatın temel prensibi sabır ve teslimiyettir.</p>
+  </div>
+
+  <div class="box">
+    <b>Riyazus-Salihin</b>
+    <p>Analiz: Ahlak, insanın en büyük değeridir.</p>
+  </div>
+
+  <div class="box">
+    <b>İslam Tarihi</b>
+    <p>Analiz: Geçmişi anlamak geleceği doğru kurmayı sağlar.</p>
+  </div>
+
+  <div class="box">
+    <b>Akademik Not</b>
+    <p>
+      Her kitap bana sadece bilgi değil, aynı zamanda düşünme disiplini kazandırır.
+      Okuma süreci analiz ile birleştiğinde gerçek öğrenme gerçekleşir.
+    </p>
+  </div>
+
+</div>
 
 </div>
 
 <script>
 function show(id){
-  document.querySelectorAll(".box").forEach(b=>b.classList.add("hidden"));
+  document.querySelectorAll(".card").forEach(c=>c.classList.add("hidden"));
   document.getElementById(id).classList.remove("hidden");
 }
 </script>
