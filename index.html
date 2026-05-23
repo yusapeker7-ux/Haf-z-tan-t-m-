@@ -1,122 +1,168 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hafız Yuşa Çiloğlan</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hafız | Portfolyo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-<style>
-body{
-  margin:0;
-  font-family:Arial;
-  color:#e5e7eb;
-  background:#05060a;
-  background-image:
-    linear-gradient(rgba(59,130,246,0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(59,130,246,0.08) 1px, transparent 1px);
-  background-size:42px 42px;
-}
+        body {
+            background-color: #0f172a;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
 
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  background:radial-gradient(circle at top, rgba(59,130,246,0.18), transparent 60%);
-  pointer-events:none;
-}
+        header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            padding: 3rem 1rem;
+            text-align: center;
+            border-bottom: 2px solid #38bdf8;
+        }
 
-header{
-  text-align:center;
-  padding:40px 20px 10px;
-}
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: #38bdf8;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #0f172a;
+        }
 
-h1{
-  margin:0;
-  font-size:34px;
-  color:#93c5fd;
-}
+        h1 {
+            font-size: 2.5rem;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
 
-.subtitle{
-  opacity:0.7;
-}
+        .subtitle {
+            color: #38bdf8;
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
 
-.container{
-  max-width:900px;
-  margin:auto;
-  padding:20px;
-}
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
 
-.card{
-  background:rgba(2,6,23,0.75);
-  border:1px solid rgba(59,130,246,0.25);
-  border-radius:14px;
-  padding:20px;
-  margin:15px 0;
-}
+        section {
+            background-color: #1e293b;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
 
-.title{
-  color:#93c5fd;
-  font-size:18px;
-  margin-bottom:8px;
-}
+        h2 {
+            color: #38bdf8;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 0.5rem;
+        }
 
-p{
-  line-height:1.6;
-  margin:0;
-}
-</style>
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .skill-card {
+            background-color: #334155;
+            padding: 0.75rem;
+            text-align: center;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .contact-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            background-color: #38bdf8;
+            color: #0f172a;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #0ea5e9;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
-
 <body>
 
-<header>
-  <h1>HAFIZ YUŞA ÇİLOĞLAN</h1>
-  <div class="subtitle">Kişisel Profil</div>
-</header>
+    <header>
+        <div class="profile-img">📖</div>
+        <h1>Hafız</h1>
+        <p class="subtitle">Yazılım Geliştirici & Tasarımcı</p>
+    </header>
 
-<div class="container">
+    <div class="container">
 
-  <div class="card">
-    <div class="title">Hakkımda</div>
-    <p>
-      Hafızlık eğitimi aldım ve Kur’an ile sürekli bir çalışma sürecim oldu.
-      Disiplinli ve düzenli şekilde ilerlemeye devam ediyorum.
-    </p>
-  </div>
+        <section id="about">
+            <h2>Hakkımda</h2>
+            <p>Merhaba! Ben Hafız. Kelamın hafızasıyla modern teknolojinin dinamizmini bir araya getirmeyi seven, projeler üreten ve sürekli kendini geliştiren biriyim. HTML5, CSS3 ve JavaScript başta olmak üzere web teknolojileri ve yazılım çözümleri üzerinde çalışıyorum.</p>
+        </section>
 
-  <div class="card">
-    <div class="title">Hafızlık</div>
-    <p>
-      Ezber ve tekrar üzerine kurulu bir süreçti.
-      Sabır ve süreklilik gerektiren bir eğitimdir.
-    </p>
-  </div>
+        <section id="skills">
+            <h2>Yetenekler & İlgi Alanları</h2>
+            <div class="skills-grid">
+                <div class="skill-card">HTML5 & CSS3</div>
+                <div class="skill-card">JavaScript</div>
+                <div class="skill-card">Siber Güvenlik</div>
+                <div class="skill-card">Scripting</div>
+                <div class="skill-card">Web Otomasyon</div>
+                <div class="skill-card">Veritabanı</div>
+            </div>
+        </section>
 
-  <div class="card">
-    <div class="title">Ezan</div>
-    <p>
-      Ezan çalışmaları yaptım ve il düzeyinde derece elde ettim.
-      Makam ve ses eğitimi üzerine deneyim kazandım.
-    </p>
-  </div>
+        <section id="projects">
+            <h2>Projeler</h2>
+            <p>Yakında buraya üzerinde çalıştığım güncel web panellerini, Discord bot projelerini ve simülasyon araçlarını ekleyeceğim.</p>
+        </section>
 
-  <div class="card">
-    <div class="title">Umre</div>
-    <p>
-      Umre ziyareti gerçekleştirdim.
-      Manevi açıdan önemli bir deneyimdi.
-    </p>
-  </div>
+        <section id="contact">
+            <h2>İletişim</h2>
+            <p>Benimle iletişime geçmek, projelerimde yer almak veya iş birliği yapmak için aşağıdaki bağlantıları kullanabilirsiniz.</p>
+            <div class="contact-links">
+                <a href="#" class="btn">E-posta Gönder</a>
+                <a href="#" class="btn" style="background-color: #475569; color: #fff;">Instagram</a>
+            </div>
+        </section>
 
-  <div class="card">
-    <div class="title">İlim</div>
-    <p>
-      Kur’an ve temel İslami kaynaklar üzerine çalışmalar yapıyorum.
-      Ayrıca yazılım ile de ilgileniyorum.
-    </p>
-  </div>
+    </div>
 
-</div>
+    <footer>
+        <p>&copy; 2026 Hafız. Tüm Hakları Saklıdır.</p>
+    </footer>
 
 </body>
 </html>
+
