@@ -10,7 +10,7 @@ body{
   margin:0;
   font-family:Arial;
   color:#e5e7eb;
-  overflow:hidden;
+  overflow-x:hidden;
 
   background:#05060a;
   background-image:
@@ -28,45 +28,22 @@ body::before{
   pointer-events:none;
 }
 
-/* INTRO (FAST) */
-#intro{
-  position:fixed;
-  inset:0;
-  background:#05060a;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
-  z-index:999;
-  animation:fadeOut 1s ease forwards;
-  animation-delay:0.8s; /* 🔥 hızlı geçiş */
-}
-
-#intro h1{
-  color:#93c5fd;
-  text-shadow:0 0 20px #2563eb;
-  letter-spacing:2px;
-}
-
-@keyframes fadeOut{
-  to{opacity:0; visibility:hidden;}
-}
-
 /* HEADER */
 header{
   text-align:center;
-  padding:30px 20px 10px;
+  padding:35px 20px 10px;
 }
 
 h1{
   margin:0;
-  font-size:38px;
+  font-size:36px;
   color:#93c5fd;
   text-shadow:0 0 18px #2563eb;
 }
 
 .subtitle{
   opacity:0.7;
+  margin-top:5px;
 }
 
 /* NAV */
@@ -75,7 +52,7 @@ h1{
   justify-content:center;
   flex-wrap:wrap;
   gap:10px;
-  margin-top:15px;
+  margin-top:18px;
 }
 
 .nav button{
@@ -98,64 +75,47 @@ h1{
   background:#1d4ed8;
 }
 
-/* FIXED CONTENT BOX (SPAWN POINT) */
+/* CONTENT BOX */
 .container{
-  height:calc(100vh - 160px);
   display:flex;
-  align-items:center;
   justify-content:center;
+  align-items:center;
+  height:calc(100vh - 160px);
 }
 
-/* SINGLE SPAWN CARD */
 .card{
   width:90%;
-  max-width:750px;
+  max-width:800px;
   background:rgba(2,6,23,0.75);
   border:1px solid rgba(59,130,246,0.2);
   border-radius:18px;
   padding:28px;
 
   opacity:0;
-  transform:scale(0.95);
+  transform:translateY(20px);
   transition:0.5s ease;
-  position:absolute;
 }
 
 .card.show{
   opacity:1;
-  transform:scale(1);
+  transform:translateY(0);
 }
 
 .title{
   color:#93c5fd;
   font-size:22px;
-  margin-bottom:10px;
+  margin-bottom:12px;
+  text-shadow:0 0 10px rgba(37,99,235,0.4);
 }
 
-/* particles */
-.p{
-  position:fixed;
-  width:4px;
-  height:4px;
-  background:#60a5fa;
-  border-radius:50%;
-  opacity:0.3;
-  animation:up 10s linear infinite;
-}
-
-@keyframes up{
-  from{transform:translateY(100vh);}
-  to{transform:translateY(-10vh);}
+p{
+  line-height:1.6;
+  opacity:0.95;
 }
 </style>
 </head>
 
 <body>
-
-<!-- INTRO -->
-<div id="intro">
-  <h1>HAFIZ YUŞA</h1>
-</div>
 
 <header>
   <h1>HAFIZ YUŞA ÇİLOĞLAN</h1>
@@ -163,26 +123,20 @@ h1{
 
   <div class="nav">
     <button class="active" onclick="go(0)">Hakkımda</button>
-    <button onclick="go(1)">Hafızlık</button>
-    <button onclick="go(2)">Ezan</button>
-    <button onclick="go(3)">Umre</button>
-    <button onclick="go(4)">İlim</button>
+    <button onclick="go(1)">Yolculuğum</button>
+    <button onclick="go(2)">İlim</button>
   </div>
 </header>
 
 <div class="container">
-
-<!-- SINGLE SPAWN BOX -->
-<div class="card show" id="box">
-
-  <div class="title">Hakkımda</div>
-  <p>
-    Bir yol vardı… sessiz, sabırlı ve derin.  
-    Ben o yolun içinde Kur’an’la büyüdüm.
-  </p>
-
-</div>
-
+  <div class="card show" id="box">
+    <div class="title">Hakkımda</div>
+    <p>
+      Ben Hafız Yuşa Çiloğlan. Küçük yaşlardan itibaren Kur’an ile iç içe büyüdüm.  
+      Hafızlık süreci benim için sadece ezber değil, sabır ve disiplinin kendisiydi.  
+      Zamanla kendimi hem dini ilimlerde hem de farklı alanlarda geliştirmeye çalıştım.
+    </p>
+  </div>
 </div>
 
 <script>
@@ -190,62 +144,44 @@ h1{
 const box=document.getElementById("box");
 const btns=document.querySelectorAll(".nav button");
 
-/* ROMAN STYLE TEXTS */
-const texts=[
+const data=[
 {
 title:"Hakkımda",
-text:`Bir çocuk düşün… sessiz bir gecede Kur’an sesiyle büyüyen.  
-Ben o sessizliğin içinden geldim.`
+text:`Ben Hafız Yuşa Çiloğlan. Küçük yaşlardan itibaren Kur’an ile iç içe büyüdüm.  
+Hafızlık süreci benim için sadece ezber değil, sabır ve disiplinin kendisiydi.  
+Zamanla kendimi hem dini ilimlerde hem de farklı alanlarda geliştirmeye çalıştım.`
 },
 
 {
-title:"Hafızlık",
-text:`Ezber değildi bu…  
-kendini yeniden inşa etmekti.`
-},
-
-{
-title:"Ezan",
-text:`Bir ses değil… göğe açılan bir kapıydı benim için.`
-},
-
-{
-title:"Umre",
-text:`Kâbe’yi gördüğüm an, dünya geride kaldı.  
-Zaman sustu.`
+title:"Yolculuğum",
+text:`Hafızlık süreci boyunca tekrar, emek ve sabır hayatımın merkezindeydi.  
+Ezan çalışmalarıyla birlikte sesin sadece bir ton değil, bir anlam taşıdığını öğrendim.  
+Umre yolculuğum ise bakış açımı değiştiren en önemli anlardan biri oldu.`
 },
 
 {
 title:"İlim",
-text:`Kitaplar bana bilgi değil, yön verdi.  
-Her sayfa bir iz bıraktı.`
+text:`Kur’an bana sabrı öğretti.  
+Riyazus-Salihin ahlakı öğretti.  
+İslam tarihi ise bakış açımı genişletti.  
+Bilgi benim için sadece öğrenmek değil, değişmek anlamına geliyor.`
 }
 ];
 
-/* SPAWN CHANGE */
 function go(i){
 
   box.classList.remove("show");
 
   setTimeout(()=>{
     box.innerHTML=`
-      <div class="title">${texts[i].title}</div>
-      <p>${texts[i].text}</p>
+      <div class="title">${data[i].title}</div>
+      <p>${data[i].text}</p>
     `;
     box.classList.add("show");
-  },150);
+  },120);
 
   btns.forEach(b=>b.classList.remove("active"));
   btns[i].classList.add("active");
-}
-
-/* particles */
-for(let i=0;i<30;i++){
-  let p=document.createElement("div");
-  p.className="p";
-  p.style.left=Math.random()*100+"vw";
-  p.style.animationDuration=(5+Math.random()*10)+"s";
-  document.body.appendChild(p);
 }
 
 </script>
