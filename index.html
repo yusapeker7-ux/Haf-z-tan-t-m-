@@ -3,231 +3,222 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yuşa Çiloğlan | Kişisel Portfolyo</title>
+    <title>Yuşa Çiloğlan | Akademik Portfolyo</title>
     <style>
-        /* Genel Sıfırlama ve Font */
+        /* Akademik & Minimalist Temel Ayarlar */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        /* Canlı Neon Arka Plan Animasyonu */
-        @keyframes bgPulse {
-            0% { background-color: #030712; }
-            50% { background-color: #0b1528; }
-            100% { background-color: #030712; }
+            font-family: 'Times New Roman', Times, serif, 'Segoe UI', Georgia;
         }
 
         body {
-            animation: bgPulse 8s ease-in-out infinite;
-            color: #f1f5f9;
-            line-height: 1.6;
+            background-color: #05070c;
+            color: #e2e8f0;
+            line-height: 1.8;
             overflow-x: hidden;
         }
 
-        /* Header Kısmı */
+        /* Ağırbaşlı ve Derin Header */
         header {
-            background: linear-gradient(180deg, #020617 0%, rgba(15, 23, 42, 0.8) 100%);
-            padding: 4rem 1rem 3rem 1rem;
+            background: linear-gradient(180deg, #020306 0%, #0b0f17 100%);
+            padding: 5rem 1rem 4rem 1rem;
             text-align: center;
-            border-bottom: 2px solid #06b6d4;
-            box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+            border-bottom: 1px solid #1e293b;
+            position: relative;
         }
 
-        /* Parlayan Neon Profil Çemberi */
-        .profile-icon {
-            width: 100px;
-            height: 100px;
+        /* Asil, Yavaşça Dönen İnce Çerçeve Animasyonu */
+        @keyframes borderGlow {
+            0% { border-color: #1e293b; box-shadow: 0 0 15px rgba(30, 41, 59, 0.2); }
+            50% { border-color: #1d4ed8; box-shadow: 0 0 25px rgba(29, 78, 216, 0.4); }
+            100% { border-color: #1e293b; box-shadow: 0 0 15px rgba(30, 41, 59, 0.2); }
+        }
+
+        .academic-crest {
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
-            background-color: #0f172a;
-            border: 3px solid #00f2fe;
-            box-shadow: 0 0 15px #00f2fe, inset 0 0 15px #00f2fe;
+            background-color: #0b0f17;
+            border: 2px solid #1e293b;
             margin: 0 auto 1.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.5rem;
+            font-size: 2.2rem;
+            animation: borderGlow 6s infinite ease-in-out;
         }
 
-        /* Neon Yazı Efektleri */
         h1 {
-            font-size: 2.5rem;
-            color: #fff;
-            text-shadow: 0 0 10px #00f2fe, 0 0 20px #00f2fe;
+            font-size: 2.4rem;
+            color: #ffffff;
+            font-weight: 500;
+            letter-spacing: 2px;
             margin-bottom: 0.5rem;
+        }
+
+        .title-sub {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            font-style: italic;
             letter-spacing: 1px;
         }
 
-        .subtitle {
-            color: #38bdf8;
-            font-size: 1.3rem;
-            font-weight: 600;
-            text-shadow: 0 0 5px rgba(56, 189, 248, 0.5);
+        /* Konteyner Düzeni */
+        .main-container {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
         }
 
-        /* Ana Konteyner */
-        .container {
-            max-width: 750px;
-            margin: 2rem auto;
-            padding: 0 1.2rem;
-        }
-
-        /* Kartlar / Bölümler */
+        /* Ciddi ve Mat Kart Tasarımları */
         section {
-            background: rgba(15, 23, 42, 0.9);
-            padding: 2.2rem;
-            border-radius: 12px;
-            margin-bottom: 2rem;
+            background: #0b0f17;
+            padding: 2.5rem;
+            border-radius: 6px;
+            margin-bottom: 2.5rem;
             border: 1px solid #1e293b;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-            transition: transform 0.3s ease, border-color 0.3s ease;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.7);
+            transition: all 0.4s ease;
         }
 
         section:hover {
-            transform: translateY(-2px);
-            border-color: #06b6d4;
-            box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);
+            border-color: #2563eb;
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.15);
         }
 
         h2 {
-            color: #00f2fe;
-            font-size: 1.5rem;
-            margin-bottom: 1.2rem;
-            text-shadow: 0 0 8px rgba(0, 242, 254, 0.6);
+            color: #ffffff;
+            font-size: 1.4rem;
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #1e293b;
+            padding-bottom: 0.5rem;
+            letter-spacing: 1px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         p {
-            color: #cbd5e1;
-            font-size: 1.1rem;
+            color: #94a3b8;
+            font-size: 1.05rem;
             text-align: justify;
+            text-indent: 1.5rem;
         }
 
-        /* Başarılar ve İlgi Alanları Listesi */
-        .grid-list {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        @media(min-width: 480px) {
-            .grid-list {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        .grid-item {
-            background: #1e293b;
-            padding: 1rem;
-            border-radius: 8px;
-            border-left: 4px solid #38bdf8;
-            font-weight: 600;
-            color: #f8fafc;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
-        }
-
-        /* Özel Vurgulu Kart (Umre İçin) */
-        .highlight-card {
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-            border: 1px dashed #f43f5e;
-            border-left: 4px solid #f43f5e;
-            box-shadow: 0 0 10px rgba(244, 63, 94, 0.2);
-        }
-
-        .highlight-card h2 {
-            color: #f43f5e;
-            text-shadow: 0 0 8px rgba(244, 63, 94, 0.6);
-        }
-
-        /* İletişim Butonları */
-        .btn-group {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
+        /* Akademik Kronoloji ve Detay Listesi */
+        .academic-list {
             margin-top: 1.5rem;
+            list-style: none;
         }
 
-        .btn {
-            background: transparent;
-            color: #00f2fe;
-            border: 2px solid #00f2fe;
-            padding: 0.8rem 2rem;
-            text-decoration: none;
-            border-radius: 30px;
+        .academic-list li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+            color: #cbd5e1;
+            font-size: 1.05rem;
+        }
+
+        .academic-list li::before {
+            content: "•";
+            color: #3b82f6;
             font-weight: bold;
-            font-size: 1rem;
-            text-transform: uppercase;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        /* İletişim & Sosyal Medya Butonları */
+        .meta-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .academic-btn {
+            background-color: transparent;
+            color: #ffffff;
+            border: 1px solid #334155;
+            padding: 0.7rem 2.2rem;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.95rem;
             letter-spacing: 1px;
-            box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
             transition: all 0.3s ease;
         }
 
-        .btn:hover {
-            background: #00f2fe;
-            color: #020617;
-            box-shadow: 0 0 20px #00f2fe;
+        .academic-btn:hover {
+            background-color: #ffffff;
+            color: #05070c;
+            border-color: #ffffff;
         }
 
         footer {
             text-align: center;
-            padding: 3rem 1rem;
+            padding: 4rem 1rem;
             color: #475569;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            border-top: 1px solid #0b0f17;
         }
     </style>
 </head>
 <body>
 
+    <!-- Akademik Üst Alan -->
     <header>
-        <div class="profile-icon">🌙</div>
+        <div class="academic-crest">📜</div>
         <h1>Yuşa Çiloğlan</h1>
-        <p class="subtitle">Hafız & Müezzin</p>
+        <p class="title-sub">Kelam Araştırmaları & Kıraat Çalışmaları</p>
     </header>
 
-    <div class="container">
+    <div class="main-container">
 
-        <section id="hakkimda">
-            <h2>✨ Hakkımda</h2>
-            <p>Selamun Aleyküm, ben Yuşa Çiloğlan. Hayatını Kur'an-ı Kerim'in rehberliğiyle şekillendiren, kelamın hafızasını kalbinde taşıyan bir hafızım. Manevi değerlere hizmet etmeyi, ezan-ı muhammediyi en güzel sadayla gökyüzüne ulaştırmayı kendime gaye edindim. Kendimi bu yolda sürekli geliştirmeye ve güzel ahlak üzere yürümeye gayret ediyorum.</p>
+        <!-- Hakkımda (Ciddi Ton) -->
+        <section id="biografi">
+            <h2>I. Biyografi ve Misyon</h2>
+            <p>Ben Yuşa Çiloğlan. Erken yaşlarda başladığım Kur'an-ı Kerim eğitimi ve hıfzü'l-Kur'an sürecini başarıyla tamamlayarak Hafızlık unvanını ihraz ettim. Çalışmalarımı sadece ezber pratiğiyle sınırlı tutmayıp, İslam sanatlarının en nadide şubelerinden biri olan Tilavet ve Ezan ilmi üzerinde akademik hassasiyetle sürdürmekteyim. Temel gayem; geleneksel kodları muhafaza ederek, ilahi kelamın estetik ve lafzi derinliğini yeni nesil platformlar vasıtasıyla geniş kitlelere ulaştırmaktır.</p>
         </section>
 
-        <section id="ilgi-alanlari">
-            <h2>🕌 İlgi Alanları & Başarılar</h2>
-            <div class="grid-list">
-                <div class="grid-item">📖 Kur'an-ı Kerim Hıfzedilmesi</div>
-                <div class="grid-item">🎙️ Ezanı Güzel Okuma Çalışmaları</div>
-                <div class="grid-item">🏆 Ezan Okuma Yarışması İl 3.'lüğü</div>
-                <div class="grid-item">📚 Dini ve Manevi Rehberlik</div>
-            </div>
+        <!-- Çalışma Alanları & Başarılar -->
+        <section id="akademik-faaliyet">
+            <h2>II. İnceleme Alanları & Başarılar</h2>
+            <p>Yürütülen çalışmalar ve elde edilen kurumsal başarılar kronolojik ve tematik olarak aşağıda kayıt altına alınmıştır:</p>
+            <ul class="academic-list">
+                <li><strong>Kıraat ve Mushaf İncelenmesi:</strong> Kur'an-ı Kerim metni üzerinde hıfız doğrulaması ve tilavet disiplinleri.</li>
+                <li><strong>Ezanı Güzel Okuma Yarışması:</strong> Makam ve ses icrası kategorisinde İl Üçüncülüğü derecesi.</li>
+                <li><strong>Manevi Sahalar ve Rehberlik:</strong> Toplumsal irşad ve dini değerlerin doğru aktarılması hususunda metodolojik çalışmalar.</li>
+                <li><strong>Dijital Tebliğ ve Estetik:</strong> Manevi mirasın modern çağın estetik algısına uygun biçimde dijital dünyaya taşınması.</li>
+            </ul>
         </section>
 
-        <section id="umre" class="highlight-card">
-            <h2>🕋 Umre Yolculuğu</h2>
-            <p>Manevi hayatımın en dönüm noktası ve en kıymetli dilimlerinden biri, kutsal topraklara gerçekleştirdiğim Umre yolculuğudur. Beytullah'ın gölgesinde geçirilen o huzur dolu günler, Efendimiz'in (S.A.V.) izinde yürümek, ruhuma bambaşka bir ufuk ve derinlik kattı.</p>
+        <!-- Kutsal Topraklar Deneyimi -->
+        <section id="manevi-seyahat">
+            <h2>III. Umre Tetkikleri ve Seyahat Notları</h2>
+            <p>Manevi ve ilmi tekamül sürecinin en mühim aşamalarından birini teşkil eden Umre ziyareti, kutsal toprakların tarihi, mimarisi ve sosyo-kültürel yapısı üzerine bizzat yerinde gözlem yapma imkanı tanımıştır. Hicaz bölgesinde gerçekleştirilen bu seyahat, hem şahsi dünyamda bir dönüm noktası olmuş hem de ilmi faaliyetlerime köklü bir vizyon kazandırmıştır.</p>
         </section>
 
-        <section id="iletisim">
-            <h2>💬 İletişim</h2>
-            <p style="text-align: center; margin-bottom: 1rem;">Benimle manevi projeler, sohbetler veya iş birlikleri için iletişime geçebilirsiniz.</p>
-            <div class="btn-group">
-                <a href="#" class="btn">Instagram</a>
-                <a href="#" class="btn" style="color: #f43f5e; border-color: #f43f5e; box-shadow: 0 0 10px rgba(244,63,94,0.2);">Mesaj Gönder</a>
+        <!-- İletişim Paneli -->
+        <section id="iletisim-akademik">
+            <h2>IV. İrtibat & Dijital Portfolyo</h2>
+            <p style="text-align: center; text-indent: 0; margin-bottom: 1.5rem;">Çalışmaları yakından takip etmek, akademik ve manevi projelerde ortak zemin oluşturmak adına doğrudan resmi kanallar üzerinden iletişime geçebilirsiniz.</p>
+            <div class="meta-links">
+                <!-- İstediğin yusa_cn hesabı buraya entegre edildi -->
+                <a href="https://instagram.com/yusa_cn" target="_blank" class="academic-btn">Instagram (@yusa_cn)</a>
+                <a href="mailto:ornek@eposta.com" class="academic-btn">E-Posta İrtibat</a>
             </div>
         </section>
 
     </div>
 
+    <!-- Alt Bilgi -->
     <footer>
-        <p>&copy; 2026 Yuşa Çiloğlan. Tüm Hakları Saklıdır.</p>
+        <p>YÜŞA ÇİLOĞLAN &copy; 2026 | AKADEMİK KİŞİSEL RESMİ SAYFASI</p>
     </footer>
 
 </body>
 </html>
-
