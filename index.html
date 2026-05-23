@@ -13,7 +13,7 @@
 :root{
   --bg:#030712;
   --surface:#08111f;
-  --surface2:#0b1728;
+  --surface2:#0d1726;
 
   --border:rgba(0,180,255,.12);
 
@@ -21,7 +21,7 @@
   --gold:#d4a843;
 
   --text:#dbeafe;
-  --text2:#8aa7c7;
+  --text2:#89a6c7;
 }
 
 *{
@@ -38,7 +38,7 @@ body{
   line-height:1.8;
 }
 
-/* ESKI ORB VE PROFIL SILINDI */
+/* SADECE PROFIL + HALKA SILINDI */
 
 .wrap{
   max-width:760px;
@@ -50,7 +50,7 @@ body{
 
 header{
   text-align:center;
-  padding:70px 0 45px;
+  padding:75px 0 45px;
 }
 
 h1{
@@ -64,7 +64,7 @@ h1{
 .arabic-name{
   display:block;
   font-family:'Amiri',serif;
-  font-size:22px;
+  font-size:23px;
   color:var(--gold);
   margin-bottom:18px;
   opacity:.85;
@@ -96,13 +96,15 @@ h1{
 nav{
   display:flex;
   gap:10px;
-  margin-bottom:22px;
+  margin-bottom:24px;
 }
 
 .nav-btn{
   flex:1;
+
   border:none;
   background:var(--surface);
+
   color:var(--text2);
 
   padding:13px;
@@ -114,12 +116,22 @@ nav{
 }
 
 .nav-btn:hover{
-  background:#10233a;
+  background:#11243d;
 }
 
 .nav-btn.active{
-  background:#12304d;
+  background:#153250;
   color:white;
+}
+
+/* SECTION */
+
+.section{
+  display:none;
+}
+
+.section.active{
+  display:block;
 }
 
 /* CARD */
@@ -143,7 +155,7 @@ nav{
 }
 
 .card p{
-  color:#b7cee4;
+  color:#b6cde5;
   font-size:14px;
   line-height:1.9;
 }
@@ -152,7 +164,7 @@ nav{
 
 .arabic-text{
   font-family:'Amiri',serif;
-  font-size:30px;
+  font-size:31px;
   color:var(--gold);
 
   direction:rtl;
@@ -160,11 +172,11 @@ nav{
 
   line-height:2.2;
 
-  margin:22px 0 12px;
+  margin:24px 0 12px;
 }
 
 .meaning{
-  color:#9fb6cd;
+  color:#9db7d2;
   font-size:13px;
   font-style:italic;
   margin-bottom:10px;
@@ -178,20 +190,20 @@ nav{
 /* EZAN */
 
 .ezan-box{
-  margin-top:22px;
+  margin-top:24px;
 
   background:rgba(212,168,67,.06);
 
-  border:1px solid rgba(212,168,67,.15);
+  border:1px solid rgba(212,168,67,.16);
 
-  border-radius:14px;
+  border-radius:16px;
 
-  padding:20px;
+  padding:22px;
 }
 
 .ezan-title{
   color:var(--gold);
-  margin-bottom:10px;
+  margin-bottom:12px;
 
   font-family:'Cinzel',serif;
   letter-spacing:2px;
@@ -200,19 +212,20 @@ nav{
 
 .ezan-ar{
   font-family:'Amiri',serif;
+
   direction:rtl;
   text-align:right;
 
-  line-height:2.1;
+  line-height:2.2;
   font-size:24px;
 
-  color:#f1d38a;
+  color:#efd48d;
 }
 
-/* KITAPLAR */
+/* BOOKS */
 
 .book{
-  padding:16px 0;
+  padding:18px 0;
   border-bottom:1px solid rgba(255,255,255,.05);
 }
 
@@ -223,7 +236,7 @@ nav{
 .book-name{
   font-family:'Amiri',serif;
   color:white;
-  font-size:22px;
+  font-size:23px;
 }
 
 .book-desc{
@@ -237,7 +250,7 @@ nav{
 footer{
   text-align:center;
   padding:40px 0 20px;
-  color:#5f7893;
+  color:#5f7791;
   font-size:12px;
 }
 
@@ -246,11 +259,11 @@ footer{
 @media(max-width:600px){
 
   h1{
-    font-size:28px;
+    font-size:29px;
   }
 
   .arabic-text{
-    font-size:24px;
+    font-size:25px;
   }
 
   .ezan-ar{
@@ -296,19 +309,23 @@ footer{
 
 <nav>
 
-<button class="nav-btn active">
+<button class="nav-btn active" onclick="showTab('about',this)">
 Hakkımda
 </button>
 
-<button class="nav-btn">
+<button class="nav-btn" onclick="showTab('books',this)">
 Kitaplar
 </button>
 
-<button class="nav-btn">
+<button class="nav-btn" onclick="showTab('contact',this)">
 İletişim
 </button>
 
 </nav>
+
+<!-- HAKKIMDA -->
+
+<div class="section active" id="about">
 
 <div class="card">
 
@@ -340,14 +357,20 @@ EZAN
 </div>
 
 <div class="ezan-ar">
-الله أكبر الله أكبر
-أشهد أن لا إله إلا الله
+الله أكبر الله أكبر<br>
+أشهد أن لا إله إلا الله<br>
 أشهد أن محمدًا رسول الله
 </div>
 
 </div>
 
 </div>
+
+</div>
+
+<!-- KITAPLAR -->
+
+<div class="section" id="books">
 
 <div class="card">
 
@@ -360,7 +383,7 @@ EZAN
 </div>
 
 <div class="book-desc">
-İmam Nevevî’nin ahlak, sabır ve kulluk üzerine eseri.
+İmam Nevevî’nin ahlak ve kulluk üzerine eseri.
 </div>
 
 </div>
@@ -384,12 +407,18 @@ Kalp, ilim ve maneviyat üzerine derin çalışma.
 </div>
 
 <div class="book-desc">
-İslamî yaşam ve sünnet üzerine önemli kaynak.
+Sünnet ve İslamî yaşam üzerine önemli eser.
 </div>
 
 </div>
 
 </div>
+
+</div>
+
+<!-- ILETISIM -->
+
+<div class="section" id="contact">
 
 <div class="card">
 
@@ -403,11 +432,35 @@ mail@example.com
 
 </div>
 
+</div>
+
 <footer>
 © 2026 Yuşa Çiloğlan
 </footer>
 
 </div>
+
+<script>
+
+function showTab(id,btn){
+
+  document.querySelectorAll('.section')
+  .forEach(section=>{
+    section.classList.remove('active');
+  });
+
+  document.getElementById(id)
+  .classList.add('active');
+
+  document.querySelectorAll('.nav-btn')
+  .forEach(button=>{
+    button.classList.remove('active');
+  });
+
+  btn.classList.add('active');
+}
+
+</script>
 
 </body>
 </html>
