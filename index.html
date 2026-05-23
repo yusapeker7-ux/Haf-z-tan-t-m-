@@ -1,465 +1,218 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Yuşa Çiloğlan</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Amiri:wght@400;700&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
-
-<style>
-
-:root{
-  --bg:#030712;
-  --surface:#08111f;
-  --surface2:#0d1726;
-
-  --border:rgba(0,180,255,.12);
-
-  --accent:#00b4ff;
-  --gold:#d4a843;
-
-  --text:#dbeafe;
-  --text2:#89a6c7;
-}
-
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
-
-body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:'DM Sans',sans-serif;
-  overflow-x:hidden;
-  line-height:1.8;
-}
-
-/* SADECE PROFIL + HALKA SILINDI */
-
-.wrap{
-  max-width:760px;
-  margin:auto;
-  padding:24px;
-}
-
-/* HEADER */
-
-header{
-  text-align:center;
-  padding:75px 0 45px;
-}
-
-h1{
-  font-family:'Cinzel',serif;
-  font-size:38px;
-  color:white;
-  letter-spacing:4px;
-  margin-bottom:10px;
-}
-
-.arabic-name{
-  display:block;
-  font-family:'Amiri',serif;
-  font-size:23px;
-  color:var(--gold);
-  margin-bottom:18px;
-  opacity:.85;
-}
-
-.tagline{
-  display:flex;
-  justify-content:center;
-  gap:12px;
-  flex-wrap:wrap;
-
-  color:var(--text2);
-
-  font-size:12px;
-  letter-spacing:2px;
-  text-transform:uppercase;
-}
-
-.tag-dot{
-  width:4px;
-  height:4px;
-  border-radius:50%;
-  background:var(--accent);
-  margin-top:8px;
-}
-
-/* NAV */
-
-nav{
-  display:flex;
-  gap:10px;
-  margin-bottom:24px;
-}
-
-.nav-btn{
-  flex:1;
-
-  border:none;
-  background:var(--surface);
-
-  color:var(--text2);
-
-  padding:13px;
-  border-radius:14px;
-
-  cursor:pointer;
-
-  transition:.2s;
-}
-
-.nav-btn:hover{
-  background:#11243d;
-}
-
-.nav-btn.active{
-  background:#153250;
-  color:white;
-}
-
-/* SECTION */
-
-.section{
-  display:none;
-}
-
-.section.active{
-  display:block;
-}
-
-/* CARD */
-
-.card{
-  background:var(--surface);
-  border:1px solid var(--border);
-
-  border-radius:18px;
-  padding:28px;
-
-  margin-bottom:16px;
-}
-
-.card h2{
-  font-family:'Cinzel',serif;
-  font-size:17px;
-  color:white;
-  margin-bottom:14px;
-  letter-spacing:2px;
-}
-
-.card p{
-  color:#b6cde5;
-  font-size:14px;
-  line-height:1.9;
-}
-
-/* ARAPCA */
-
-.arabic-text{
-  font-family:'Amiri',serif;
-  font-size:31px;
-  color:var(--gold);
-
-  direction:rtl;
-  text-align:right;
-
-  line-height:2.2;
-
-  margin:24px 0 12px;
-}
-
-.meaning{
-  color:#9db7d2;
-  font-size:13px;
-  font-style:italic;
-  margin-bottom:10px;
-}
-
-.ref{
-  color:var(--gold);
-  font-size:12px;
-}
-
-/* EZAN */
-
-.ezan-box{
-  margin-top:24px;
-
-  background:rgba(212,168,67,.06);
-
-  border:1px solid rgba(212,168,67,.16);
-
-  border-radius:16px;
-
-  padding:22px;
-}
-
-.ezan-title{
-  color:var(--gold);
-  margin-bottom:12px;
-
-  font-family:'Cinzel',serif;
-  letter-spacing:2px;
-  font-size:13px;
-}
-
-.ezan-ar{
-  font-family:'Amiri',serif;
-
-  direction:rtl;
-  text-align:right;
-
-  line-height:2.2;
-  font-size:24px;
-
-  color:#efd48d;
-}
-
-/* BOOKS */
-
-.book{
-  padding:18px 0;
-  border-bottom:1px solid rgba(255,255,255,.05);
-}
-
-.book:last-child{
-  border:none;
-}
-
-.book-name{
-  font-family:'Amiri',serif;
-  color:white;
-  font-size:23px;
-}
-
-.book-desc{
-  color:var(--text2);
-  font-size:13px;
-  margin-top:4px;
-}
-
-/* FOOTER */
-
-footer{
-  text-align:center;
-  padding:40px 0 20px;
-  color:#5f7791;
-  font-size:12px;
-}
-
-/* MOBILE */
-
-@media(max-width:600px){
-
-  h1{
-    font-size:29px;
-  }
-
-  .arabic-text{
-    font-size:25px;
-  }
-
-  .ezan-ar{
-    font-size:20px;
-  }
-
-  .card{
-    padding:22px;
-  }
-
-}
-
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hafız Yuşa Çiloğlan - Portfolio</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
+      color: #111;
+    }
+
+    header {
+      text-align: center;
+      padding: 30px;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 32px;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 15px;
+    }
+
+    nav button {
+      padding: 10px 15px;
+      border: 1px solid #ccc;
+      background: white;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    nav button.active {
+      background: black;
+      color: white;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .box {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .arabic {
+      text-align: right;
+      font-size: 22px;
+      margin-top: 15px;
+      direction: rtl;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    p {
+      line-height: 1.8;
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="wrap">
-
 <header>
-
-<h1>Yuşa Çiloğlan</h1>
-
-<span class="arabic-name">
-يوسف
-</span>
-
-<div class="tagline">
-
-<span>Hafız</span>
-
-<span class="tag-dot"></span>
-
-<span>Yazılımcı</span>
-
-<span class="tag-dot"></span>
-
-<span>Araştırmacı</span>
-
-</div>
-
+  <h1>Hafız Yuşa Çiloğlan</h1>
+  <p>Hafız • Yazılıma meraklı • İslami ilimlerle ilgilenen</p>
 </header>
 
 <nav>
-
-<button class="nav-btn active" onclick="showTab('about',this)">
-Hakkımda
-</button>
-
-<button class="nav-btn" onclick="showTab('books',this)">
-Kitaplar
-</button>
-
-<button class="nav-btn" onclick="showTab('contact',this)">
-İletişim
-</button>
-
+  <button onclick="showTab('home')" class="active">Giriş</button>
+  <button onclick="showTab('about')">Hakkımda</button>
+  <button onclick="showTab('books')">Kitaplar</button>
+  <button onclick="showTab('ezan')">Ezan Analizim</button>
+  <button onclick="showTab('hafiz')">Hafızlık</button>
+  <button onclick="showTab('ayet')">Ayetler</button>
 </nav>
 
-<!-- HAKKIMDA -->
+<div class="container">
 
-<div class="section active" id="about">
+  <!-- HOME -->
+  <div id="home" class="box">
+    <h2>Hoş Geldin 👋</h2>
 
-<div class="card">
+    <p>
+      Bu site benim kişisel portfolyomdur. Burada hem yazılım öğrenme yolculuğumu hem de hafızlık sürecimi paylaşıyorum.
+      Küçük yaşlardan beri Kur’an-ı Kerim ile iç içeyim ve bu yolculuk hayatımın merkezinde yer alıyor.
+    </p>
 
-<h2>İLİM VE YOLCULUK</h2>
+    <p>
+      Aynı zamanda yazılım öğrenmeye çalışıyorum. HTML, CSS ve JavaScript ile projeler geliştiriyorum.
+      Hedefim hem dini ilimlerde hem de teknoloji alanında kendimi geliştirmek.
+    </p>
 
-<p>
-Yazılım, araştırma ve İslami ilimlerle ilgileniyorum.
-Modern teknoloji ile manevi atmosferi birleştiren,
-derin anlam taşıyan sistemler üretmeyi seviyorum.
-Sadelik, disiplin ve istikrar benim için merkezdir.
-</p>
+    <div class="arabic">
+      بِسْمِ ٱللّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
+    </div>
+    <p>Rahman ve Rahim olan Allah’ın adıyla.</p>
+  </div>
 
-<div class="arabic-text">
-إِنَّ مَعَ الْعُسْرِ يُسْرًا
-</div>
+  <!-- ABOUT -->
+  <div id="about" class="box hidden">
+    <h2>Hakkımda</h2>
 
-<div class="meaning">
-“Şüphesiz zorlukla beraber kolaylık vardır.”
-</div>
+    <p>
+      Ben hafızım ve aynı zamanda yazılıma meraklı bir öğrenciyim. Sürekli olarak kendimi geliştirmeye çalışıyorum.
+      Hem dini ilimler hem de teknoloji benim için önemli bir yolculuk.
+    </p>
 
-<div class="ref">
-İnşirah 6
-</div>
+    <p>
+      Boş zamanlarımda kod yazıyorum, yeni şeyler öğreniyorum ve projeler geliştiriyorum.
+      Disiplinli çalışmanın hayatımda büyük bir yeri var.
+    </p>
 
-<div class="ezan-box">
+    <div class="arabic">
+      ٱلرَّحْمَٰنُ • عَلَّمَ ٱلْقُرْآنَ • خَلَقَ ٱلْإِنسَانَ
+    </div>
+  </div>
 
-<div class="ezan-title">
-EZAN
-</div>
+  <!-- BOOKS -->
+  <div id="books" class="box hidden">
+    <h2>Okuduğum Kitaplar</h2>
 
-<div class="ezan-ar">
-الله أكبر الله أكبر<br>
-أشهد أن لا إله إلا الله<br>
-أشهد أن محمدًا رسول الله
-</div>
+    <p>
+      Okuma alışkanlığım hem dini hem de kişisel gelişim üzerine yoğunlaşmıştır.
+      Özellikle Kur’an-ı Kerim çalışmaları günlük hayatımın önemli bir parçasıdır.
+    </p>
 
-</div>
+    <ul>
+      <li>Kur’an-ı Kerim (düzenli hatim)</li>
+      <li>Riyazus-Salihin</li>
+      <li>Tefsir notları</li>
+      <li>İslam tarihi kitapları</li>
+    </ul>
 
-</div>
+    <p>
+      Kitaplar bana hem bilgi hem de karakter kazandırıyor. Sürekli okumaya ve öğrenmeye çalışıyorum.
+    </p>
+  </div>
 
-</div>
+  <!-- EZAN -->
+  <div id="ezan" class="box hidden">
+    <h2>Ezan Analizim</h2>
 
-<!-- KITAPLAR -->
+    <p>
+      Küçük yaşlardan beri makam dersleri aldım. Ezanın sadece bir ses değil, aynı zamanda bir duygu ve ibadet olduğunu düşünüyorum.
+      Bu yüzden ezanı okurken manevi yönüne çok dikkat ediyorum.
+    </p>
 
-<div class="section" id="books">
+    <p>
+      Yarışmalara katıldım ve İl Ezan 3.’sü oldum. Bu benim için büyük bir tecrübe oldu.
+      Ses kontrolü, nefes teknikleri ve makam bilgisi üzerinde sürekli çalışıyorum.
+    </p>
+  </div>
 
-<div class="card">
+  <!-- HAFIZLIK -->
+  <div id="hafiz" class="box hidden">
+    <h2>Hafızlık Yolculuğum</h2>
 
-<h2>KİTAPLAR</h2>
+    <p>
+      Hafızlığa bir hocamın vesilesiyle başladım. Başlangıçta zor gibi görünse de zamanla sabır ve tekrar ile ilerledim.
+      Bu yolculuk benim için bir hayat disiplini haline geldi.
+    </p>
 
-<div class="book">
+    <p>
+      Elhamdülillah bu süreçte birçok şey öğrendim. En önemlisi sabır ve istikrar oldu.
+      Hâlâ düzenli tekrar yaparak ezberlerimi koruyorum.
+    </p>
+  </div>
 
-<div class="book-name">
-رياض الصالحين
-</div>
+  <!-- AYET -->
+  <div id="ayet" class="box hidden">
+    <h2>Ayetler</h2>
 
-<div class="book-desc">
-İmam Nevevî’nin ahlak ve kulluk üzerine eseri.
-</div>
+    <div class="arabic">
+      إِنَّ مَعَ ٱلْعُسْرِ يُسْرًا<br/>
+      فَإِنَّ مَعَ ٱلْعُسْرِ يُسْرًا
+    </div>
+    <p>Zorlukla beraber mutlaka bir kolaylık vardır.</p>
 
-</div>
-
-<div class="book">
-
-<div class="book-name">
-إحياء علوم الدين
-</div>
-
-<div class="book-desc">
-Kalp, ilim ve maneviyat üzerine derin çalışma.
-</div>
-
-</div>
-
-<div class="book">
-
-<div class="book-name">
-زاد المعاد
-</div>
-
-<div class="book-desc">
-Sünnet ve İslamî yaşam üzerine önemli eser.
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- ILETISIM -->
-
-<div class="section" id="contact">
-
-<div class="card">
-
-<h2>İLETİŞİM</h2>
-
-<p>
-Instagram: @yusa
-<br><br>
-mail@example.com
-</p>
-
-</div>
-
-</div>
-
-<footer>
-© 2026 Yuşa Çiloğlan
-</footer>
+    <div class="arabic">
+      وَقُل رَّبِّ زِدْنِي عِلْمًا
+    </div>
+    <p>“Rabbim! İlmimi artır.”</p>
+  </div>
 
 </div>
 
 <script>
+  function showTab(id) {
+    let sections = document.querySelectorAll(".box");
+    sections.forEach(s => s.classList.add("hidden"));
 
-function showTab(id,btn){
+    document.getElementById(id).classList.remove("hidden");
 
-  document.querySelectorAll('.section')
-  .forEach(section=>{
-    section.classList.remove('active');
-  });
-
-  document.getElementById(id)
-  .classList.add('active');
-
-  document.querySelectorAll('.nav-btn')
-  .forEach(button=>{
-    button.classList.remove('active');
-  });
-
-  btn.classList.add('active');
-}
-
+    let buttons = document.querySelectorAll("nav button");
+    buttons.forEach(b => b.classList.remove("active"));
+    event.target.classList.add("active");
+  }
 </script>
 
 </body>
