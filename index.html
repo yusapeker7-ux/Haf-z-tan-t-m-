@@ -3,69 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yuşa Çiloğlan | Kişisel</title>
+    <title>Yuşa Çiloğlan | Kişisel Portfolyo</title>
     <style>
-        body { background: #050505; color: #eee; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
-        .nav { display: flex; justify-content: space-around; background: #111; padding: 15px; border-bottom: 1px solid #333; position: sticky; top: 0; }
-        .nav-btn { cursor: pointer; color: #888; font-weight: bold; }
-        .nav-btn:hover { color: #00d4ff; }
-        
-        .container { max-width: 700px; margin: auto; padding: 20px; }
-        .tab-content { display: none; padding: 20px 0; animation: fadeIn 0.5s; }
-        .active { display: block; }
-        
-        .pfp { width: 120px; height: 120px; border-radius: 50%; border: 3px solid #00d4ff; display: block; margin: 20px auto; }
-        .card { background: #111; padding: 25px; border-radius: 15px; border: 1px solid #222; margin-bottom: 20px; }
-        h2 { color: #00d4ff; }
-        
+        body { background: #050505; color: #d1d1d1; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
+        .nav { display: flex; justify-content: center; gap: 20px; background: #0a0a0a; padding: 20px; border-bottom: 1px solid #222; position: sticky; top: 0; z-index: 1000; }
+        .nav-btn { cursor: pointer; color: #aaa; font-weight: bold; transition: 0.3s; }
+        .nav-btn:hover, .nav-btn.active { color: #00d4ff; }
+        .container { max-width: 800px; margin: auto; padding: 20px; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.6s; }
+        .pfp { width: 160px; height: 160px; border-radius: 50%; border: 4px solid #00d4ff; display: block; margin: 20px auto; object-fit: cover; }
+        .card { background: #0f0f0f; padding: 30px; border-radius: 20px; border: 1px solid #222; margin-bottom: 20px; }
+        h1, h2 { color: #fff; text-align: center; }
+        h2 { color: #00d4ff; font-size: 1.5rem; text-align: left; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
 <div class="nav">
-    <span class="nav-btn" onclick="showTab('hakkimda')">Hakkımda</span>
-    <span class="nav-btn" onclick="showTab('taktikler')">Taktikler</span>
-    <span class="nav-btn" onclick="showTab('iletisim')">İletişim</span>
+    <span class="nav-btn active" onclick="switchTab(this, 'hakkimda')">Hakkımda</span>
+    <span class="nav-btn" onclick="switchTab(this, 'ilmi')">İlmi & Kitaplar</span>
+    <span class="nav-btn" onclick="switchTab(this, 'seyahat')">Manevi Yolculuk</span>
 </div>
 
 <div class="container">
     <div id="hakkimda" class="tab-content active">
-        <img src="https://images.weserv.nl/?url=https://www.instagram.com/yusa.ciloglan/profilepic&w=400" class="pfp">
+        <img src="https://www.instagram.com/yusa.ciloglan/profilepic" class="pfp" onerror="this.src='https://via.placeholder.com/160'">
         <h1>Yuşa Çiloğlan</h1>
         <div class="card">
-            <h2>Vizyonum</h2>
-            <p>Hafızlık disiplini ile akademik araştırmaları harmanlayan bir yapıdayım. 101 Evliya, İhya-u Ulumiddin gibi temel eserlerin ışığında ilmi bir derinlik hedefliyorum. Medine yolculuklarımda kazandığım o manevi huzur, hayatımın her anına yansıyan bir sükûnet kaynağıdır.</p>
+            <h2>Hafızlık Disiplini</h2>
+            <p>Hafızlık, hayatımın temel taşı olan ve bana zaman yönetimini, odaklanmayı öğreten manevi bir zırhtır. Kur'an'ı sadece ezberlemedim, onun nizamını zihnime yerleştirdim. Bu disiplin, bugün hayatımın her alanında bana rehberlik ediyor.</p>
+        </div>
+        <div class="card">
+            <h2>Akademik Yaklaşım</h2>
+            <p>Modern dünyanın hızı içinde, kadim ilimlerin derinliğini korumaya çalışıyorum. İl Ezan yarışmasındaki başarım, makam sanatına olan tutkumun ve yıllar süren disiplinli çalışmamın küçük bir nişanesidir.</p>
         </div>
     </div>
 
-    <div id="taktikler" class="tab-content">
+    <div id="ilmi" class="tab-content">
         <div class="card">
-            <h2>33 Tekrar Taktiği</h2>
-            <p>Osmanlı usulü ezber disiplinidir. Bir sayfayı 33 defa okumak, zihne kalıcı bir mühür vurur. Bu yöntemle Kur'an'ı ezberlemek, sadece hafıza değil, bir zihin antrenmanıdır.</p>
+            <h2>Okuduğum & Başucu Kitaplarım</h2>
+            <p>İlmi derinliğimi besleyen kaynaklar arasında baş köşede <b>İhya-u Ulumiddin</b>, <b>Risale-i Nur</b>, <b>101 Evliya</b> ve <b>Siyer-i Nebi</b> yer alıyor. Bu eserler, sadece birer kitap değil, hayatı okuma kılavuzlarımdır.</p>
         </div>
         <div class="card">
-            <h2>İlmi Kütüphanem</h2>
-            <p>Risale-i Nur, Siyer-i Nebi ve tasavvufi kaynaklar... Okumalarımı bu merkezde derinleştiriyorum.</p>
+            <h2>33 Tekrar Ezber Taktiği</h2>
+            <p>Osmanlı ulemasının kullandığı bu yöntemle, zihnimde bilgi kalıcılığını maksimize ediyorum. Tekrar, ezberin babasıdır ve bu disiplin sayesinde en zorlu metinleri dahi zihinsel bir haritaya dönüştürebiliyorum.</p>
         </div>
     </div>
 
-    <div id="iletisim" class="tab-content">
+    <div id="seyahat" class="tab-content">
         <div class="card">
-            <h2>Mesaj Gönder</h2>
-            <form action="https://formspree.io/f/KENDI_MAIL_ID_BURAYA" method="POST">
-                <input type="email" name="email" placeholder="E-postan" style="width:100%; padding:10px; margin-bottom:10px; background:#222; color:#fff; border:none;">
-                <textarea name="message" placeholder="Mesajın..." style="width:100%; padding:10px; height:100px; background:#222; color:#fff; border:none;"></textarea>
-                <button type="submit" style="width:100%; padding:10px; background:#00d4ff; border:none; margin-top:10px; font-weight:bold;">Gönder</button>
-            </form>
+            <h2>Medine ve Umre Yolculukları</h2>
+            <p>Manevi iklimin merkezi olan Medine-i Münevvere’de geçirdiğim günler, dünyevi tüm telaşları dışarıda bıraktığım nadir anlardı. O toprakların sükûneti, kalbime derin bir huzur bıraktı. Umre yolculukları benim için bir "kendine dönüş" sürecidir; sadeliğin ne kadar büyük bir zenginlik olduğunu orada bizzat yaşayarak öğrendim.</p>
         </div>
     </div>
 </div>
 
 <script>
-    function showTab(tabId) {
+    function switchTab(el, id) {
         document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        el.classList.add('active');
     }
 </script>
 
