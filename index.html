@@ -3,58 +3,410 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Profesyonel Portföy | Yazılım & Çözümler</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+<title>Yuşa Çiloğlan</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Amiri:wght@400;700&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+
 <style>
-:root {
-  --bg: #020912;
-  --surface: #060f1e;
-  --accent: #00b4ff;
-  --text: #b8d4e8;
-  --text-bright: #e0f0ff;
-  --border: rgba(0,180,255,0.15);
+
+:root{
+  --bg:#030712;
+  --surface:#08111f;
+  --surface2:#0b1728;
+
+  --border:rgba(0,180,255,.12);
+
+  --accent:#00b4ff;
+  --gold:#d4a843;
+
+  --text:#dbeafe;
+  --text2:#8aa7c7;
 }
-body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; line-height: 1.6; }
-.wrap { max-width: 800px; margin: 0 auto; }
-header { text-align: center; padding: 50px 0; }
-h1 { font-family: 'Cinzel', serif; color: var(--text-bright); letter-spacing: 3px; margin-bottom: 10px; }
-.tagline { color: var(--accent); letter-spacing: 2px; text-transform: uppercase; font-size: 12px; }
-.section-title { font-family: 'Cinzel', serif; color: var(--text-bright); border-bottom: 1px solid var(--border); padding-bottom: 10px; margin: 40px 0 20px; }
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 15px; }
-.card h3 { color: var(--accent); margin-top: 0; }
-.skill-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
-.skill-tag { background: rgba(0,180,255,0.05); padding: 8px; border-radius: 6px; text-align: center; font-size: 13px; border: 1px solid var(--border); }
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'DM Sans',sans-serif;
+  overflow-x:hidden;
+  line-height:1.8;
+}
+
+/* ESKI ORB VE PROFIL SILINDI */
+
+.wrap{
+  max-width:760px;
+  margin:auto;
+  padding:24px;
+}
+
+/* HEADER */
+
+header{
+  text-align:center;
+  padding:70px 0 45px;
+}
+
+h1{
+  font-family:'Cinzel',serif;
+  font-size:38px;
+  color:white;
+  letter-spacing:4px;
+  margin-bottom:10px;
+}
+
+.arabic-name{
+  display:block;
+  font-family:'Amiri',serif;
+  font-size:22px;
+  color:var(--gold);
+  margin-bottom:18px;
+  opacity:.85;
+}
+
+.tagline{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
+
+  color:var(--text2);
+
+  font-size:12px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+
+.tag-dot{
+  width:4px;
+  height:4px;
+  border-radius:50%;
+  background:var(--accent);
+  margin-top:8px;
+}
+
+/* NAV */
+
+nav{
+  display:flex;
+  gap:10px;
+  margin-bottom:22px;
+}
+
+.nav-btn{
+  flex:1;
+  border:none;
+  background:var(--surface);
+  color:var(--text2);
+
+  padding:13px;
+  border-radius:14px;
+
+  cursor:pointer;
+
+  transition:.2s;
+}
+
+.nav-btn:hover{
+  background:#10233a;
+}
+
+.nav-btn.active{
+  background:#12304d;
+  color:white;
+}
+
+/* CARD */
+
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+
+  border-radius:18px;
+  padding:28px;
+
+  margin-bottom:16px;
+}
+
+.card h2{
+  font-family:'Cinzel',serif;
+  font-size:17px;
+  color:white;
+  margin-bottom:14px;
+  letter-spacing:2px;
+}
+
+.card p{
+  color:#b7cee4;
+  font-size:14px;
+  line-height:1.9;
+}
+
+/* ARAPCA */
+
+.arabic-text{
+  font-family:'Amiri',serif;
+  font-size:30px;
+  color:var(--gold);
+
+  direction:rtl;
+  text-align:right;
+
+  line-height:2.2;
+
+  margin:22px 0 12px;
+}
+
+.meaning{
+  color:#9fb6cd;
+  font-size:13px;
+  font-style:italic;
+  margin-bottom:10px;
+}
+
+.ref{
+  color:var(--gold);
+  font-size:12px;
+}
+
+/* EZAN */
+
+.ezan-box{
+  margin-top:22px;
+
+  background:rgba(212,168,67,.06);
+
+  border:1px solid rgba(212,168,67,.15);
+
+  border-radius:14px;
+
+  padding:20px;
+}
+
+.ezan-title{
+  color:var(--gold);
+  margin-bottom:10px;
+
+  font-family:'Cinzel',serif;
+  letter-spacing:2px;
+  font-size:13px;
+}
+
+.ezan-ar{
+  font-family:'Amiri',serif;
+  direction:rtl;
+  text-align:right;
+
+  line-height:2.1;
+  font-size:24px;
+
+  color:#f1d38a;
+}
+
+/* KITAPLAR */
+
+.book{
+  padding:16px 0;
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.book:last-child{
+  border:none;
+}
+
+.book-name{
+  font-family:'Amiri',serif;
+  color:white;
+  font-size:22px;
+}
+
+.book-desc{
+  color:var(--text2);
+  font-size:13px;
+  margin-top:4px;
+}
+
+/* FOOTER */
+
+footer{
+  text-align:center;
+  padding:40px 0 20px;
+  color:#5f7893;
+  font-size:12px;
+}
+
+/* MOBILE */
+
+@media(max-width:600px){
+
+  h1{
+    font-size:28px;
+  }
+
+  .arabic-text{
+    font-size:24px;
+  }
+
+  .ezan-ar{
+    font-size:20px;
+  }
+
+  .card{
+    padding:22px;
+  }
+
+}
+
 </style>
 </head>
+
 <body>
 
 <div class="wrap">
-  <header>
-    <h1>DİJİTAL ÇÖZÜMLER</h1>
-    <p class="tagline">Yazılım Geliştirme & Sistem Mimarisi</p>
-  </header>
 
-  <h2 class="section-title">Uzmanlık Alanları</h2>
-  <div class="skill-grid">
-    <div class="skill-tag">Full-Stack Geliştirme</div>
-    <div class="skill-tag">Cloud Mimari</div>
-    <div class="skill-tag">Veri Analitiği</div>
-    <div class="skill-tag">UI/UX Tasarım</div>
-  </div>
+<header>
 
-  <h2 class="section-title">Öne Çıkan Projeler</h2>
-  <div class="card">
-    <h3>Kurumsal Otomasyon Sistemi</h3>
-    <p>Şirket içi süreçleri dijitalleştiren, verimliliği %40 artıran kapsamlı bir yönetim paneli ve API entegrasyonu.</p>
-  </div>
-  <div class="card">
-    <h3>E-Ticaret Platformu</h3>
-    <p>Yüksek trafikli, ölçeklenebilir, modern ödeme sistemleri ile entegre edilmiş bir e-ticaret altyapısı.</p>
-  </div>
+<h1>Yuşa Çiloğlan</h1>
 
-  <footer style="text-align:center; margin-top:50px; font-size:12px; opacity:0.6;">
-    © 2026 | Profesyonel Çözümler
-  </footer>
+<span class="arabic-name">
+يوسف
+</span>
+
+<div class="tagline">
+
+<span>Hafız</span>
+
+<span class="tag-dot"></span>
+
+<span>Yazılımcı</span>
+
+<span class="tag-dot"></span>
+
+<span>Araştırmacı</span>
+
+</div>
+
+</header>
+
+<nav>
+
+<button class="nav-btn active">
+Hakkımda
+</button>
+
+<button class="nav-btn">
+Kitaplar
+</button>
+
+<button class="nav-btn">
+İletişim
+</button>
+
+</nav>
+
+<div class="card">
+
+<h2>İLİM VE YOLCULUK</h2>
+
+<p>
+Yazılım, araştırma ve İslami ilimlerle ilgileniyorum.
+Modern teknoloji ile manevi atmosferi birleştiren,
+derin anlam taşıyan sistemler üretmeyi seviyorum.
+Sadelik, disiplin ve istikrar benim için merkezdir.
+</p>
+
+<div class="arabic-text">
+إِنَّ مَعَ الْعُسْرِ يُسْرًا
+</div>
+
+<div class="meaning">
+“Şüphesiz zorlukla beraber kolaylık vardır.”
+</div>
+
+<div class="ref">
+İnşirah 6
+</div>
+
+<div class="ezan-box">
+
+<div class="ezan-title">
+EZAN
+</div>
+
+<div class="ezan-ar">
+الله أكبر الله أكبر
+أشهد أن لا إله إلا الله
+أشهد أن محمدًا رسول الله
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>KİTAPLAR</h2>
+
+<div class="book">
+
+<div class="book-name">
+رياض الصالحين
+</div>
+
+<div class="book-desc">
+İmam Nevevî’nin ahlak, sabır ve kulluk üzerine eseri.
+</div>
+
+</div>
+
+<div class="book">
+
+<div class="book-name">
+إحياء علوم الدين
+</div>
+
+<div class="book-desc">
+Kalp, ilim ve maneviyat üzerine derin çalışma.
+</div>
+
+</div>
+
+<div class="book">
+
+<div class="book-name">
+زاد المعاد
+</div>
+
+<div class="book-desc">
+İslamî yaşam ve sünnet üzerine önemli kaynak.
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>İLETİŞİM</h2>
+
+<p>
+Instagram: @yusa
+<br><br>
+mail@example.com
+</p>
+
+</div>
+
+<footer>
+© 2026 Yuşa Çiloğlan
+</footer>
+
 </div>
 
 </body>
