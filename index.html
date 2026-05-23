@@ -1,1 +1,281 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yuşa Çiloğlan — Hafız · Yazılımcı · Araştırmacı</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Amiri:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #020912;
+  --surface: #060f1e;
+  --surface2: #091525;
+  --surface3: #0c1c30;
+  --border: rgba(0,180,255,0.1);
+  --border2: rgba(0,180,255,0.18);
+  --accent: #00b4ff;
+  --accent-dim: rgba(0,180,255,0.12);
+  --accent-glow: rgba(0,180,255,0.4);
+  --text: #b8d4e8;
+  --text-dim: #4a6a86;
+  --text-bright: #e0f0ff;
+  --gold: #d4a843;
+  --gold-dim: rgba(212,168,67,0.12);
+  --gold-border: rgba(212,168,67,0.2);
+  --green: #22c55e;
+  --purple: #a78bfa;
+}
 
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+  font-size:15px;
+  line-height:1.75;
+}
+
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(0,180,255,0.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,180,255,0.018) 1px,transparent 1px);
+  background-size:44px 44px;
+  pointer-events:none;z-index:0;
+}
+.orb{position:fixed;border-radius:50%;pointer-events:none;z-index:0;filter:blur(1px);}
+.orb1{width:700px;height:700px;top:-280px;left:50%;transform:translateX(-50%);background:radial-gradient(circle,rgba(0,180,255,0.06) 0%,transparent 65%);}
+.orb2{width:500px;height:500px;bottom:-100px;right:-150px;background:radial-gradient(circle,rgba(0,80,160,0.07) 0%,transparent 65%);}
+.orb3{width:300px;height:300px;top:40%;left:-80px;background:radial-gradient(circle,rgba(212,168,67,0.04) 0%,transparent 65%);}
+
+.wrap{position:relative;z-index:1;max-width:700px;margin:0 auto;padding:0 20px 80px;}
+
+/* ── HEADER ── */
+header{text-align:center;padding:60px 0 32px;animation:fadeUp .8s ease both;}
+
+.profile-ring{position:relative;display:inline-block;margin-bottom:22px;}
+.ring-outer{position:absolute;inset:-4px;border-radius:50%;background:conic-gradient(from 0deg,var(--accent) 0%,transparent 35%,var(--gold) 55%,transparent 75%,var(--accent) 100%);animation:spin 7s linear infinite;z-index:0;}
+.ring-inner{position:absolute;inset:-1px;border-radius:50%;background:var(--bg);z-index:1;}
+.avatar-init{
+  width:116px;height:116px;border-radius:50%;
+  background:linear-gradient(135deg,#091525,#0d2040);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;
+  position:relative;z-index:2;
+  font-family:'Amiri',serif;font-size:36px;color:var(--accent);
+  border:none;
+}
+
+h1{font-family:'Cinzel',serif;font-size:clamp(24px,6vw,34px);font-weight:700;color:var(--text-bright);letter-spacing:4px;margin-bottom:10px;text-shadow:0 0 40px rgba(0,180,255,0.2);}
+.arabic-name{font-family:'Amiri',serif;font-size:18px;color:var(--gold);opacity:.7;display:block;margin-bottom:12px;letter-spacing:2px;}
+.tagline{display:flex;align-items:center;justify-content:center;gap:10px;font-size:11.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--text-dim);flex-wrap:wrap;margin-bottom:16px;}
+.tag-dot{width:3px;height:3px;border-radius:50%;background:var(--accent);opacity:.5;}
+
+.social-row{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:6px;}
+.social-pill{display:inline-flex;align-items:center;gap:7px;border-radius:20px;padding:5px 14px;font-size:11.5px;letter-spacing:1px;text-decoration:none;transition:all .22s;}
+.pill-ig{background:rgba(131,58,180,0.1);border:1px solid rgba(131,58,180,0.22);color:#c084fc;}
+.pill-ig:hover{background:rgba(131,58,180,0.2);border-color:rgba(131,58,180,0.45);}
+.pill-ig svg{width:13px;height:13px;fill:#c084fc;}
+
+/* ── NAV ── */
+nav{
+  display:flex;justify-content:center;gap:3px;
+  margin:28px 0 38px;
+  animation:fadeUp .8s .15s ease both;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:14px;padding:5px;
+}
+.nav-btn{
+  background:none;border:none;cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-size:12.5px;
+  letter-spacing:.8px;color:var(--text-dim);
+  padding:9px 0;border-radius:10px;
+  transition:all .25s;flex:1;text-align:center;
+}
+.nav-btn:hover{color:var(--text);background:var(--accent-dim);}
+.nav-btn.active{background:var(--accent-dim);color:var(--accent);border:1px solid var(--border2);box-shadow:0 0 18px rgba(0,180,255,0.07);}
+
+/* ── SECTIONS ── */
+.section{display:none;animation:fadeUp .45s ease both;}
+.section.visible{display:block;}
+
+/* ── CARDS ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:14px;position:relative;overflow:hidden;transition:border-color .3s,box-shadow .3s;}
+.card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent-glow),transparent);opacity:0;transition:opacity .3s;}
+.card:hover{border-color:var(--border2);box-shadow:0 4px 30px rgba(0,180,255,0.06);}
+.card:hover::after{opacity:1;}
+.card-gold{border-color:var(--gold-border);}
+.card-gold::after{background:linear-gradient(90deg,transparent,rgba(212,168,67,.35),transparent);}
+.card-gold:hover{border-color:rgba(212,168,67,.3);box-shadow:0 4px 30px rgba(212,168,67,.06);}
+.card-purple{border-color:rgba(167,139,250,.12);}
+.card-purple::after{background:linear-gradient(90deg,transparent,rgba(167,139,250,.4),transparent);}
+
+.card-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:16px;}
+.card-icon-box{width:40px;height:40px;min-width:40px;border-radius:10px;background:var(--accent-dim);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:18px;}
+.card-icon-box.gold{background:var(--gold-dim);border-color:var(--gold-border);}
+.card-icon-box.purple{background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.2);}
+.card-icon-box.green{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.18);}
+
+.card-title{font-family:'Cinzel',serif;font-size:12.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);margin-bottom:2px;}
+.card-gold .card-title{color:var(--gold);}
+.card-purple .card-title{color:var(--purple);}
+.card-subtitle{font-size:11.5px;color:var(--text-dim);letter-spacing:.3px;}
+
+.card p{color:var(--text);font-size:14.5px;line-height:1.82;}
+.card p+p{margin-top:12px;}
+
+/* ── QURAN QUOTE ── */
+.qquote{border-left:2px solid var(--gold);padding:12px 16px;margin:16px 0;background:var(--gold-dim);border-radius:0 10px 10px 0;}
+.qquote .ar{font-family:'Amiri',serif;font-size:20px;color:var(--gold);direction:rtl;text-align:right;display:block;line-height:2.1;margin-bottom:6px;}
+.qquote .tr{font-size:12px;color:var(--text-dim);font-style:italic;line-height:1.6;}
+.qquote .ref{font-size:11px;color:var(--gold);opacity:.7;margin-top:4px;display:block;letter-spacing:.5px;}
+
+/* ── STATS ── */
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0 6px;}
+.stat{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px 8px;text-align:center;transition:border-color .25s;}
+.stat:hover{border-color:var(--border2);}
+.stat-n{font-family:'Cinzel',serif;font-size:24px;color:var(--accent);display:block;line-height:1;margin-bottom:6px;}
+.stat-l{font-size:9.5px;color:var(--text-dim);letter-spacing:1.8px;text-transform:uppercase;}
+
+/* ── DIVIDER ── */
+.div-row{display:flex;align-items:center;gap:12px;margin:6px 0 20px;}
+.div-line{flex:1;height:1px;background:var(--border);}
+.div-txt{font-family:'Cinzel',serif;font-size:9.5px;letter-spacing:3px;color:var(--text-dim);text-transform:uppercase;white-space:nowrap;}
+
+/* ── BADGE ── */
+.badge{display:inline-flex;align-items:center;gap:6px;background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:20px;padding:4px 12px;font-size:10.5px;color:var(--gold);letter-spacing:1.2px;margin-bottom:16px;}
+.badge-blue{background:var(--accent-dim);border-color:var(--border2);color:var(--accent);}
+
+/* ── STEP LIST ── */
+.steps{counter-reset:step;}
+.step{display:flex;gap:16px;margin-bottom:24px;align-items:flex-start;}
+.step:last-child{margin-bottom:0;}
+.snum{counter-increment:step;width:34px;height:34px;min-width:34px;border-radius:50%;background:var(--accent-dim);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:11px;color:var(--accent);margin-top:1px;}
+.snum::before{content:counter(step,'0' decimal);}
+.sc strong{display:block;font-size:14.5px;color:var(--text-bright);margin-bottom:5px;font-weight:600;}
+.sc p{font-size:13.5px;color:var(--text-dim);line-height:1.75;}
+
+/* ── BOOK LIST ── */
+.blist{list-style:none;}
+.blist li{display:flex;align-items:flex-start;gap:14px;padding:15px 0;border-bottom:1px solid rgba(0,180,255,0.06);}
+.blist li:last-child{border-bottom:none;}
+.bnum{font-family:'Cinzel',serif;font-size:11px;color:var(--accent);opacity:.65;min-width:22px;padding-top:3px;}
+.bname{font-family:'Amiri',serif;font-size:18px;color:var(--text-bright);display:block;line-height:1.3;}
+.bauth{font-size:11.5px;color:var(--text-dim);display:block;margin-top:3px;letter-spacing:.3px;}
+.bdesc{font-size:12.5px;color:var(--text-dim);margin-top:5px;line-height:1.6;display:block;font-style:italic;}
+
+/* ── TIMELINE ── */
+.timeline{position:relative;padding-left:28px;}
+.timeline::before{content:'';position:absolute;left:6px;top:8px;bottom:8px;width:1px;background:linear-gradient(180deg,var(--accent),var(--gold),transparent);}
+.titem{position:relative;margin-bottom:22px;}
+.titem:last-child{margin-bottom:0;}
+.tdot{position:absolute;left:-26px;top:5px;width:13px;height:13px;border-radius:50%;background:var(--accent-dim);border:2px solid var(--accent);box-shadow:0 0 10px var(--accent-glow);}
+.titem.gold .tdot{background:var(--gold-dim);border-color:var(--gold);box-shadow:0 0 10px rgba(212,168,67,.4);}
+.tyear{font-family:'Cinzel',serif;font-size:10px;color:var(--accent);letter-spacing:2px;margin-bottom:4px;display:block;}
+.titem.gold .tyear{color:var(--gold);}
+.ttitle{font-size:14.5px;color:var(--text-bright);font-weight:500;margin-bottom:4px;}
+.tdesc{font-size:13px;color:var(--text-dim);line-height:1.65;}
+
+/* ── SKILL BARS ── */
+.skill-row{margin-bottom:14px;}
+.skill-row:last-child{margin-bottom:0;}
+.skill-top{display:flex;justify-content:space-between;margin-bottom:6px;}
+.skill-name{font-size:13px;color:var(--text-bright);}
+.skill-pct{font-family:'Cinzel',serif;font-size:11px;color:var(--accent);}
+.skill-bar{height:4px;background:var(--surface3);border-radius:4px;overflow:hidden;}
+.skill-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--accent),#0070cc);}
+
+/* ── TIP BOX ── */
+.tip{background:rgba(0,180,255,0.05);border:1px solid rgba(0,180,255,0.13);border-radius:12px;padding:14px 16px;margin-top:18px;font-size:13px;color:var(--text-dim);line-height:1.7;}
+.tip strong{color:var(--accent);}
+.tip.gold{background:var(--gold-dim);border-color:var(--gold-border);}
+.tip.gold strong{color:var(--gold);}
+
+/* ── CONTACT ── */
+.form-g{margin-bottom:14px;}
+label{display:block;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:6px;}
+input,textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 15px;color:var(--text-bright);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color .25s,box-shadow .25s;resize:vertical;}
+input:focus,textarea:focus{border-color:rgba(0,180,255,0.38);box-shadow:0 0 0 3px rgba(0,180,255,0.07);}
+input::placeholder,textarea::placeholder{color:var(--text-dim);opacity:.6;}
+textarea{min-height:130px;}
+.btn-send{width:100%;padding:14px;background:transparent;border:1px solid var(--accent);border-radius:10px;color:var(--accent);font-family:'Cinzel',serif;font-size:11.5px;letter-spacing:3.5px;text-transform:uppercase;cursor:pointer;transition:all .3s;position:relative;overflow:hidden;margin-top:6px;}
+.btn-send::before{content:'';position:absolute;inset:0;background:var(--accent-dim);transform:translateX(-100%);transition:transform .3s;}
+.btn-send:hover::before{transform:translateX(0);}
+.btn-send:hover{box-shadow:0 0 24px rgba(0,180,255,0.18);}
+.btn-send span{position:relative;z-index:1;}
+.fsuccess{display:none;text-align:center;padding:36px 20px;}
+.fsuccess .fcheck{font-size:40px;display:block;margin-bottom:14px;}
+
+/* ── FOOTER ── */
+footer{text-align:center;padding:22px 0 10px;font-size:11px;color:var(--text-dim);border-top:1px solid var(--border);margin-top:24px;}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── MOBILE ── */
+@media(max-width:480px){
+  .card{padding:20px;}
+  .nav-btn{font-size:10.5px;letter-spacing:0;padding:9px 4px;}
+  h1{font-size:22px;letter-spacing:2px;}
+  .stats-grid{gap:7px;}
+  .stat-n{font-size:20px;}
+}
+</style>
+</head>
+<body>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<div class="wrap">
+
+<header>
+  <div class="profile-ring">
+    <div class="ring-outer"></div>
+    <div class="ring-inner"></div>
+    <img src="data:image/jpeg;base64,[BASE64_KODU_BURAYA_GELECEK]" alt="Profil" class="avatar-init" style="padding:0;object-fit:cover;">
+  </div>
+  <h1>Yuşa Çiloğlan</h1>
+  <span class="arabic-name">يوشع جيلوغلان</span>
+  <div class="tagline">
+    <span>Hafız</span>
+    <div class="tag-dot"></div>
+    <span>Yazılımcı</span>
+    <div class="tag-dot"></div>
+    <span>Araştırmacı</span>
+  </div>
+  <div class="social-row">
+      <a href="#" class="social-pill pill-ig">
+        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.173.053 1.874.244 2.315.419.581.226.996.495 1.43.93.435.435.704.85.93 1.43.175.441.366 1.142.419 2.315.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.053 1.173-.244 1.874-.419 2.315-.226.581-.495.996-.93 1.43-.435.435-.85.704-1.43.93-.441.175-1.142.366-2.315.419-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.173-.053-1.874-.244-2.315-.419-.581-.226-.996-.495-1.43-.93-.435-.435-.704-.85-.93-1.43-.175-.441-.366-1.142-.419-2.315-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.053-1.173.244-1.874.419-2.315.226-.581.495-.996.93-1.43.435-.435.85-.704 1.43-.93.441-.175 1.142-.366 2.315-.419 1.266-.058 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-1.277.058-2.15.258-2.914.556-.788.306-1.455.715-2.122 1.382-.667.667-1.076 1.334-1.382 2.122-.298.764-.498 1.637-.556 2.914-.058 1.28-.072 1.688-.072 4.947s.014 3.667.072 4.947c.058 1.277.258 2.15.556 2.914.306.788.715 1.455 1.382 2.122.667.667 1.334 1.076 2.122 1.382.764.298 1.637.498 2.914.556 1.28.058 1.688.072 4.947.072s3.667-.014 4.947-.072c1.277-.058 2.15-.258 2.914-.556.788-.306 1.455-.715 2.122-1.382.667-.667 1.076-1.334 1.382-2.122.298-.764.498-1.637.556-2.914.058-1.28.072-1.688.072-4.947s-.014-3.667-.072-4.947c-.058-1.277-.258-2.15-.556-2.914-.306-.788-.715-1.455-1.382-2.122-.667-.667-1.334-1.076-2.122-1.382-.764-.298-1.637-.498-2.914-.556-1.28-.058-1.688-.072-4.947-.072zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        @yusa_cn
+      </a>
+    </div>
+    <div class="tip gold" style="margin-top:16px;">
+      <strong>Not:</strong> Hafızlık ve talim soruları için Instagram DM en hızlı yol. Uzun akademik meseleler için mail tercih ederim.
+    </div>
+  </div>
+
+</section>
+
+<footer>
+  <p style="font-family:'Amiri',serif;font-size:14px;color:var(--gold);opacity:.6;margin-bottom:6px;">يوشع جيلوغلان</p>
+  <p>Hafız · Yazılımcı · Araştırmacı · Makam Sanatçısı</p>
+  <p style="margin-top:6px;font-size:10px;opacity:.5;">رَبِّ زِدْنِي عِلْمًا</p>
+</footer>
+
+</div><script>
+function showTab(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('visible'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const sec = document.getElementById(id);
+  if(sec) sec.classList.add('visible');
+  if(btn) btn.classList.add('active');
+}
+</script>
+</body>
+  </html>
+  
