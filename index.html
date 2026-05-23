@@ -10,7 +10,6 @@ body{
   margin:0;
   font-family:Arial;
   color:#e5e7eb;
-
   background:#05060a;
   background-image:
     linear-gradient(rgba(59,130,246,0.08) 1px, transparent 1px),
@@ -18,16 +17,14 @@ body{
   background-size:42px 42px;
 }
 
-/* glow */
 body::before{
   content:"";
   position:fixed;
   inset:0;
-  background:radial-gradient(circle at top, rgba(59,130,246,0.22), transparent 60%);
+  background:radial-gradient(circle at top, rgba(59,130,246,0.18), transparent 60%);
   pointer-events:none;
 }
 
-/* HEADER */
 header{
   text-align:center;
   padding:40px 20px 10px;
@@ -35,16 +32,14 @@ header{
 
 h1{
   margin:0;
-  font-size:36px;
+  font-size:34px;
   color:#93c5fd;
-  text-shadow:0 0 18px #2563eb;
 }
 
 .subtitle{
   opacity:0.7;
 }
 
-/* CARDS */
 .container{
   max-width:900px;
   margin:auto;
@@ -54,54 +49,20 @@ h1{
 .card{
   background:rgba(2,6,23,0.75);
   border:1px solid rgba(59,130,246,0.25);
-  border-radius:16px;
-  padding:22px;
-  margin:20px 0;
-
-  box-shadow:0 0 20px rgba(59,130,246,0.12);
-
-  transition:0.3s;
-}
-
-.card:hover{
-  transform:scale(1.01);
-  box-shadow:0 0 25px rgba(59,130,246,0.25);
+  border-radius:14px;
+  padding:20px;
+  margin:15px 0;
 }
 
 .title{
   color:#93c5fd;
-  font-size:20px;
-  margin-bottom:10px;
+  font-size:18px;
+  margin-bottom:8px;
 }
 
 p{
   line-height:1.6;
-  opacity:0.95;
-}
-
-/* NAV */
-.nav{
-  display:flex;
-  justify-content:center;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-top:15px;
-}
-
-.nav button{
-  background:rgba(2,6,23,0.7);
-  border:1px solid rgba(59,130,246,0.25);
-  color:white;
-  padding:8px 12px;
-  border-radius:10px;
-  cursor:pointer;
-  font-size:13px;
-  transition:0.3s;
-}
-
-.nav button:hover{
-  transform:scale(1.05);
-  box-shadow:0 0 10px rgba(59,130,246,0.4);
+  margin:0;
 }
 </style>
 </head>
@@ -110,7 +71,7 @@ p{
 
 <header>
   <h1>HAFIZ YUŞA ÇİLOĞLAN</h1>
-  <div class="subtitle">Kur’an • İlim • Umre • Ezan</div>
+  <div class="subtitle">Kişisel Profil</div>
 </header>
 
 <div class="container">
@@ -118,41 +79,40 @@ p{
   <div class="card">
     <div class="title">Hakkımda</div>
     <p>
-      Ben Hafız Yuşa Çiloğlan. Kur’an ile büyüdüm.  
-      Hafızlık süreci benim için sabır ve disiplin demekti.
+      Hafızlık eğitimi aldım ve Kur’an ile sürekli bir çalışma sürecim oldu.
+      Disiplinli ve düzenli şekilde ilerlemeye devam ediyorum.
     </p>
   </div>
 
   <div class="card">
     <div class="title">Hafızlık</div>
     <p>
-      Ezber değil, karakter inşasıydı.  
-      Her tekrar beni biraz daha güçlendirdi.
+      Ezber ve tekrar üzerine kurulu bir süreçti.
+      Sabır ve süreklilik gerektiren bir eğitimdir.
     </p>
   </div>
 
   <div class="card">
     <div class="title">Ezan</div>
     <p>
-      Ezan benim için sadece ses değil, anlamdır.  
-      Makamla birlikte ruh değişir.
+      Ezan çalışmaları yaptım ve il düzeyinde derece elde ettim.
+      Makam ve ses eğitimi üzerine deneyim kazandım.
     </p>
   </div>
 
   <div class="card">
     <div class="title">Umre</div>
     <p>
-      Kâbe’yi görmek hayatımdaki en güçlü andı.  
-      O an dünya anlam değiştirdi.
+      Umre ziyareti gerçekleştirdim.
+      Manevi açıdan önemli bir deneyimdi.
     </p>
   </div>
 
   <div class="card">
     <div class="title">İlim</div>
     <p>
-      Kur’an bana sabrı,  
-      kitaplar bana düşünmeyi öğretti.  
-      Bilgi benim için değişimdir.
+      Kur’an ve temel İslami kaynaklar üzerine çalışmalar yapıyorum.
+      Ayrıca yazılım ile de ilgileniyorum.
     </p>
   </div>
 
