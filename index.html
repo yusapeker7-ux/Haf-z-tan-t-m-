@@ -1,56 +1,29 @@
-<!DOCTYPE html>
-<html lang="tr">
+<!DOCTYPE html><html lang="tr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hafız Yuşa | Akademik Portfolio</title>
-
-<style>
+<title>Hikâyem | Hafız Yuşa</title><style>
 body{
   margin:0;
   font-family: Arial;
+  background:#050505;
   color:#e5e7eb;
-  background-color:#050505;
 
-  /* kareli grid arka plan */
   background-image:
     linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
   background-size:40px 40px;
 }
 
-/* HEADER */
 header{
   text-align:center;
-  padding:30px;
+  padding:30px 20px;
   border-bottom:1px solid #1f2937;
 }
 
 h1{
   margin:0;
-  font-size:32px;
   color:#60a5fa;
-}
-
-nav{
-  display:flex;
-  justify-content:center;
-  gap:10px;
-  padding:15px;
-  flex-wrap:wrap;
-}
-
-nav button{
-  background:#0f172a;
-  color:white;
-  border:1px solid #1f2937;
-  padding:10px 15px;
-  border-radius:8px;
-  cursor:pointer;
-}
-
-nav button:hover{
-  border-color:#3b82f6;
 }
 
 .container{
@@ -59,151 +32,125 @@ nav button:hover{
   padding:20px;
 }
 
+.topbar{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:20px;
+}
+
+.btn{
+  padding:10px 14px;
+  border-radius:10px;
+  border:1px solid #1f2937;
+  background:#0b0f1a;
+  color:white;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.btn:hover{
+  border-color:#3b82f6;
+  transform:scale(1.05);
+}
+
 .card{
   background:#0b0f1a;
   border:1px solid #1f2937;
-  border-radius:12px;
-  padding:20px;
+  border-radius:14px;
+  padding:22px;
   margin-bottom:20px;
+
+  opacity:0;
+  transform:translateY(20px);
+  transition:1s;
+}
+
+.card.show{
+  opacity:1;
+  transform:translateY(0);
 }
 
 .title{
   color:#93c5fd;
+  font-size:22px;
   margin-bottom:10px;
 }
 
-/* kutular */
-.box{
-  border-left:3px solid #3b82f6;
-  padding:10px 15px;
-  margin-top:10px;
-  background:#0a0f1f;
-}
-
-/* arapça */
 .arabic{
   text-align:right;
   direction:rtl;
-  font-size:20px;
   color:#93c5fd;
+  font-size:20px;
   margin-top:10px;
 }
 
-.hidden{display:none;}
-</style>
-
-</head>
-
-<body>
-
-<header>
+</style></head><body><header>
   <h1>Hafız Yuşa Çiloğlan</h1>
-  <p>Hafız • Akademik İslam Çalışmaları • Yazılım Öğrencisi</p>
-</header>
-
-<nav>
-  <button onclick="show('about')">Hakkımda</button>
-  <button onclick="show('ezan')">Ezan Çalışmaları</button>
-  <button onclick="show('books')">İlim ve Kitap</button>
-</nav>
-
-<div class="container">
-
-<!-- ABOUT -->
-<div id="about" class="card">
-
-  <h2 class="title">Hakkımda</h2>
-
+  <p>Hafız • Umre Yolcusu • İlim Talebesi</p>  <div class="topbar">
+    <button class="btn" onclick="scrollToCard(0)">Hakkımda</button>
+    <button class="btn" onclick="scrollToCard(1)">Hafızlık</button>
+    <button class="btn" onclick="scrollToCard(2)">Ezan</button>
+    <button class="btn" onclick="scrollToCard(3)">Umre</button>
+    <button class="btn" onclick="scrollToCard(4)">Kitaplar</button>
+    <a class="btn" href="https://instagram.com/" target="_blank">Instagram</a>
+  </div>
+</header><div class="container"><div class="card">
+  <div class="title">Hakkımda</div>
   <p>
-    Ben Hafız Yuşa Çiloğlan. Kur’an-ı Kerim hafızlığı yapmış, aynı zamanda yazılım ve İslami ilimlere ilgi duyan bir öğrenciyim.
-    Hayatımın merkezinde disiplin, tekrar ve öğrenme vardır.
+    Ben Hafız Yuşa Çiloğlan. Kur’an-ı Kerim ile büyümüş, ilim ve yazılım alanında kendini geliştirmeye çalışan bir öğrenciyim.
+    Hayatım sabır, tekrar ve disiplin üzerine kurulu.
   </p>
-
+  <div class="arabic">وَقُل رَّبِّ زِدْنِي عِلْمًا</div>
+</div><div class="card">
+  <div class="title">Hafızlık</div>
   <p>
-    Akademik olarak hem dini ilimlerde hem de modern teknoloji alanında kendimi geliştirmeye çalışıyorum.
-    Amacım bilgi birikimini sadece öğrenmek değil, aynı zamanda analiz ederek anlamaktır.
+    Hafızlık benim için sadece ezber değil, bir hayat eğitimi oldu. Zamanla sabır ve disiplin kazandım.
   </p>
-
-  <div class="arabic">
-    وَقُل رَّبِّ زِدْنِي عِلْمًا
-  </div>
-
-  <div class="box">
-    <b>Akademik Not:</b>
-    İlim sadece bilgi değildir, aynı zamanda karakter ve sabır eğitimidir.
-  </div>
-
-</div>
-
-<!-- EZAN -->
-<div id="ezan" class="card hidden">
-
-  <h2 class="title">Ezan Çalışmaları</h2>
-
+</div><div class="card">
+  <div class="title">Ezan Yolculuğu</div>
   <p>
-    Ezan üzerine yaptığım çalışmalar makam, ses kontrolü ve nefes teknikleri üzerine yoğunlaşmaktadır.
-    Bu alan sadece teknik değil, aynı zamanda manevi bir disiplindir.
+    Küçük yaşlardan itibaren makam eğitimi aldım ve İl Ezan 3.’lüğü elde ettim.
+    Ezan benim için bir ses değil, bir ruh halidir.
   </p>
-
+  <div class="arabic">إِنَّ مَعَ ٱلْعُسْرِ يُسْرًا</div>
+</div><div class="card">
+  <div class="title">Umre Yolculuğum 🕋</div>
   <p>
-    Katıldığım ezan yarışmalarında İl seviyesinde derece elde ettim.
-    Bu süreç bana hem özgüven hem de disiplin kazandırdı.
+    Umre benim hayatımda bir dönüm noktası oldu. Kâbe’yi ilk gördüğüm an anlatılamaz bir huzurdu.
+    Orada insan kendini yeniden tanıyor.
   </p>
-
-  <div class="box">
-    <b>Analiz:</b>
-    Ezanın makam yapısı, insan psikolojisi üzerinde derin bir etki bırakır.
-    Her makam farklı bir duygu frekansı taşır.
-  </div>
-
-  <div class="arabic">
-    إِنَّ مَعَ ٱلْعُسْرِ يُسْرًا
-  </div>
-
-</div>
-
-<!-- BOOKS -->
-<div id="books" class="card hidden">
-
-  <h2 class="title">İlim ve Kitap</h2>
-
+  <div class="arabic">رَبِّ اجْعَلْنِي مُقِيمَ ٱلصَّلَاةِ</div>
+</div><div class="card">
+  <div class="title">İlim ve Kitap</div>
   <p>
-    Okuduğum kitaplar benim için sadece bilgi kaynağı değil, aynı zamanda düşünce yapımı şekillendiren kaynaklardır.
+    Kitaplar bana sadece bilgi değil, düşünme disiplini kazandırdı.
   </p>
+  <ul>
+    <li>Kur’an-ı Kerim → sabır ve teslimiyet</li>
+    <li>Riyazus-Salihin → ahlak</li>
+    <li>İslam tarihi → bilinç</li>
+  </ul>
+</div></div><!-- QURAN AMBIENCE --><audio autoplay loop>
+  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_7b5a4c2b6c.mp3" type="audio/mpeg">
+</audio><script>
+// scroll animation
+const cards = document.querySelectorAll('.card');
 
-  <div class="box">
-    <b>Kur’an-ı Kerim</b>
-    <p>Analiz: Hayatın temel prensibi sabır ve teslimiyettir.</p>
-  </div>
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      entry.target.classList.add('show');
+    }
+  });
+},{threshold:0.2});
 
-  <div class="box">
-    <b>Riyazus-Salihin</b>
-    <p>Analiz: Ahlak, insanın en büyük değeridir.</p>
-  </div>
+cards.forEach(c => observer.observe(c));
 
-  <div class="box">
-    <b>İslam Tarihi</b>
-    <p>Analiz: Geçmişi anlamak geleceği doğru kurmayı sağlar.</p>
-  </div>
-
-  <div class="box">
-    <b>Akademik Not</b>
-    <p>
-      Her kitap bana sadece bilgi değil, aynı zamanda düşünme disiplini kazandırır.
-      Okuma süreci analiz ile birleştiğinde gerçek öğrenme gerçekleşir.
-    </p>
-  </div>
-
-</div>
-
-</div>
-
-<script>
-function show(id){
-  document.querySelectorAll(".card").forEach(c=>c.classList.add("hidden"));
-  document.getElementById(id).classList.remove("hidden");
+// smooth scroll
+function scrollToCard(i){
+  cards[i].scrollIntoView({behavior:'smooth'});
 }
-</script>
-
-</body>
+</script></body>
 </html>
