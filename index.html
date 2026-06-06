@@ -3,567 +3,472 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini AI Chatbot - Holografik Ses</title>
+    <title>Yuşa Çiloğlan | Sesli AI Chatbot</title>
     <style>
+        /* Temel Ayarlar */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Times New Roman', Times, serif, 'Segoe UI';
+        }
+
+        /* Ağırbaşlı Mat Siyah ve Loş Lacivert Geçişi */
+        @keyframes portfolioBg {
+            0% { background-color: #04060a; }
+            50% { background-color: #0b111e; }
+            100% { background-color: #04060a; }
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0a0e27 100%);
-            min-height: 100vh;
+            animation: portfolioBg 12s ease-in-out infinite;
+            color: #d1d5db;
+            line-height: 1.8;
+            padding: 0 1rem;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
-            overflow: hidden;
+            min-height: 100vh;
         }
 
-        .container {
+        .voice-container {
             width: 100%;
-            max-width: 900px;
-            background: rgba(10, 14, 39, 0.95);
-            border-radius: 30px;
-            box-shadow: 0 0 60px rgba(102, 126, 234, 0.3), inset 0 0 60px rgba(102, 126, 234, 0.1);
-            overflow: hidden;
+            max-width: 600px;
+            background: rgba(11, 15, 26, 0.95);
+            border-radius: 12px;
+            border: 1px solid #1e293b;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
             display: flex;
             flex-direction: column;
-            height: 90vh;
-            max-height: 700px;
-            border: 2px solid rgba(102, 126, 234, 0.4);
-            position: relative;
-        }
-
-        /* Holografik Arka Plan Efekti */
-        .container::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, 
-                transparent 0%, 
-                rgba(102, 126, 234, 0.1) 25%, 
-                transparent 50%, 
-                rgba(118, 75, 162, 0.1) 75%, 
-                transparent 100%);
-            animation: holoDrift 20s linear infinite;
-            pointer-events: none;
-        }
-
-        @keyframes holoDrift {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            100% { transform: translate(100px, 100px) rotate(360deg); }
-        }
-
-        .header {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%);
-            color: white;
-            padding: 25px;
+            padding: 2rem;
             text-align: center;
-            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.2);
-            position: relative;
-            z-index: 2;
-            border-bottom: 2px solid rgba(102, 126, 234, 0.3);
         }
 
-        .header h1 {
-            font-size: 28px;
-            margin-bottom: 8px;
-            text-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
-            letter-spacing: 2px;
+        header {
+            margin-bottom: 3rem;
         }
 
-        .header p {
-            font-size: 12px;
-            opacity: 0.85;
+        .arabic-banner {
+            font-size: 1.4rem;
+            color: #38bdf8;
+            margin-bottom: 0.5rem;
             letter-spacing: 1px;
         }
 
-        .hologram-sphere {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 15px;
+        h1 {
+            font-size: 1.8rem;
+            color: #ffffff;
+            font-weight: 500;
+            letter-spacing: 1px;
+            margin-bottom: 0.3rem;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        /* Mikrofon Animasyonu */
+        .voice-circle {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 2rem;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(56, 189, 248, 0.4), rgba(56, 189, 248, 0.1));
+            border: 3px solid rgba(56, 189, 248, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             position: relative;
+            box-shadow: 0 0 40px rgba(56, 189, 248, 0.2), inset 0 0 40px rgba(56, 189, 248, 0.1);
+        }
+
+        .voice-circle.active {
+            animation: voicePulse 1.5s ease-in-out infinite;
+            border-color: rgba(239, 68, 68, 0.5);
+            background: radial-gradient(circle at 30% 30%, rgba(239, 68, 68, 0.4), rgba(239, 68, 68, 0.1));
+        }
+
+        @keyframes voicePulse {
+            0%, 100% {
+                box-shadow: 0 0 40px rgba(239, 68, 68, 0.2), inset 0 0 40px rgba(239, 68, 68, 0.1);
+            }
+            50% {
+                box-shadow: 0 0 80px rgba(239, 68, 68, 0.4), inset 0 0 40px rgba(239, 68, 68, 0.2);
+            }
+        }
+
+        .mic-icon {
+            font-size: 4rem;
+        }
+
+        .voice-waves {
+            position: absolute;
+            width: 100%;
+            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .sphere-core {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.4));
-            box-shadow: 0 0 40px rgba(102, 126, 234, 0.6), inset -20px -20px 40px rgba(0, 0, 0, 0.4);
-            position: relative;
-            animation: sphereFloat 3s ease-in-out infinite;
-        }
-
-        @keyframes sphereFloat {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .sound-wave {
+        .wave {
             position: absolute;
-            border: 2px solid rgba(102, 126, 234, 0.5);
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
-            animation: waveExpand 1.5s ease-out infinite;
+            border: 2px solid rgba(56, 189, 248, 0.3);
+            animation: waveOut 1.5s ease-out infinite;
         }
 
-        .sound-wave:nth-child(1) {
-            animation-delay: 0s;
-            width: 40px;
-            height: 40px;
+        .voice-circle.active .wave {
+            border-color: rgba(239, 68, 68, 0.3);
         }
 
-        .sound-wave:nth-child(2) {
-            animation-delay: 0.5s;
-            width: 60px;
-            height: 60px;
+        .wave:nth-child(2) {
+            animation-delay: 0.3s;
         }
 
-        .sound-wave:nth-child(3) {
-            animation-delay: 1s;
-            width: 80px;
-            height: 80px;
+        .wave:nth-child(3) {
+            animation-delay: 0.6s;
         }
 
-        @keyframes waveExpand {
+        @keyframes waveOut {
             0% {
-                transform: scale(0.3);
+                transform: scale(0.5);
                 opacity: 1;
             }
             100% {
-                transform: scale(1);
+                transform: scale(1.8);
                 opacity: 0;
             }
         }
 
-        .chat-box {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            background: rgba(15, 20, 40, 0.9);
-            position: relative;
-            z-index: 2;
-            scroll-behavior: smooth;
-        }
-
-        .chat-box::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .chat-box::-webkit-scrollbar-track {
-            background: rgba(102, 126, 234, 0.1);
-        }
-
-        .chat-box::-webkit-scrollbar-thumb {
-            background: rgba(102, 126, 234, 0.4);
-            border-radius: 4px;
-        }
-
-        .message {
-            margin-bottom: 15px;
-            display: flex;
-            animation: slideIn 0.4s ease;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(15px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .message.user {
-            justify-content: flex-end;
-        }
-
-        .message.ai {
-            justify-content: flex-start;
-        }
-
-        .message-content {
-            max-width: 70%;
-            padding: 14px 18px;
-            border-radius: 15px;
-            word-wrap: break-word;
-            line-height: 1.5;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .message.user .message-content {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
-            color: white;
-            border: 1px solid rgba(102, 126, 234, 0.5);
-        }
-
-        .message.ai .message-content {
-            background: rgba(30, 40, 70, 0.8);
-            color: #e0e7ff;
-            border: 1px solid rgba(102, 126, 234, 0.3);
-        }
-
-        .typing {
+        /* Durumu Göster */
+        .status-text {
+            font-size: 1.1rem;
+            color: #cbd5e1;
+            margin-bottom: 1rem;
+            min-height: 2.2rem;
             display: flex;
             align-items: center;
-            gap: 6px;
-            padding: 14px 18px;
+            justify-content: center;
+        }
+
+        .status-text.listening {
+            color: #38bdf8;
+            font-weight: 600;
+        }
+
+        .status-text.processing {
+            color: #fbbf24;
+            font-weight: 600;
+        }
+
+        .status-text.speaking {
+            color: #34d399;
+            font-weight: 600;
+        }
+
+        /* Mesajlar */
+        .messages-box {
             background: rgba(30, 40, 70, 0.8);
-            border: 1px solid rgba(102, 126, 234, 0.3);
-            border-radius: 15px;
-            width: fit-content;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            max-height: 200px;
+            overflow-y: auto;
+            text-align: left;
         }
 
-        .typing span {
-            width: 10px;
-            height: 10px;
-            background: rgba(102, 126, 234, 0.8);
-            border-radius: 50%;
-            animation: typeBounce 1.4s infinite;
-            box-shadow: 0 0 10px rgba(102, 126, 234, 0.6);
+        .messages-box::-webkit-scrollbar {
+            width: 4px;
         }
 
-        .typing span:nth-child(2) {
-            animation-delay: 0.2s;
+        .messages-box::-webkit-scrollbar-thumb {
+            background: rgba(56, 189, 248, 0.3);
+            border-radius: 2px;
         }
 
-        .typing span:nth-child(3) {
-            animation-delay: 0.4s;
+        .message-item {
+            margin-bottom: 0.8rem;
+            padding: 0.6rem;
+            border-left: 3px solid #38bdf8;
+            padding-left: 0.8rem;
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            line-height: 1.3;
         }
 
-        @keyframes typeBounce {
-            0%, 60%, 100% {
-                transform: translateY(0);
-                opacity: 0.6;
-            }
-            30% {
-                transform: translateY(-12px);
-                opacity: 1;
-            }
+        .message-item.user {
+            border-left-color: #fbbf24;
+            background: rgba(251, 191, 36, 0.1);
         }
 
-        .input-area {
-            padding: 20px;
-            background: rgba(10, 15, 30, 0.95);
-            border-top: 2px solid rgba(102, 126, 234, 0.3);
+        .message-item.ai {
+            border-left-color: #34d399;
+            background: rgba(52, 211, 153, 0.1);
+        }
+
+        /* Kontrol Butonları */
+        .controls {
             display: flex;
-            gap: 12px;
-            position: relative;
-            z-index: 2;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 1.5rem;
         }
 
-        .input-group {
-            display: flex;
-            gap: 10px;
-            flex: 1;
-        }
-
-        #message-input {
-            flex: 1;
-            padding: 12px 16px;
-            border: 2px solid rgba(102, 126, 234, 0.3);
-            border-radius: 12px;
-            font-size: 14px;
-            outline: none;
-            background: rgba(30, 40, 70, 0.6);
-            color: #e0e7ff;
-            transition: all 0.3s;
-        }
-
-        #message-input::placeholder {
-            color: rgba(224, 231, 255, 0.4);
-        }
-
-        #message-input:focus {
-            border-color: rgba(102, 126, 234, 0.8);
-            background: rgba(30, 40, 70, 0.8);
-            box-shadow: 0 0 15px rgba(102, 126, 234, 0.3);
-        }
-
-        button {
-            padding: 12px 20px;
+        .btn {
+            padding: 1rem 1.5rem;
             border: none;
-            border-radius: 12px;
-            font-size: 14px;
+            border-radius: 8px;
+            font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
             display: flex;
             align-items: center;
+            gap: 0.5rem;
+            min-width: 120px;
             justify-content: center;
-            gap: 8px;
         }
 
-        #send-btn {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
-            color: white;
-            border: 1px solid rgba(102, 126, 234, 0.5);
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        .btn-voice {
+            background: rgba(239, 68, 68, 0.5);
+            color: #ffffff;
+            border: 1px solid #ef4444;
+            flex: 1;
         }
 
-        #send-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        .btn-voice:hover:not(:disabled) {
+            background: rgba(239, 68, 68, 0.7);
+            transform: scale(1.05);
         }
 
-        #send-btn:active {
-            transform: translateY(0);
+        .btn-voice:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
-        #voice-btn {
-            background: linear-gradient(135deg, rgba(255, 107, 107, 0.8) 0%, rgba(255, 71, 87, 0.8) 100%);
-            color: white;
-            width: 44px;
-            height: 44px;
-            padding: 0;
-            border: 1px solid rgba(255, 107, 107, 0.5);
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        .btn-stop {
+            background: rgba(239, 68, 68, 0.8);
+            color: #ffffff;
+            border: 1px solid #ef4444;
         }
 
-        #voice-btn:hover {
-            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.5);
+        .btn-stop:hover {
+            background: rgba(239, 68, 68, 0.9);
+            transform: scale(1.05);
         }
 
-        #voice-btn.recording {
-            animation: micPulse 1s infinite;
-            box-shadow: 0 0 30px rgba(255, 71, 87, 0.6);
+        .btn-settings {
+            background: rgba(34, 197, 194, 0.5);
+            color: #ffffff;
+            border: 1px solid #22c55e;
         }
 
-        @keyframes micPulse {
-            0%, 100% {
-                transform: scale(1);
-                box-shadow: 0 0 30px rgba(255, 71, 87, 0.6);
-            }
-            50% {
-                transform: scale(1.05);
-                box-shadow: 0 0 50px rgba(255, 71, 87, 0.8);
-            }
+        .btn-settings:hover {
+            background: rgba(34, 197, 194, 0.7);
+            transform: scale(1.05);
         }
 
-        #settings-btn {
-            background: linear-gradient(135deg, rgba(78, 205, 196, 0.8) 0%, rgba(69, 183, 176, 0.8) 100%);
-            color: white;
-            width: 44px;
-            height: 44px;
-            padding: 0;
-            border: 1px solid rgba(78, 205, 196, 0.5);
-            box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
+        .btn-clear {
+            background: rgba(100, 100, 120, 0.3);
+            color: #cbd5e1;
+            border: 1px solid #233554;
         }
 
-        #settings-btn:hover {
-            box-shadow: 0 6px 20px rgba(78, 205, 196, 0.5);
+        .btn-clear:hover {
+            background: rgba(100, 100, 120, 0.5);
         }
 
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
-            z-index: 2000;
+            z-index: 1000;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.7);
-            animation: fadeIn 0.3s;
-            backdrop-filter: blur(5px);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
         }
 
         .modal-content {
-            background: linear-gradient(135deg, rgba(20, 30, 60, 0.95) 0%, rgba(30, 40, 70, 0.95) 100%);
-            margin: 10% auto;
-            padding: 30px;
-            border-radius: 20px;
+            background: rgba(11, 15, 26, 0.95);
+            margin: 15% auto;
+            padding: 2rem;
+            border: 1px solid #1e293b;
+            border-radius: 8px;
             width: 90%;
             max-width: 400px;
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), 0 0 40px rgba(102, 126, 234, 0.3);
-            border: 2px solid rgba(102, 126, 234, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
         }
 
         .close {
-            color: #aaa;
+            color: #94a3b8;
             float: right;
             font-size: 28px;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: color 0.3s;
         }
 
         .close:hover {
-            color: #fff;
-            text-shadow: 0 0 10px rgba(102, 126, 234, 0.6);
+            color: #38bdf8;
         }
 
         .modal h2 {
-            margin-bottom: 20px;
-            color: #e0e7ff;
-            text-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+            font-size: 1.3rem;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 1.2rem;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 0.4rem;
             color: #cbd5e1;
             font-weight: 600;
+            font-size: 0.9rem;
         }
 
         .form-group input,
         .form-group select {
             width: 100%;
-            padding: 10px;
-            border: 1px solid rgba(102, 126, 234, 0.3);
-            border-radius: 8px;
-            font-size: 14px;
-            background: rgba(30, 40, 70, 0.6);
+            padding: 0.7rem;
+            border: 1px solid #233554;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            background: rgba(30, 40, 70, 0.8);
             color: #e0e7ff;
-        }
-
-        .form-group input::placeholder {
-            color: rgba(224, 231, 255, 0.4);
+            outline: none;
+            transition: border-color 0.3s;
         }
 
         .form-group input:focus,
         .form-group select:focus {
-            outline: none;
-            border-color: rgba(102, 126, 234, 0.8);
-            box-shadow: 0 0 15px rgba(102, 126, 234, 0.2);
+            border-color: #38bdf8;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
         }
 
         .modal-buttons {
             display: flex;
-            gap: 10px;
+            gap: 0.8rem;
             justify-content: flex-end;
-            margin-top: 20px;
+            margin-top: 1.5rem;
         }
 
         .modal-buttons button {
-            padding: 10px 20px;
-            font-size: 14px;
+            padding: 0.7rem 1.5rem;
+            font-size: 0.9rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
         }
 
         #save-btn {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
-            color: white;
-            border: 1px solid rgba(102, 126, 234, 0.5);
+            background: rgba(56, 189, 248, 0.5);
+            color: #ffffff;
+            border: 1px solid #38bdf8;
         }
 
         #cancel-btn {
-            background: rgba(100, 100, 120, 0.6);
-            color: #e0e7ff;
-            border: 1px solid rgba(102, 126, 234, 0.3);
+            background: rgba(100, 100, 120, 0.3);
+            color: #cbd5e1;
+            border: 1px solid #233554;
         }
 
         .error {
-            background: rgba(255, 107, 107, 0.2);
-            border: 1px solid rgba(255, 107, 107, 0.5);
-            color: #ff9999;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 10px;
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            color: #fca5a5;
+            padding: 0.8rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
             display: none;
-            box-shadow: 0 0 15px rgba(255, 107, 107, 0.2);
+            font-size: 0.9rem;
         }
 
         .success {
-            background: rgba(102, 255, 102, 0.2);
-            border: 1px solid rgba(102, 255, 102, 0.5);
-            color: #99ff99;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 10px;
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid rgba(34, 197, 94, 0.5);
+            color: #86efac;
+            padding: 0.8rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
             display: none;
-            box-shadow: 0 0 15px rgba(102, 255, 102, 0.2);
+            font-size: 0.9rem;
         }
 
-        .permission-request {
-            background: rgba(102, 126, 234, 0.15);
-            border: 2px solid rgba(102, 126, 234, 0.4);
-            padding: 15px;
-            border-radius: 12px;
+        footer {
             text-align: center;
-            color: #e0e7ff;
-            margin-bottom: 10px;
-            display: none;
-        }
-
-        .permission-request button {
-            margin-top: 10px;
+            padding: 1rem 0 0 0;
+            color: #475569;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            border-top: 1px solid #1e293b;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="hologram-sphere">
-                <div class="sphere-core">
-                    <div class="sound-wave"></div>
-                    <div class="sound-wave"></div>
-                    <div class="sound-wave"></div>
-                </div>
+
+    <div class="voice-container">
+        <header>
+            <div class="arabic-banner">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ</div>
+            <h1>Sesli AI Chatbot</h1>
+            <p class="subtitle">Hafızatan Tütüm - Gemini Powered</p>
+        </header>
+
+        <div class="error" id="error-msg"></div>
+        <div class="success" id="success-msg"></div>
+
+        <div class="voice-circle" id="voice-circle">
+            <div class="voice-waves">
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
             </div>
-            <h1>🤖 Gemini AI Chatbot</h1>
-            <p>Holografik Ses Destekli - Konuş & Dinle</p>
+            <div class="mic-icon">🎤</div>
         </div>
 
-        <div class="chat-box" id="chat-box">
-            <div class="message ai">
-                <div class="message-content">
-                    👋 Merhaba! Ben Gemini AI'ım. Seninle sesle konuşmaya hazırım! 🎤
-                </div>
-            </div>
+        <div class="status-text" id="status">Başlamak için "Dinle" butonuna tıkla</div>
+
+        <div class="messages-box" id="messages-box">
+            <div class="message-item ai">👋 Merhaba! Sesle konuş, ben dinleyip cevap vereceğim...</div>
         </div>
 
-        <div class="input-area">
-            <div class="error" id="error-msg"></div>
-            <div class="success" id="success-msg"></div>
-            <div class="permission-request" id="permission-request">
-                🎤 Mikrofon için izin gerekli
-                <button onclick="requestMicrophonePermission()">İzin Ver</button>
-            </div>
-            <div class="input-group">
-                <input 
-                    type="text" 
-                    id="message-input" 
-                    placeholder="Mesajını yaz veya mikrofonu kullan..." 
-                    autocomplete="off"
-                >
-                <button id="voice-btn" title="Ses Kaydı Başlat">🎤</button>
-                <button id="send-btn" title="Gönder">Gönder</button>
-            </div>
-            <button id="settings-btn" title="Ayarlar">⚙️</button>
+        <div class="controls">
+            <button class="btn btn-voice" id="listen-btn">🎤 Dinle</button>
+            <button class="btn btn-stop" id="stop-btn" style="display: none;">⏹️ Durdur</button>
         </div>
+
+        <div class="controls">
+            <button class="btn btn-clear" id="clear-btn">🗑️ Temizle</button>
+            <button class="btn btn-settings" id="settings-btn">⚙️ Ayarlar</button>
+        </div>
+
+        <footer>
+            <p>YÜŞA ÇİLOĞLAN &copy; 2026 | SESLİ AI CHATBOT</p>
+        </footer>
     </div>
 
     <!-- Ayarlar Modal -->
     <div id="settings-modal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>⚙️ API Ayarları</h2>
+            <h2>⚙️ Ayarlar</h2>
             <div class="form-group">
                 <label for="api-key">Gemini API Key:</label>
                 <input 
                     type="password" 
                     id="api-key" 
-                    placeholder="Buraya API key'ini yapıştır"
+                    placeholder="API key'ini yapıştır"
                 >
             </div>
             <div class="form-group">
@@ -576,7 +481,7 @@
             <div class="form-group">
                 <label>
                     <input type="checkbox" id="voice-response" checked>
-                    AI'ın sesli yanıt vermesini sağla
+                    AI sesli yanıt versin
                 </label>
             </div>
             <div class="modal-buttons">
@@ -592,20 +497,21 @@
             apiKey: localStorage.getItem('gemini-api-key') || '',
             voiceLang: localStorage.getItem('voice-lang') || 'tr-TR',
             voiceResponse: localStorage.getItem('voice-response') !== 'false',
-            model: 'gemini-pro'  // DÜZELTILDI: Doğru model
+            model: 'gemini-pro'
         };
 
         let conversationHistory = [];
-        let mediaRecorder;
-        let audioChunks = [];
-        let isRecording = false;
+        let isListening = false;
+        let isSpeaking = false;
 
         // DOM Elements
-        const chatBox = document.getElementById('chat-box');
-        const messageInput = document.getElementById('message-input');
-        const sendBtn = document.getElementById('send-btn');
-        const voiceBtn = document.getElementById('voice-btn');
+        const voiceCircle = document.getElementById('voice-circle');
+        const statusText = document.getElementById('status');
+        const listenBtn = document.getElementById('listen-btn');
+        const stopBtn = document.getElementById('stop-btn');
+        const clearBtn = document.getElementById('clear-btn');
         const settingsBtn = document.getElementById('settings-btn');
+        const messagesBox = document.getElementById('messages-box');
         const modal = document.getElementById('settings-modal');
         const closeModal = document.querySelector('.close');
         const apiKeyInput = document.getElementById('api-key');
@@ -615,7 +521,6 @@
         const cancelBtn = document.getElementById('cancel-btn');
         const errorMsg = document.getElementById('error-msg');
         const successMsg = document.getElementById('success-msg');
-        const permissionRequest = document.getElementById('permission-request');
 
         // Modal Kontrolleri
         settingsBtn.addEventListener('click', () => {
@@ -658,52 +563,53 @@
             modal.style.display = 'none';
         });
 
-        // Mesaj Göster
-        function showMessage(text, isUser = false) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${isUser ? 'user' : 'ai'}`;
-            
-            const contentDiv = document.createElement('div');
-            contentDiv.className = 'message-content';
-            contentDiv.textContent = text;
-            
-            messageDiv.appendChild(contentDiv);
-            chatBox.appendChild(messageDiv);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-
-        // Yazıyor göstergesi
-        function showTyping() {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'message ai';
-            messageDiv.id = 'typing-indicator';
-            
-            const typingDiv = document.createElement('div');
-            typingDiv.className = 'typing';
-            typingDiv.innerHTML = '<span></span><span></span><span></span>';
-            
-            messageDiv.appendChild(typingDiv);
-            chatBox.appendChild(messageDiv);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-
-        function removeTyping() {
-            const typing = document.getElementById('typing-indicator');
-            if (typing) {
-                typing.remove();
+        // Status Güncelle
+        function updateStatus(text, type = 'normal') {
+            statusText.textContent = text;
+            statusText.classList.remove('listening', 'processing', 'speaking');
+            if (type !== 'normal') {
+                statusText.classList.add(type);
             }
         }
 
-        // Gemini API'ye istek gönder
-        async function sendToGemini(userMessage) {
+        // Mesaj Ekle
+        function addMessage(text, type = 'user') {
+            const messageEl = document.createElement('div');
+            messageEl.className = `message-item ${type}`;
+            messageEl.textContent = text;
+            messagesBox.appendChild(messageEl);
+            messagesBox.scrollTop = messagesBox.scrollHeight;
+        }
+
+        // Hata Göster
+        function showError(message) {
+            errorMsg.textContent = message;
+            errorMsg.style.display = 'block';
+            setTimeout(() => {
+                errorMsg.style.display = 'none';
+            }, 5000);
+        }
+
+        // Başarı Göster
+        function showSuccess(message) {
+            successMsg.textContent = message;
+            successMsg.style.display = 'block';
+            setTimeout(() => {
+                successMsg.style.display = 'none';
+            }, 3000);
+        }
+
+        // Gemini API'ye Sorgu Gönder
+        async function askGemini(userMessage) {
             if (!config.apiKey) {
-                showError('❌ Lütfen API Key ayarlarını yapılandır!');
+                showError('❌ Lütfen API Key'i ayarlardan gir!');
+                updateStatus('API Key gerekli');
                 return;
             }
 
             try {
-                showTyping();
-                
+                updateStatus('🤔 Gemini'yi sorgulanıyor...', 'processing');
+
                 conversationHistory.push({
                     role: 'user',
                     parts: [{ text: userMessage }]
@@ -720,15 +626,11 @@
                             contents: conversationHistory,
                             generationConfig: {
                                 temperature: 0.7,
-                                topK: 40,
-                                topP: 0.95,
-                                maxOutputTokens: 1024,
+                                maxOutputTokens: 500,
                             }
                         })
                     }
                 );
-
-                removeTyping();
 
                 if (!response.ok) {
                     const error = await response.json();
@@ -743,162 +645,136 @@
                     parts: [{ text: aiMessage }]
                 });
 
-                showMessage(aiMessage, false);
+                addMessage(aiMessage, 'ai');
+                updateStatus('✓ Hazır! Yeni mesaj için tıkla', 'normal');
 
                 if (config.voiceResponse) {
                     speakText(aiMessage);
                 }
 
             } catch (error) {
-                removeTyping();
                 showError('❌ Hata: ' + error.message);
+                updateStatus('Hata oluştu');
                 console.error('Gemini API Error:', error);
             }
         }
 
-        // Metin konuş
+        // Metni Sesli Oku
         function speakText(text) {
             if ('speechSynthesis' in window) {
-                speechSynthesis.cancel(); // Önceki sesi durdur
+                isSpeaking = true;
+                voiceCircle.classList.add('active');
+                updateStatus('🔊 Konuşuyor...', 'speaking');
+
+                speechSynthesis.cancel();
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = config.voiceLang;
                 utterance.rate = 0.9;
-                utterance.pitch = 1;
+
+                utterance.onend = () => {
+                    isSpeaking = false;
+                    voiceCircle.classList.remove('active');
+                    updateStatus('✓ Hazır! Yeni mesaj için tıkla', 'normal');
+                };
+
                 speechSynthesis.speak(utterance);
             }
         }
 
-        // Hata göster
-        function showError(message) {
-            errorMsg.textContent = message;
-            errorMsg.style.display = 'block';
-            setTimeout(() => {
-                errorMsg.style.display = 'none';
-            }, 5000);
-        }
-
-        // Başarı göster
-        function showSuccess(message) {
-            successMsg.textContent = message;
-            successMsg.style.display = 'block';
-            setTimeout(() => {
-                successMsg.style.display = 'none';
-            }, 3000);
-        }
-
-        // Gönder butonu
-        sendBtn.addEventListener('click', () => {
-            const message = messageInput.value.trim();
-            if (!message) return;
-
-            showMessage(message, true);
-            messageInput.value = '';
-            sendToGemini(message);
-        });
-
-        // Enter tuşu
-        messageInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendBtn.click();
+        // Dinle Butonu
+        listenBtn.addEventListener('click', async () => {
+            if (isSpeaking) {
+                showError('AI hâlâ konuşuyor, lütfen bekle...');
+                return;
             }
-        });
 
-        // Mikrofon İzni İste
-        async function requestMicrophonePermission() {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                stream.getTracks().forEach(track => track.stop());
-                permissionRequest.style.display = 'none';
-                showSuccess('✓ Mikrofon erişimi verildi!');
-            } catch (error) {
-                showError('❌ Mikrofon erişimi reddedildi: ' + error.message);
+            if (!config.apiKey) {
+                showError('❌ Lütfen API Key'i ayarlardan gir!');
+                return;
             }
-        }
 
-        window.requestMicrophonePermission = requestMicrophonePermission;
+            isListening = true;
+            voiceCircle.classList.add('active');
+            listenBtn.style.display = 'none';
+            stopBtn.style.display = 'flex';
+            updateStatus('👂 Dinleniyor...', 'listening');
 
-        // Ses Kaydı
-        voiceBtn.addEventListener('click', async () => {
-            if (!isRecording) {
-                try {
-                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                    mediaRecorder = new MediaRecorder(stream);
-                    audioChunks = [];
-
-                    mediaRecorder.ondataavailable = (event) => {
-                        audioChunks.push(event.data);
-                    };
-
-                    mediaRecorder.onstop = async () => {
-                        await processAudio();
-                        stream.getTracks().forEach(track => track.stop());
-                    };
-
-                    mediaRecorder.start();
-                    isRecording = true;
-                    voiceBtn.classList.add('recording');
-                    voiceBtn.textContent = '⏹️';
-                    showSuccess('🎤 Ses kaydı başladı...');
-
-                } catch (error) {
-                    if (error.name === 'NotAllowedError') {
-                        permissionRequest.style.display = 'block';
-                    }
-                    showError('❌ Mikrofona erişim reddedildi');
-                }
-            } else {
-                mediaRecorder.stop();
-                isRecording = false;
-                voiceBtn.classList.remove('recording');
-                voiceBtn.textContent = '🎤';
-            }
-        });
-
-        // Ses işle
-        async function processAudio() {
             try {
                 const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
                 recognition.lang = config.voiceLang;
                 recognition.continuous = false;
                 recognition.interimResults = false;
 
-                recognition.onstart = () => {
-                    showSuccess('🎙️ Ses tanınıyor...');
-                };
-
                 recognition.onresult = (event) => {
                     let transcript = '';
                     for (let i = event.resultIndex; i < event.results.length; i++) {
                         transcript += event.results[i][0].transcript;
                     }
-                    
+
                     if (transcript) {
-                        messageInput.value = transcript;
-                        showSuccess('✓ Tanındı: ' + transcript);
-                        sendBtn.click();
+                        addMessage(transcript, 'user');
+                        updateStatus('✓ Tanındı: ' + transcript, 'normal');
+                        askGemini(transcript);
                     }
                 };
 
                 recognition.onerror = (event) => {
+                    isListening = false;
+                    voiceCircle.classList.remove('active');
+                    listenBtn.style.display = 'flex';
+                    stopBtn.style.display = 'none';
                     showError('❌ Ses tanıma hatası: ' + event.error);
+                    updateStatus('Hata oluştu');
+                };
+
+                recognition.onend = () => {
+                    isListening = false;
+                    voiceCircle.classList.remove('active');
+                    listenBtn.style.display = 'flex';
+                    stopBtn.style.display = 'none';
                 };
 
                 recognition.start();
 
             } catch (error) {
-                showError('❌ Ses işleme hatası: ' + error.message);
+                isListening = false;
+                voiceCircle.classList.remove('active');
+                listenBtn.style.display = 'flex';
+                stopBtn.style.display = 'none';
+                showError('❌ Mikrofon hatası: ' + error.message);
+                updateStatus('Hata oluştu');
             }
-        }
+        });
 
-        // Sayfa yüklendiğinde
+        // Durdur Butonu
+        stopBtn.addEventListener('click', () => {
+            if (isSpeaking) {
+                speechSynthesis.cancel();
+                isSpeaking = false;
+            }
+            isListening = false;
+            voiceCircle.classList.remove('active');
+            listenBtn.style.display = 'flex';
+            stopBtn.style.display = 'none';
+            updateStatus('✓ Durduruldu');
+        });
+
+        // Temizle Butonu
+        clearBtn.addEventListener('click', () => {
+            messagesBox.innerHTML = '<div class="message-item ai">👋 Merhaba! Sesle konuş, ben dinleyip cevap vereceğim...</div>';
+            conversationHistory = [];
+            updateStatus('✓ Temizlendi! Yeni sohbete başla');
+        });
+
+        // Sayfa Yüklendiğinde
         window.addEventListener('load', () => {
             if (config.apiKey) {
                 showSuccess('✓ Sistem hazır - API Key yüklendi');
             } else {
-                showError('⚠️ Lütfen API Key ayarlarını yapılandır!');
+                showError('⚠️ API Key ayarlarını yapılandır!');
             }
         });
     </script>
+
 </body>
 </html>
