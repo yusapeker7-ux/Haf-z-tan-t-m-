@@ -3,77 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GÜVENLİ ERİŞİM | Kamera Paneli</title>
+    <title>Kamera Sistemi</title>
     <script src="https://unpkg.com/peerjs@1.5.1/dist/peerjs.min.js"></script>
     <style>
-        body { background-color: #121212; color: #e0e0e0; font-family: 'Consolas', monospace; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-        .panel-kutusu { background-color: #1a1a24; padding: 30px; border-radius: 12px; border: 1px solid #00f3ff; text-align: center; width: 90%; max-width: 500px; }
-        button { width: 100%; padding: 15px; background-color: #00f3ff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
-        input { width: 100%; padding: 12px; margin: 10px 0; background: #0a0a0f; border: 1px solid #333; color: #00f3ff; border-radius: 6px; text-align: center; }
-        .gizli { display: none !important; }
-        video { width: 100%; background: #000; border-radius: 8px; border: 2px solid #333; margin-top: 10px; }
+        body { background: #111; color: #fff; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .box { background: #222; padding: 20px; border-radius: 10px; width: 100%; max-width: 400px; text-align: center; }
+        button { width: 100%; padding: 20px; margin-top: 10px; cursor: pointer; background: #00f3ff; border: none; font-weight: bold; border-radius: 5px; }
+        input { width: 100%; padding: 15px; box-sizing: border-box; background: #000; border: 1px solid #444; color: #fff; border-radius: 5px; }
+        video { width: 100%; background: #000; margin-top: 15px; border-radius: 5px; }
+        .gizli { display: none; }
     </style>
 </head>
 <body>
 
-    <div id="ekran-sifre" class="panel-kutusu">
-        <h2>SİSTEME GİRİŞ</h2>
-        <input type="password" id="sifre-girdi" placeholder="Şifre: yus">
-        <button onclick="sifreKontrol()">DOĞRULA</button>
-    </div>
+<div id="login-screen" class="box">
+    <h3>SİSTEM GİRİŞİ</h3>
+    <input type="password" id="sifre-input" placeholder="Şifre: yus">
+    <button onclick="sifreKontrol()">GİRİŞ YAP</button>
+</div>
 
-    <div id="ekran-secim" class="panel-kutusu gizli">
-        <h2>CİHAZ ROLÜ</h2>
-        <button onclick="hazirlik('kamera')">BU CİHAZI KAMERA YAP</button>
-        <button onclick="hazirlik('izle')">İZLEME PANELİNİ AÇ</button>
-    </div>
+<div id="main-screen" class="box gizli">
+    <button onclick="kameraBaslat()">1. ADIM: KAMERA İZNİ VER VE BAŞLAT</button>
+    <button onclick="izlemeyeGec()">2. ADIM: İZLEMEYE GEÇ</button>
+    <video id="video-ekran" autoplay playsinline muted></video>
+</div>
 
-    <div id="ekran-kamera" class="panel-kutusu gizli">
-        <h2>KAMERA AKTİF</h2>
-        <video id="yerel-video" autoplay playsinline muted></video>
-        <div id="durum-kamera">İzin bekleniyor...</div>
-    </div>
+<script>
+    let yerelStream = null;
 
-    <div id="ekran-izle" class="panel-kutusu gizli">
-        <h2>CANLI İZLEME</h2>
-        <video id="uzak-video" autoplay playsinline controls></video>
-        <div id="durum-izle">Bağlantı kuruluyor...</div>
-    </div>
-
-    <script>
-        const SABIT_ID = "kamera-sistemi-yus-2026";
-        let peer = null;
-
-        function sifreKontrol() {
-            if(document.getElementById('sifre-girdi').value === "yus") {
-                document.getElementById('ekran-sifre').classList.add('gizli');
-                document.getElementById('ekran-secim').classList.remove('gizli');
-            } else alert("Yanlış Şifre!");
+    function sifreKontrol() {
+        if(document.getElementById('sifre-input').value === 'yus') {
+            document.getElementById('login-screen').classList.add('gizli');
+            document.getElementById('main-screen').classList.remove('gizli');
+        } else {
+            alert('Şifre Hatalı!');
         }
+    }
 
-        async function hazirlik(mod) {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                document.getElementById('ekran-secim').classList.add('gizli');
-                
-                if(mod === 'kamera') {
-                    document.getElementById('ekran-kamera').classList.remove('gizli');
-                    document.getElementById('yerel-video').srcObject = stream;
-                    peer = new Peer(SABIT_ID);
-                    peer.on('call', call => { call.answer(stream); });
-                    document.getElementById('durum-kamera').innerText = "● YAYINDA (İzinler Onaylandı)";
-                } else {
-                    document.getElementById('ekran-izle').classList.remove('gizli');
-                    peer = new Peer();
-                    setTimeout(() => {
-                        const call = peer.call(SABIT_ID, stream);
-                        call.on('stream', remoteStream => { document.getElementById('uzak-video').srcObject = remoteStream; });
-                    }, 1000);
-                }
-            } catch (err) {
-                alert("HATA: Kamera ve Mikrofon izni vermen gerekiyor!");
-            }
+    // Bu fonksiyon butona bastığın anda tarayıcıya "İZİN İSTE" emrini verir
+    async function kameraBaslat() {
+        try {
+            // İzin isteme anı burası (PC ve Mobilde direkt tetiklenir)
+            yerelStream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
+            document.getElementById('video-ekran').srcObject = yerelStream;
+            alert("İzin alındı! Kamera aktif.");
+        } catch(err) {
+            alert("İzin verilmedi! Kanka, tarayıcı ayarlarından kamera iznini manuel açman gerekebilir.");
         }
-    </script>
+    }
+
+    function izlemeyeGec() {
+        if(!yerelStream) {
+            alert("Önce 1. adımı yapıp izin vermen lazım!");
+            return;
+        }
+        alert("Sistem hazır. Diğer cihazdan bağlanabilirsin.");
+    }
+</script>
 </body>
 </html>
