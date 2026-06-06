@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Erişim Paneli</title>
+    <title>Sistem</title>
     <script src="https://unpkg.com/peerjs@1.5.1/dist/peerjs.min.js"></script>
     <style>
         body { background: #000; color: #0f0; font-family: monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
@@ -15,36 +15,43 @@
 
 <div class="panel">
     <input type="password" id="sifre" placeholder="Şifre: yus" style="width:100%; padding:10px; background:#222; color:#0f0; border:1px solid #0f0;">
-    <button onclick="baslat()">SİSTEMİ BAŞLAT</button>
+    <button onclick="sistemiAktifEt()">SİSTEMİ BAŞLAT</button>
     <div id="kontrol" style="display:none;">
-        <button onclick="kameraOl()">EVDEKİ TELEFON (KAMERA)</button>
-        <button onclick="izle()">OKULDAKİ TELEFON (İZLE)</button>
+        <button onclick="kameraOl()">EVDEKİ (KAMERA)</button>
+        <button onclick="izle()">OKULDAN (İZLE)</button>
     </div>
     <video id="v" autoplay playsinline muted></video>
 </div>
 
 <script>
-    let peer;
-    const SABIT_KEY = "benzersiz-anahtar-yus-2026";
-
-    function baslat() {
+    function sistemiAktifEt() {
         if(document.getElementById('sifre').value === 'yus') {
             document.getElementById('kontrol').style.display = 'block';
+        } else {
+            alert('Yanlış Şifre!');
         }
     }
 
     async function kameraOl() {
-        const stream = await navigator.mediaDevices.getUserMedia({video: {facingMode: "environment"}, audio: true});
+        // İzin al
+        const stream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
         document.getElementById('v').srcObject = stream;
-        peer = new Peer(SABIT_KEY);
-        peer.on('call', call => { call.answer(stream); });
-        alert("Evdeki telefon hazır. Kamerayı açık bırak.");
+        
+        // PeerJS başlat
+        const peer = new Peer('yus-kamera-ozel-id');
+        peer.on('call', call => {
+            call.answer(stream);
+        });
+        alert('Kamera yayında!');
     }
 
     async function izle() {
-        peer = new Peer();
-        const call = peer.call(SABIT_KEY, await navigator.mediaDevices.getUserMedia({video: true, audio: true}));
-        call.on('stream', s => document.getElementById('v').srcObject = s);
+        const peer = new Peer();
+        // İzlemek için boş bir stream ile çağrı başlat
+        const call = peer.call('yus-kamera-ozel-id', new MediaStream());
+        call.on('stream', remoteStream => {
+            document.getElementById('v').srcObject = remoteStream;
+        });
     }
 </script>
 </body>
