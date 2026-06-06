@@ -3,178 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Siber Güvenlik | Kamera Sistemi</title>
+    <title>GÜVENLİ ERİŞİM | Kamera Paneli</title>
     <script src="https://unpkg.com/peerjs@1.5.1/dist/peerjs.min.js"></script>
     <style>
-        body { 
-            background-color: #121212; 
-            color: #e0e0e0; 
-            font-family: 'Consolas', 'Courier New', monospace; 
-            margin: 0; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            min-height: 100vh; 
-            overflow-x: hidden; 
-        }
-        .panel-kutusu { 
-            background-color: #1a1a24; 
-            padding: 30px; 
-            border-radius: 12px; 
-            border: 1px solid #00f3ff; 
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2); 
-            text-align: center; 
-            width: 90%; 
-            max-width: 500px; 
-        }
-        h2 { color: #00f3ff; letter-spacing: 2px; margin-top: 0; text-transform: uppercase; }
-        input[type="password"] { 
-            width: 100%; 
-            padding: 12px; 
-            margin: 15px 0; 
-            background-color: #0a0a0f; 
-            border: 1px solid #333; 
-            color: #00f3ff; 
-            border-radius: 6px; 
-            outline: none; 
-            text-align: center; 
-            font-family: inherit; 
-            box-sizing: border-box; 
-        }
-        button { 
-            width: 100%; 
-            padding: 12px; 
-            background-color: #00f3ff; 
-            color: #000; 
-            border: none; 
-            border-radius: 6px; 
-            font-weight: bold; 
-            cursor: pointer; 
-            transition: 0.3s; 
-            font-family: inherit; 
-            text-transform: uppercase; 
-            margin-bottom: 10px; 
-        }
-        button:hover { background-color: #00c4cc; box-shadow: 0 0 15px rgba(0, 243, 255, 0.4); }
-        .btn-kamera { background-color: #ff3366; color: white; }
-        .btn-kamera:hover { background-color: #d62050; box-shadow: 0 0 15px rgba(255, 51, 102, 0.4); }
-        #hata-mesaji { color: #ff3333; margin-top: 10px; display: none; }
+        body { background-color: #121212; color: #e0e0e0; font-family: 'Consolas', monospace; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+        .panel-kutusu { background-color: #1a1a24; padding: 30px; border-radius: 12px; border: 1px solid #00f3ff; text-align: center; width: 90%; max-width: 500px; }
+        button { width: 100%; padding: 15px; background-color: #00f3ff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; background: #0a0a0f; border: 1px solid #333; color: #00f3ff; border-radius: 6px; text-align: center; }
         .gizli { display: none !important; }
-        video { width: 100%; background-color: #000; border-radius: 8px; border: 2px solid #333; }
-        .durum { color: #00ff00; font-weight: bold; margin-top: 15px; font-size: 14px; animation: yanipSonme 1.5s infinite; }
-        .bilgi { color: #00f3ff; font-size: 14px; margin-top: 10px; }
-        @keyframes yanipSonme { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+        video { width: 100%; background: #000; border-radius: 8px; border: 2px solid #333; margin-top: 10px; }
     </style>
 </head>
 <body>
 
     <div id="ekran-sifre" class="panel-kutusu">
-        <h2>SİSTEME ERİŞİM</h2>
-        <input type="password" id="sifre-girdi" placeholder="Şifreyi Girin">
-        <button onclick="sifreKontrol()">Sistemi Doğrula</button>
-        <div id="hata-mesaji">ERİŞİM REDDEDİLDİ!</div>
+        <h2>SİSTEME GİRİŞ</h2>
+        <input type="password" id="sifre-girdi" placeholder="Şifre: yus">
+        <button onclick="sifreKontrol()">DOĞRULA</button>
     </div>
 
     <div id="ekran-secim" class="panel-kutusu gizli">
-        <h2>İŞLEM SEÇİN</h2>
-        <p style="color: #888;">Bu cihazın görevi ne olacak?</p>
-        <button class="btn-kamera" onclick="modSec('kamera')">📸 BU TELEFONU KAMERA YAP</button>
-        <button onclick="modSec('izle')">🖥️ İZLEME PANELİNE GEÇ</button>
+        <h2>CİHAZ ROLÜ</h2>
+        <button onclick="hazirlik('kamera')">BU CİHAZI KAMERA YAP</button>
+        <button onclick="hazirlik('izle')">İZLEME PANELİNİ AÇ</button>
     </div>
 
     <div id="ekran-kamera" class="panel-kutusu gizli">
-        <h2>Kamera Aktif</h2>
+        <h2>KAMERA AKTİF</h2>
         <video id="yerel-video" autoplay playsinline muted></video>
-        <div class="durum" id="kamera-durum">● YAYINDA (BAĞLANTI BEKLENİYOR...)</div>
+        <div id="durum-kamera">İzin bekleniyor...</div>
     </div>
 
     <div id="ekran-izle" class="panel-kutusu gizli">
-        <h2>CANLI İZLEME EKRANI</h2>
+        <h2>CANLI İZLEME</h2>
         <video id="uzak-video" autoplay playsinline controls></video>
-        <div id="izleme-durum" class="bilgi">Kameraya otomatik bağlanılıyor...</div>
+        <div id="durum-izle">Bağlantı kuruluyor...</div>
     </div>
 
     <script>
-        // İki cihazın birbirini bulması için sabit ID
-        const SABIT_KAMERA_ID = "sistem-kamera-gizli-yus-2026";
+        const SABIT_ID = "kamera-sistemi-yus-2026";
         let peer = null;
-        let yerelStream = null;
 
         function sifreKontrol() {
-            const sifre = document.getElementById('sifre-girdi').value;
-            if (sifre === "yus") {
+            if(document.getElementById('sifre-girdi').value === "yus") {
                 document.getElementById('ekran-sifre').classList.add('gizli');
                 document.getElementById('ekran-secim').classList.remove('gizli');
-            } else {
-                document.getElementById('hata-mesaji').style.display = 'block';
-            }
+            } else alert("Yanlış Şifre!");
         }
 
-        document.getElementById("sifre-girdi").addEventListener("keypress", function(e) {
-            if (e.key === "Enter") sifreKontrol();
-        });
-
-        function modSec(mod) {
-            document.getElementById('ekran-secim').classList.add('gizli');
-            
-            if (mod === 'kamera') {
-                document.getElementById('ekran-kamera').classList.remove('gizli');
-                kameraBaslat();
-            } else {
-                document.getElementById('ekran-izle').classList.remove('gizli');
-                izleyiciBaslat();
-            }
-        }
-
-        function kameraBaslat() {
-            // Kamera cihazı sabit ID ile ağı başlatır
-            peer = new Peer(SABIT_KAMERA_ID);
-            
-            // Arka kamerayı açmaya çalış, yoksa ön kamerayı aç
-            navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: true })
-            .then(stream => {
-                yerelStream = stream;
-                document.getElementById('yerel-video').srcObject = stream;
+        async function hazirlik(mod) {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                document.getElementById('ekran-secim').classList.add('gizli');
                 
-                // Biri bağlandığında görüntüyü gönder
-                peer.on('call', call => {
-                    call.answer(yerelStream);
-                    document.getElementById('kamera-durum').innerText = "● İZLEYİCİ BAĞLANDI!";
-                });
-            }).catch(err => {
-                alert("Kamera izni verilmedi veya bulunamadı!");
-            });
-        }
-
-        function izleyiciBaslat() {
-            // İzleyici rastgele bir ID ile ağa katılır
-            peer = new Peer();
-            
-            peer.on('open', () => {
-                document.getElementById('izleme-durum').innerText = "Sinyal aranıyor...";
-                
-                // Birkaç saniye sonra sabit ID'ye sahip kamerayı ara
-                setTimeout(() => {
-                    const call = peer.call(SABIT_KAMERA_ID, new MediaStream()); // Boş stream ile ara
-                    
-                    call.on('stream', uzakStream => {
-                        document.getElementById('uzak-video').srcObject = uzakStream;
-                        document.getElementById('izleme-durum').innerText = "● CANLI BAĞLANTI KURULDU";
-                        document.getElementById('izleme-durum').style.color = "#00ff00";
-                    });
-
-                    call.on('close', () => {
-                        document.getElementById('izleme-durum').innerText = "Bağlantı koptu!";
-                        document.getElementById('izleme-durum').style.color = "#ff3333";
-                    });
-
-                }, 2000);
-            });
-            
-            peer.on('error', err => {
-                document.getElementById('izleme-durum').innerText = "Hata: Önce kamerayı açmalısın!";
-                document.getElementById('izleme-durum').style.color = "#ff3333";
-            });
+                if(mod === 'kamera') {
+                    document.getElementById('ekran-kamera').classList.remove('gizli');
+                    document.getElementById('yerel-video').srcObject = stream;
+                    peer = new Peer(SABIT_ID);
+                    peer.on('call', call => { call.answer(stream); });
+                    document.getElementById('durum-kamera').innerText = "● YAYINDA (İzinler Onaylandı)";
+                } else {
+                    document.getElementById('ekran-izle').classList.remove('gizli');
+                    peer = new Peer();
+                    setTimeout(() => {
+                        const call = peer.call(SABIT_ID, stream);
+                        call.on('stream', remoteStream => { document.getElementById('uzak-video').srcObject = remoteStream; });
+                    }, 1000);
+                }
+            } catch (err) {
+                alert("HATA: Kamera ve Mikrofon izni vermen gerekiyor!");
+            }
         }
     </script>
 </body>
