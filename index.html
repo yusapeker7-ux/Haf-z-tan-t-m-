@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini AI Chatbot - Ses Destekli</title>
+    <title>Gemini AI Chatbot - Holografik Ses</title>
     <style>
         * {
             margin: 0;
@@ -13,62 +13,171 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0a0e27 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            overflow: hidden;
         }
 
         .container {
             width: 100%;
-            max-width: 800px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 900px;
+            background: rgba(10, 14, 39, 0.95);
+            border-radius: 30px;
+            box-shadow: 0 0 60px rgba(102, 126, 234, 0.3), inset 0 0 60px rgba(102, 126, 234, 0.1);
             overflow: hidden;
             display: flex;
             flex-direction: column;
             height: 90vh;
-            max-height: 600px;
+            max-height: 700px;
+            border: 2px solid rgba(102, 126, 234, 0.4);
+            position: relative;
+        }
+
+        /* Holografik Arka Plan Efekti */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, 
+                transparent 0%, 
+                rgba(102, 126, 234, 0.1) 25%, 
+                transparent 50%, 
+                rgba(118, 75, 162, 0.1) 75%, 
+                transparent 100%);
+            animation: holoDrift 20s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes holoDrift {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(100px, 100px) rotate(360deg); }
         }
 
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%);
             color: white;
-            padding: 20px;
+            padding: 25px;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.2);
+            position: relative;
+            z-index: 2;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.3);
         }
 
         .header h1 {
-            font-size: 24px;
-            margin-bottom: 5px;
+            font-size: 28px;
+            margin-bottom: 8px;
+            text-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+            letter-spacing: 2px;
         }
 
         .header p {
             font-size: 12px;
-            opacity: 0.9;
+            opacity: 0.85;
+            letter-spacing: 1px;
+        }
+
+        .hologram-sphere {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 15px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sphere-core {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.4));
+            box-shadow: 0 0 40px rgba(102, 126, 234, 0.6), inset -20px -20px 40px rgba(0, 0, 0, 0.4);
+            position: relative;
+            animation: sphereFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes sphereFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .sound-wave {
+            position: absolute;
+            border: 2px solid rgba(102, 126, 234, 0.5);
+            border-radius: 50%;
+            animation: waveExpand 1.5s ease-out infinite;
+        }
+
+        .sound-wave:nth-child(1) {
+            animation-delay: 0s;
+            width: 40px;
+            height: 40px;
+        }
+
+        .sound-wave:nth-child(2) {
+            animation-delay: 0.5s;
+            width: 60px;
+            height: 60px;
+        }
+
+        .sound-wave:nth-child(3) {
+            animation-delay: 1s;
+            width: 80px;
+            height: 80px;
+        }
+
+        @keyframes waveExpand {
+            0% {
+                transform: scale(0.3);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 0;
+            }
         }
 
         .chat-box {
             flex: 1;
             overflow-y: auto;
             padding: 20px;
-            background: #f5f5f5;
+            background: rgba(15, 20, 40, 0.9);
+            position: relative;
+            z-index: 2;
+            scroll-behavior: smooth;
+        }
+
+        .chat-box::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-box::-webkit-scrollbar-track {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .chat-box::-webkit-scrollbar-thumb {
+            background: rgba(102, 126, 234, 0.4);
+            border-radius: 4px;
         }
 
         .message {
             margin-bottom: 15px;
             display: flex;
-            animation: slideIn 0.3s ease;
+            animation: slideIn 0.4s ease;
         }
 
         @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(15px);
             }
             to {
                 opacity: 1;
@@ -86,40 +195,44 @@
 
         .message-content {
             max-width: 70%;
-            padding: 12px 16px;
-            border-radius: 12px;
+            padding: 14px 18px;
+            border-radius: 15px;
             word-wrap: break-word;
-            line-height: 1.4;
+            line-height: 1.5;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
 
         .message.user .message-content {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
             color: white;
+            border: 1px solid rgba(102, 126, 234, 0.5);
         }
 
         .message.ai .message-content {
-            background: white;
-            color: #333;
-            border: 1px solid #ddd;
+            background: rgba(30, 40, 70, 0.8);
+            color: #e0e7ff;
+            border: 1px solid rgba(102, 126, 234, 0.3);
         }
 
         .typing {
             display: flex;
             align-items: center;
-            gap: 5px;
-            padding: 12px 16px;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 12px;
+            gap: 6px;
+            padding: 14px 18px;
+            background: rgba(30, 40, 70, 0.8);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 15px;
             width: fit-content;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
 
         .typing span {
-            width: 8px;
-            height: 8px;
-            background: #667eea;
+            width: 10px;
+            height: 10px;
+            background: rgba(102, 126, 234, 0.8);
             border-radius: 50%;
-            animation: bounce 1.4s infinite;
+            animation: typeBounce 1.4s infinite;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.6);
         }
 
         .typing span:nth-child(2) {
@@ -130,23 +243,25 @@
             animation-delay: 0.4s;
         }
 
-        @keyframes bounce {
+        @keyframes typeBounce {
             0%, 60%, 100% {
                 transform: translateY(0);
-                opacity: 0.7;
+                opacity: 0.6;
             }
             30% {
-                transform: translateY(-10px);
+                transform: translateY(-12px);
                 opacity: 1;
             }
         }
 
         .input-area {
             padding: 20px;
-            background: white;
-            border-top: 1px solid #ddd;
+            background: rgba(10, 15, 30, 0.95);
+            border-top: 2px solid rgba(102, 126, 234, 0.3);
             display: flex;
-            gap: 10px;
+            gap: 12px;
+            position: relative;
+            z-index: 2;
         }
 
         .input-group {
@@ -158,21 +273,29 @@
         #message-input {
             flex: 1;
             padding: 12px 16px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            border-radius: 12px;
             font-size: 14px;
             outline: none;
-            transition: border-color 0.3s;
+            background: rgba(30, 40, 70, 0.6);
+            color: #e0e7ff;
+            transition: all 0.3s;
+        }
+
+        #message-input::placeholder {
+            color: rgba(224, 231, 255, 0.4);
         }
 
         #message-input:focus {
-            border-color: #667eea;
+            border-color: rgba(102, 126, 234, 0.8);
+            background: rgba(30, 40, 70, 0.8);
+            box-shadow: 0 0 15px rgba(102, 126, 234, 0.3);
         }
 
         button {
             padding: 12px 20px;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
@@ -184,13 +307,15 @@
         }
 
         #send-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
             color: white;
+            border: 1px solid rgba(102, 126, 234, 0.5);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
 
         #send-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
         }
 
         #send-btn:active {
@@ -198,53 +323,60 @@
         }
 
         #voice-btn {
-            background: #ff6b6b;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.8) 0%, rgba(255, 71, 87, 0.8) 100%);
             color: white;
             width: 44px;
             height: 44px;
             padding: 0;
+            border: 1px solid rgba(255, 107, 107, 0.5);
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
         }
 
         #voice-btn:hover {
-            background: #ff5252;
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.5);
         }
 
         #voice-btn.recording {
-            background: #ff4757;
-            animation: pulse 1s infinite;
+            animation: micPulse 1s infinite;
+            box-shadow: 0 0 30px rgba(255, 71, 87, 0.6);
         }
 
-        @keyframes pulse {
+        @keyframes micPulse {
             0%, 100% {
-                box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7);
+                transform: scale(1);
+                box-shadow: 0 0 30px rgba(255, 71, 87, 0.6);
             }
             50% {
-                box-shadow: 0 0 0 10px rgba(255, 71, 87, 0);
+                transform: scale(1.05);
+                box-shadow: 0 0 50px rgba(255, 71, 87, 0.8);
             }
         }
 
         #settings-btn {
-            background: #4ecdc4;
+            background: linear-gradient(135deg, rgba(78, 205, 196, 0.8) 0%, rgba(69, 183, 176, 0.8) 100%);
             color: white;
             width: 44px;
             height: 44px;
             padding: 0;
+            border: 1px solid rgba(78, 205, 196, 0.5);
+            box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
         }
 
         #settings-btn:hover {
-            background: #45b7b0;
+            box-shadow: 0 6px 20px rgba(78, 205, 196, 0.5);
         }
 
         .modal {
             display: none;
             position: fixed;
-            z-index: 1000;
+            z-index: 2000;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.4);
+            background-color: rgba(0, 0, 0, 0.7);
             animation: fadeIn 0.3s;
+            backdrop-filter: blur(5px);
         }
 
         @keyframes fadeIn {
@@ -253,13 +385,14 @@
         }
 
         .modal-content {
-            background-color: white;
+            background: linear-gradient(135deg, rgba(20, 30, 60, 0.95) 0%, rgba(30, 40, 70, 0.95) 100%);
             margin: 10% auto;
             padding: 30px;
-            border-radius: 12px;
+            border-radius: 20px;
             width: 90%;
             max-width: 400px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), 0 0 40px rgba(102, 126, 234, 0.3);
+            border: 2px solid rgba(102, 126, 234, 0.3);
         }
 
         .close {
@@ -268,15 +401,18 @@
             font-size: 28px;
             font-weight: bold;
             cursor: pointer;
+            transition: all 0.3s;
         }
 
         .close:hover {
-            color: #000;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(102, 126, 234, 0.6);
         }
 
         .modal h2 {
             margin-bottom: 20px;
-            color: #333;
+            color: #e0e7ff;
+            text-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
         }
 
         .form-group {
@@ -286,7 +422,7 @@
         .form-group label {
             display: block;
             margin-bottom: 5px;
-            color: #555;
+            color: #cbd5e1;
             font-weight: 600;
         }
 
@@ -294,15 +430,22 @@
         .form-group select {
             width: 100%;
             padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 8px;
             font-size: 14px;
+            background: rgba(30, 40, 70, 0.6);
+            color: #e0e7ff;
+        }
+
+        .form-group input::placeholder {
+            color: rgba(224, 231, 255, 0.4);
         }
 
         .form-group input:focus,
         .form-group select:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: rgba(102, 126, 234, 0.8);
+            box-shadow: 0 0 15px rgba(102, 126, 234, 0.2);
         }
 
         .modal-buttons {
@@ -318,45 +461,73 @@
         }
 
         #save-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
             color: white;
+            border: 1px solid rgba(102, 126, 234, 0.5);
         }
 
         #cancel-btn {
-            background: #ddd;
-            color: #333;
+            background: rgba(100, 100, 120, 0.6);
+            color: #e0e7ff;
+            border: 1px solid rgba(102, 126, 234, 0.3);
         }
 
         .error {
-            background: #ffe0e0;
-            color: #c33;
-            padding: 10px;
-            border-radius: 6px;
+            background: rgba(255, 107, 107, 0.2);
+            border: 1px solid rgba(255, 107, 107, 0.5);
+            color: #ff9999;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: none;
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.2);
+        }
+
+        .success {
+            background: rgba(102, 255, 102, 0.2);
+            border: 1px solid rgba(102, 255, 102, 0.5);
+            color: #99ff99;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: none;
+            box-shadow: 0 0 15px rgba(102, 255, 102, 0.2);
+        }
+
+        .permission-request {
+            background: rgba(102, 126, 234, 0.15);
+            border: 2px solid rgba(102, 126, 234, 0.4);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            color: #e0e7ff;
             margin-bottom: 10px;
             display: none;
         }
 
-        .success {
-            background: #e0ffe0;
-            color: #0c0;
-            padding: 10px;
-            border-radius: 6px;
-            margin-bottom: 10px;
-            display: none;
+        .permission-request button {
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
+            <div class="hologram-sphere">
+                <div class="sphere-core">
+                    <div class="sound-wave"></div>
+                    <div class="sound-wave"></div>
+                    <div class="sound-wave"></div>
+                </div>
+            </div>
             <h1>🤖 Gemini AI Chatbot</h1>
-            <p>Hafızatan Tütüm - Ses Destekli Yapay Zeka</p>
+            <p>Holografik Ses Destekli - Konuş & Dinle</p>
         </div>
 
         <div class="chat-box" id="chat-box">
             <div class="message ai">
                 <div class="message-content">
-                    👋 Merhaba! Ben Gemini AI'ım. Seninle konuşmak için hazırım. Yazarak veya ses kaydederek mesaj gönderebilirsin!
+                    👋 Merhaba! Ben Gemini AI'ım. Seninle sesle konuşmaya hazırım! 🎤
                 </div>
             </div>
         </div>
@@ -364,11 +535,15 @@
         <div class="input-area">
             <div class="error" id="error-msg"></div>
             <div class="success" id="success-msg"></div>
+            <div class="permission-request" id="permission-request">
+                🎤 Mikrofon için izin gerekli
+                <button onclick="requestMicrophonePermission()">İzin Ver</button>
+            </div>
             <div class="input-group">
                 <input 
                     type="text" 
                     id="message-input" 
-                    placeholder="Mesajını yaz..." 
+                    placeholder="Mesajını yaz veya mikrofonu kullan..." 
                     autocomplete="off"
                 >
                 <button id="voice-btn" title="Ses Kaydı Başlat">🎤</button>
@@ -417,11 +592,13 @@
             apiKey: localStorage.getItem('gemini-api-key') || '',
             voiceLang: localStorage.getItem('voice-lang') || 'tr-TR',
             voiceResponse: localStorage.getItem('voice-response') !== 'false',
-            model: 'gemini-1.5-flash'
+            model: 'gemini-pro'  // DÜZELTILDI: Doğru model
         };
 
-        // Konversasyon Hafızası
         let conversationHistory = [];
+        let mediaRecorder;
+        let audioChunks = [];
+        let isRecording = false;
 
         // DOM Elements
         const chatBox = document.getElementById('chat-box');
@@ -438,6 +615,7 @@
         const cancelBtn = document.getElementById('cancel-btn');
         const errorMsg = document.getElementById('error-msg');
         const successMsg = document.getElementById('success-msg');
+        const permissionRequest = document.getElementById('permission-request');
 
         // Modal Kontrolleri
         settingsBtn.addEventListener('click', () => {
@@ -476,7 +654,7 @@
             localStorage.setItem('voice-lang', config.voiceLang);
             localStorage.setItem('voice-response', config.voiceResponse);
 
-            showSuccess('Ayarlar kaydedildi!');
+            showSuccess('✓ Ayarlar kaydedildi!');
             modal.style.display = 'none';
         });
 
@@ -509,7 +687,6 @@
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        // Yazıyor göstergesi kaldır
         function removeTyping() {
             const typing = document.getElementById('typing-indicator');
             if (typing) {
@@ -520,14 +697,13 @@
         // Gemini API'ye istek gönder
         async function sendToGemini(userMessage) {
             if (!config.apiKey) {
-                showError('Lütfen önce API Key ayarlarını yapılandır!');
+                showError('❌ Lütfen API Key ayarlarını yapılandır!');
                 return;
             }
 
             try {
                 showTyping();
                 
-                // Konversasyon geçmişine ekle
                 conversationHistory.push({
                     role: 'user',
                     parts: [{ text: userMessage }]
@@ -562,7 +738,6 @@
                 const data = await response.json();
                 const aiMessage = data.candidates[0].content.parts[0].text;
 
-                // Konversasyon geçmişine AI yanıtını ekle
                 conversationHistory.push({
                     role: 'model',
                     parts: [{ text: aiMessage }]
@@ -570,14 +745,13 @@
 
                 showMessage(aiMessage, false);
 
-                // Sesli yanıt
                 if (config.voiceResponse) {
                     speakText(aiMessage);
                 }
 
             } catch (error) {
                 removeTyping();
-                showError('Hata: ' + error.message);
+                showError('❌ Hata: ' + error.message);
                 console.error('Gemini API Error:', error);
             }
         }
@@ -585,9 +759,11 @@
         // Metin konuş
         function speakText(text) {
             if ('speechSynthesis' in window) {
+                speechSynthesis.cancel(); // Önceki sesi durdur
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = config.voiceLang;
-                utterance.rate = 0.95;
+                utterance.rate = 0.9;
+                utterance.pitch = 1;
                 speechSynthesis.speak(utterance);
             }
         }
@@ -628,11 +804,21 @@
             }
         });
 
-        // Ses Kaydı
-        let mediaRecorder;
-        let audioChunks = [];
-        let isRecording = false;
+        // Mikrofon İzni İste
+        async function requestMicrophonePermission() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                stream.getTracks().forEach(track => track.stop());
+                permissionRequest.style.display = 'none';
+                showSuccess('✓ Mikrofon erişimi verildi!');
+            } catch (error) {
+                showError('❌ Mikrofon erişimi reddedildi: ' + error.message);
+            }
+        }
 
+        window.requestMicrophonePermission = requestMicrophonePermission;
+
+        // Ses Kaydı
         voiceBtn.addEventListener('click', async () => {
             if (!isRecording) {
                 try {
@@ -645,8 +831,7 @@
                     };
 
                     mediaRecorder.onstop = async () => {
-                        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-                        await processAudio(audioBlob);
+                        await processAudio();
                         stream.getTracks().forEach(track => track.stop());
                     };
 
@@ -654,9 +839,13 @@
                     isRecording = true;
                     voiceBtn.classList.add('recording');
                     voiceBtn.textContent = '⏹️';
+                    showSuccess('🎤 Ses kaydı başladı...');
 
                 } catch (error) {
-                    showError('Mikrofona erişim reddedildi: ' + error.message);
+                    if (error.name === 'NotAllowedError') {
+                        permissionRequest.style.display = 'block';
+                    }
+                    showError('❌ Mikrofona erişim reddedildi');
                 }
             } else {
                 mediaRecorder.stop();
@@ -667,12 +856,16 @@
         });
 
         // Ses işle
-        async function processAudio(audioBlob) {
+        async function processAudio() {
             try {
-                showMessage('🎤 Ses kaydı alındı...', true);
-                
                 const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
                 recognition.lang = config.voiceLang;
+                recognition.continuous = false;
+                recognition.interimResults = false;
+
+                recognition.onstart = () => {
+                    showSuccess('🎙️ Ses tanınıyor...');
+                };
 
                 recognition.onresult = (event) => {
                     let transcript = '';
@@ -682,23 +875,26 @@
                     
                     if (transcript) {
                         messageInput.value = transcript;
+                        showSuccess('✓ Tanındı: ' + transcript);
                         sendBtn.click();
                     }
                 };
 
                 recognition.onerror = (event) => {
-                    showError('Ses tanıma hatası: ' + event.error);
+                    showError('❌ Ses tanıma hatası: ' + event.error);
                 };
 
+                recognition.start();
+
             } catch (error) {
-                showError('Ses işleme hatası: ' + error.message);
+                showError('❌ Ses işleme hatası: ' + error.message);
             }
         }
 
         // Sayfa yüklendiğinde
         window.addEventListener('load', () => {
             if (config.apiKey) {
-                showSuccess('API Key yüklendi ✓');
+                showSuccess('✓ Sistem hazır - API Key yüklendi');
             } else {
                 showError('⚠️ Lütfen API Key ayarlarını yapılandır!');
             }
