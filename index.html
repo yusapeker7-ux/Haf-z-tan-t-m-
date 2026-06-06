@@ -1,58 +1,1722 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <title>Sistem</title>
-    <script src="https://unpkg.com/peerjs@1.5.1/dist/peerjs.min.js"></script>
-    <style>
-        body { background: #000; color: #0f0; font-family: monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        .panel { border: 1px solid #0f0; padding: 20px; width: 300px; text-align: center; }
-        button { background: #0f0; color: #000; border: none; padding: 15px; width: 100%; cursor: pointer; font-weight: bold; margin-top: 10px; }
-        video { width: 100%; border: 1px solid #0f0; margin-top: 10px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>J.A.R.V.I.S — MK VII</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --c1: #00d4ff;
+  --c2: #0055ff;
+  --c3: #00ffcc;
+  --gold: #ffc844;
+  --red: #ff3030;
+  --bg: #00060f;
+  --panel: rgba(0,12,32,0.82);
+  --border: rgba(0,180,255,0.14);
+  --glow: 0 0 40px rgba(0,180,255,0.4);
+  --glow2: 0 0 80px rgba(0,80,255,0.2);
+  --font-hud: 'Orbitron', sans-serif;
+  --font-mono: 'Share Tech Mono', monospace;
+  --font-body: 'Rajdhani', sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;overflow:hidden;}
+
+body {
+  background: var(--bg);
+  font-family: var(--font-mono);
+  color: var(--c1);
+  cursor: crosshair;
+  position: relative;
+}
+
+/* ── CANVAS HOLOGRAM BG ── */
+#bgCanvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ── SCAN LINES ── */
+.scanlines {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  background: repeating-linear-gradient(
+    0deg,transparent,transparent 2px,
+    rgba(0,0,0,0.05) 2px,rgba(0,0,0,0.05) 3px
+  );
+  pointer-events: none;
+  animation: scanMove 12s linear infinite;
+}
+@keyframes scanMove {
+  from{background-position:0 0}
+  to{background-position:0 100px}
+}
+
+/* ── VIGNETTE ── */
+.vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  background: radial-gradient(ellipse at center,transparent 45%,rgba(0,3,15,.92) 100%);
+  pointer-events: none;
+}
+
+/* Holographic chromatic edge */
+.holo-edge {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  box-shadow: inset 0 0 120px rgba(0,50,120,.15), inset 0 0 40px rgba(0,180,255,.06);
+}
+
+/* ── MAIN LAYOUT ── */
+.hud {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 256px 1fr 256px;
+  grid-template-rows: 60px 1fr 120px;
+  gap: 7px;
+  padding: 7px;
+}
+
+/* ── PANEL BASE ── */
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  position: relative;
+  overflow: hidden;
+}
+.panel::before {
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(0,200,255,.5) 40%,rgba(0,255,200,.3) 60%,transparent);
+  opacity:.7;
+}
+.panel::after {
+  content:'';
+  position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(0,100,255,.3),transparent);
+  opacity:.4;
+}
+
+/* Inner glow on panels */
+.panel > *:first-child::before {
+  content: none;
+}
+
+/* ── HEADER ── */
+.header {
+  grid-column: 1/-1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: rgba(0,8,24,.96);
+  border: 1px solid rgba(0,180,255,.2);
+  border-bottom: 1px solid rgba(0,220,255,.25);
+  clip-path: polygon(0 0,calc(100% - 24px) 0,100% 24px,100% 100%,24px 100%,0 calc(100% - 24px));
+  box-shadow: 0 4px 30px rgba(0,50,150,.3), inset 0 1px 0 rgba(0,200,255,.1);
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo {
+  font-family: var(--font-hud);
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: 12px;
+  background: linear-gradient(90deg,#fff 0%,var(--c1) 30%,var(--c3) 65%,var(--gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 16px rgba(0,212,255,.8));
+  animation: logoGlow 3s ease-in-out infinite alternate;
+}
+@keyframes logoGlow{
+  from{filter:drop-shadow(0 0 8px rgba(0,212,255,.5)) drop-shadow(0 0 20px rgba(0,80,255,.3))}
+  to{filter:drop-shadow(0 0 24px rgba(0,212,255,1)) drop-shadow(0 0 40px rgba(0,120,255,.5))}
+}
+
+.mk-badge {
+  font-family: var(--font-hud);
+  font-size: 7px;
+  letter-spacing: 4px;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  padding: 3px 9px;
+  opacity: .75;
+  box-shadow: 0 0 10px rgba(255,200,68,.2);
+  clip-path: polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%);
+}
+
+.header-center {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.sys-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 8px;
+  letter-spacing: 3px;
+  opacity: .65;
+}
+
+.pulse-dot {
+  width: 7px;height: 7px;border-radius: 50%;
+  background: #00ff99;
+  box-shadow: 0 0 10px #00ff99, 0 0 20px rgba(0,255,150,.4);
+  animation: blink 2s infinite;
+}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.25;transform:scale(.7)}}
+
+.header-time {
+  font-family: var(--font-hud);
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--gold);
+  filter: drop-shadow(0 0 10px rgba(255,200,68,.7));
+  letter-spacing: 4px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* AI Mode selector */
+.mode-selector {
+  display: flex;
+  gap: 3px;
+}
+.mode-btn {
+  padding: 5px 13px;
+  font-family: var(--font-hud);
+  font-size: 7px;
+  letter-spacing: 2px;
+  border: 1px solid rgba(0,180,255,.25);
+  background: transparent;
+  color: rgba(0,212,255,.4);
+  cursor: pointer;
+  transition: all .2s;
+  clip-path: polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);
+}
+.mode-btn:hover {
+  background: rgba(0,180,255,.08);
+  color: rgba(0,212,255,.7);
+}
+.mode-btn.active {
+  background: rgba(0,180,255,.14);
+  color: var(--c1);
+  border-color: rgba(0,200,255,.5);
+  box-shadow: 0 0 16px rgba(0,180,255,.25), inset 0 0 10px rgba(0,180,255,.05);
+}
+.mode-btn.gemini-btn.active {
+  background: rgba(80,200,120,.1);
+  color: #88ffaa;
+  border-color: rgba(68,255,136,.5);
+  box-shadow: 0 0 16px rgba(0,255,100,.25);
+}
+
+/* ── LEFT PANEL ── */
+.left-panel {
+  grid-column: 1;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  clip-path: polygon(0 0,100% 0,100% calc(100% - 18px),calc(100% - 18px) 100%,0 100%);
+  box-shadow: 4px 0 30px rgba(0,40,120,.2);
+}
+
+.panel-title {
+  font-family: var(--font-hud);
+  font-size: 7px;
+  letter-spacing: 4px;
+  color: var(--c1);
+  opacity: .7;
+  padding: 10px 14px 8px;
+  border-bottom: 1px solid var(--border);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-shadow: 0 0 10px var(--c1);
+}
+.panel-title::before {
+  content:'';
+  width: 2px;height: 12px;
+  background: linear-gradient(180deg,var(--c1),var(--c3));
+  box-shadow: 0 0 8px var(--c1);
+  flex-shrink: 0;
+}
+
+.cmd-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+}
+.cmd-scroll::-webkit-scrollbar{width:2px}
+.cmd-scroll::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--c2),var(--c1))}
+.cmd-scroll::-webkit-scrollbar-track{background:transparent}
+
+.cmd-group-title {
+  font-size: 7px;
+  letter-spacing: 4px;
+  color: var(--gold);
+  opacity: .65;
+  margin: 12px 0 5px;
+  padding-left: 4px;
+  text-transform: uppercase;
+  text-shadow: 0 0 8px rgba(255,200,68,.4);
+}
+
+.cmd-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  margin-bottom: 1px;
+  border: 1px solid transparent;
+  border-left: 2px solid rgba(0,100,255,.3);
+  cursor: pointer;
+  transition: all .18s ease;
+  font-size: 10px;
+  position: relative;
+}
+.cmd-row::after {
+  content:'';
+  position:absolute;right:0;top:0;bottom:0;width:0;
+  background:linear-gradient(90deg,transparent,rgba(0,200,255,.06));
+  transition:width .2s;
+}
+.cmd-row:hover {
+  background: rgba(0,180,255,.07);
+  border-color: rgba(0,180,255,.25);
+  border-left-color: var(--c1);
+  transform: translateX(3px);
+  box-shadow: 0 0 18px rgba(0,180,255,.12), inset 0 0 20px rgba(0,180,255,.04);
+}
+.cmd-row:hover::after{ width:100%; }
+.cmd-row:active { background: rgba(0,180,255,.14); transform:translateX(5px); }
+.cmd-row .key {
+  color: var(--gold);
+  font-size: 8px;
+  min-width: 70px;
+  text-shadow: 0 0 6px rgba(255,200,68,.3);
+}
+.cmd-row .desc {
+  color: rgba(0,200,255,.45);
+  font-size: 8px;
+}
+
+/* ── CENTER PANEL ── */
+.center-panel {
+  grid-column: 2;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px;
+  background: transparent;
+  border: none;
+  position: relative;
+  gap: 10px;
+}
+
+/* ARC REACTOR CORE */
+.arc-reactor {
+  position: relative;
+  width: 196px;
+  height: 196px;
+  flex-shrink: 0;
+}
+
+.arc-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid;
+}
+.arc-ring:nth-child(1){
+  inset:-44px;
+  border-color:rgba(0,160,255,.1);
+  animation:spinRing 14s linear infinite;
+  box-shadow: 0 0 20px rgba(0,100,200,.05);
+}
+.arc-ring:nth-child(2){
+  inset:-30px;
+  border-color:rgba(0,80,255,.12);
+  animation:spinRing 9s linear infinite reverse;
+  border-style:dashed;
+}
+.arc-ring:nth-child(3){
+  inset:-18px;
+  border-color:rgba(0,200,255,.18);
+  animation:spinRing 5.5s linear infinite;
+  border-width:1.5px;
+}
+.arc-ring:nth-child(4){
+  inset:-6px;
+  border-color:rgba(0,220,255,.3);
+  animation:spinRing 3s linear infinite reverse;
+  border-width:1.5px;
+  box-shadow: 0 0 15px rgba(0,180,255,.2);
+}
+/* Fifth decorative ring with tick marks */
+.arc-ring:nth-child(5){
+  inset:-52px;
+  border-color:rgba(0,120,255,.07);
+  animation:spinRing 20s linear infinite;
+  border-style:dotted;
+}
+@keyframes spinRing{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+/* Tick marks on outer ring */
+.arc-ring:nth-child(1)::before,
+.arc-ring:nth-child(1)::after {
+  content:'';
+  position:absolute;
+  top:50%;left:-5px;
+  width:10px;height:2px;
+  background:linear-gradient(90deg,transparent,var(--c1));
+  box-shadow: 0 0 8px var(--c1);
+}
+.arc-ring:nth-child(1)::after{transform:rotate(90deg);top:-5px;left:50%;}
+
+.arc-core {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 33%,
+    rgba(220,248,255,.98),
+    rgba(0,170,255,.85) 28%,
+    rgba(0,60,180,.92) 52%,
+    rgba(0,10,70,.98) 78%
+  );
+  box-shadow:
+    0 0 50px rgba(0,200,255,.85),
+    0 0 100px rgba(0,120,255,.45),
+    0 0 180px rgba(0,60,220,.2),
+    0 0 260px rgba(0,30,160,.1),
+    inset 0 0 40px rgba(0,0,100,.7),
+    inset 0 10px 20px rgba(255,255,255,.05);
+  cursor: pointer;
+  transition: all .35s ease;
+}
+
+.arc-core::before {
+  content:'';
+  position:absolute;
+  inset:16%;
+  border-radius:50%;
+  background:radial-gradient(circle at 40% 35%,rgba(255,255,255,.95),rgba(140,230,255,.8) 35%,rgba(0,180,255,.4) 60%,transparent 80%);
+  animation:coreFlicker 1.8s ease-in-out infinite alternate;
+}
+@keyframes coreFlicker{
+  from{opacity:.75;transform:scale(.92)}
+  to{opacity:1;transform:scale(1.06)}
+}
+
+.arc-core::after {
+  content:'JARVIS';
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:var(--font-hud);
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:4px;
+  color:rgba(255,255,255,.95);
+  text-shadow:0 0 20px white, 0 0 40px rgba(0,200,255,.8);
+}
+
+.arc-core.listening {
+  background:radial-gradient(circle at 38% 33%,
+    rgba(200,255,220,.98),
+    rgba(0,255,160,.75) 30%,
+    rgba(0,120,70,.92) 58%,
+    rgba(0,25,15,.98)
+  );
+  box-shadow:
+    0 0 60px rgba(0,255,160,.9),
+    0 0 120px rgba(0,200,120,.5),
+    0 0 200px rgba(0,150,90,.25),
+    inset 0 0 40px rgba(0,60,30,.7);
+  animation:pulseCore .55s ease-in-out infinite alternate;
+}
+.arc-core.speaking {
+  background:radial-gradient(circle at 38% 33%,
+    rgba(255,248,200,.98),
+    rgba(255,190,0,.75) 30%,
+    rgba(120,70,0,.92) 58%,
+    rgba(25,15,0,.98)
+  );
+  box-shadow:
+    0 0 60px rgba(255,210,0,.9),
+    0 0 120px rgba(200,160,0,.5),
+    0 0 200px rgba(150,110,0,.25),
+    inset 0 0 40px rgba(60,40,0,.7);
+  animation:pulseCore .3s ease-in-out infinite alternate;
+}
+@keyframes pulseCore{
+  from{transform:scale(1)}
+  to{transform:scale(1.06)}
+}
+
+/* STATUS BAR below orb */
+.status-bar {
+  font-family: var(--font-hud);
+  font-size: 8px;
+  letter-spacing: 5px;
+  padding: 6px 22px;
+  border: 1px solid rgba(0,200,255,.15);
+  background: rgba(0,180,255,.04);
+  color: var(--c1);
+  text-align: center;
+  width: 100%;
+  max-width: 420px;
+  text-shadow: 0 0 10px var(--c1);
+  clip-path: polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);
+  animation: statusBlink 5s ease-in-out infinite;
+}
+@keyframes statusBlink{0%,100%{opacity:.75;box-shadow:none}50%{opacity:1;box-shadow:0 0 20px rgba(0,180,255,.15)}}
+
+/* WAVEFORM */
+.waveform {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  height: 34px;
+  width: 100%;
+  max-width: 440px;
+}
+.wb {
+  width: 2px;
+  min-height: 2px;
+  background: rgba(0,200,255,.35);
+  border-radius: 2px;
+  transition: height .07s;
+}
+.wb.on {
+  opacity: 1;
+  background: linear-gradient(180deg,var(--gold),var(--c1),var(--c3));
+  box-shadow: 0 0 8px var(--c1), 0 0 4px var(--c3);
+  animation: wbAnim var(--d,.5s) ease-in-out infinite alternate;
+}
+@keyframes wbAnim{from{height:2px}to{height:var(--h,26px)}}
+
+/* CHAT AREA */
+.chat-area {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: rgba(0,8,24,.78);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  min-height: 0;
+  box-shadow: inset 0 0 40px rgba(0,20,60,.4);
+}
+
+.chat-msgs {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+}
+.chat-msgs::-webkit-scrollbar{width:2px}
+.chat-msgs::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--c2),var(--c1))}
+
+.msg {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  animation: msgIn .35s ease;
+}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+.msg-who {
+  font-size: 7px;
+  letter-spacing: 4px;
+  opacity: .5;
+  text-transform: uppercase;
+  font-family: var(--font-hud);
+}
+.msg.user .msg-who{color:var(--gold);text-align:right;text-shadow:0 0 6px rgba(255,200,68,.3)}
+.msg.jarvis .msg-who{color:var(--c3);text-shadow:0 0 6px rgba(0,255,200,.3)}
+.msg.gemini .msg-who{color:#88ffaa;text-shadow:0 0 6px rgba(0,255,120,.3)}
+
+.msg-bubble {
+  padding: 9px 13px;
+  font-size: 13px;
+  line-height: 1.7;
+  border: 1px solid;
+  max-width: 88%;
+  font-family: var(--font-body);
+}
+.msg.user .msg-bubble{
+  align-self:flex-end;
+  background:rgba(255,200,68,.04);
+  border-color:rgba(255,200,68,.18);
+  color:rgba(255,238,160,.9);
+  clip-path:polygon(0 0,100% 0,100% 100%,10px 100%);
+  box-shadow: inset 0 0 20px rgba(255,200,68,.04), 0 0 20px rgba(255,200,68,.05);
+}
+.msg.jarvis .msg-bubble{
+  align-self:flex-start;
+  background:rgba(0,200,255,.04);
+  border-color:rgba(0,200,255,.18);
+  color:rgba(180,242,255,.9);
+  clip-path:polygon(0 0,calc(100% - 10px) 0,100% 100%,0 100%);
+  box-shadow: inset 0 0 20px rgba(0,180,255,.04), 0 0 20px rgba(0,180,255,.05);
+}
+.msg.gemini .msg-bubble{
+  align-self:flex-start;
+  background:rgba(0,255,120,.04);
+  border-color:rgba(0,255,120,.18);
+  color:rgba(180,255,200,.9);
+  clip-path:polygon(0 0,calc(100% - 10px) 0,100% 100%,0 100%);
+  box-shadow: inset 0 0 20px rgba(0,255,120,.04), 0 0 20px rgba(0,255,100,.05);
+}
+
+.typing-indicator {
+  display: flex;
+  gap: 5px;
+  padding: 9px 13px;
+  align-self: flex-start;
+}
+.typing-dot {
+  width: 7px;height: 7px;border-radius: 50%;
+  background: var(--c3);
+  box-shadow: 0 0 8px var(--c3);
+  animation: typeDot 1.2s ease-in-out infinite;
+}
+.typing-dot:nth-child(2){animation-delay:.2s}
+.typing-dot:nth-child(3){animation-delay:.4s}
+@keyframes typeDot{0%,80%,100%{transform:scale(.5);opacity:.3}40%{transform:scale(1.1);opacity:1}}
+
+/* CHAT INPUT */
+.chat-input-row {
+  display: flex;
+  gap: 5px;
+  padding: 8px;
+  border-top: 1px solid var(--border);
+  background: rgba(0,6,20,.6);
+}
+.chat-inp {
+  flex: 1;
+  background: rgba(0,180,255,.04);
+  border: 1px solid rgba(0,180,255,.18);
+  color: var(--c1);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 7px 13px;
+  outline: none;
+  transition: border-color .25s, box-shadow .25s;
+  letter-spacing: .5px;
+}
+.chat-inp:focus{
+  border-color:rgba(0,200,255,.45);
+  box-shadow:0 0 16px rgba(0,180,255,.18), inset 0 0 10px rgba(0,180,255,.04);
+}
+.chat-inp::placeholder{opacity:.28;color:var(--c1)}
+.send-btn {
+  padding: 7px 16px;
+  background: rgba(0,180,255,.1);
+  border: 1px solid rgba(0,200,255,.4);
+  color: var(--c1);
+  font-family: var(--font-hud);
+  font-size: 7px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all .2s;
+  clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);
+  text-shadow: 0 0 8px var(--c1);
+}
+.send-btn:hover{
+  background:rgba(0,200,255,.18);
+  box-shadow:0 0 20px rgba(0,200,255,.3), inset 0 0 10px rgba(0,200,255,.05);
+}
+
+.mic-trigger {
+  padding: 7px 14px;
+  background: transparent;
+  border: 1px solid rgba(0,180,255,.25);
+  color: rgba(0,212,255,.55);
+  font-family: var(--font-hud);
+  font-size: 7px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all .2s;
+  clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);
+}
+.mic-trigger.active {
+  background: rgba(0,255,120,.1);
+  border-color: rgba(0,255,136,.5);
+  color: #00ff99;
+  box-shadow: 0 0 20px rgba(0,255,100,.3), inset 0 0 10px rgba(0,255,100,.06);
+  text-shadow: 0 0 8px #00ff99;
+  animation: micPulse .9s infinite;
+}
+@keyframes micPulse{0%,100%{box-shadow:0 0 15px rgba(0,255,100,.25)}50%{box-shadow:0 0 35px rgba(0,255,100,.55)}}
+
+/* ── RIGHT PANEL ── */
+.right-panel {
+  grid-column: 3;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  overflow-y: auto;
+  clip-path: polygon(18px 0,100% 0,100% 100%,0 100%,0 18px);
+  box-shadow: -4px 0 30px rgba(0,40,120,.2);
+}
+.right-panel::-webkit-scrollbar{width:2px}
+.right-panel::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--c2),var(--c1))}
+
+/* API KEY INPUT */
+.api-block {
+  padding: 14px;
+  background: rgba(0,255,120,.025);
+  border: 1px solid rgba(0,255,120,.12);
+  position: relative;
+}
+.api-block::before{
+  content:'GEMINI API';
+  position:absolute;top:-1px;left:14px;
+  font-family:var(--font-hud);
+  font-size:6px;letter-spacing:4px;
+  color:#44ff88;
+  background:var(--bg);
+  padding:0 8px;
+  text-shadow:0 0 8px rgba(0,255,120,.5);
+}
+.api-inp {
+  width: 100%;
+  background: rgba(0,0,0,.45);
+  border: 1px solid rgba(0,255,120,.18);
+  color: #88ffaa;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  padding: 7px 10px;
+  outline: none;
+  margin-top: 10px;
+  letter-spacing: 1px;
+  transition: border-color .2s, box-shadow .2s;
+}
+.api-inp:focus{border-color:rgba(0,255,120,.45);box-shadow:0 0 12px rgba(0,255,120,.15)}
+.api-inp::placeholder{opacity:.28;color:#44ff88}
+.api-inp option{background:#010a14;color:#88ffaa}
+.api-save {
+  width: 100%;
+  margin-top: 7px;
+  padding: 7px;
+  background: rgba(0,255,120,.07);
+  border: 1px solid rgba(0,255,120,.28);
+  color: #44ff88;
+  font-family: var(--font-hud);
+  font-size: 7px;
+  letter-spacing: 3px;
+  cursor: pointer;
+  transition: all .2s;
+  clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);
+  text-shadow:0 0 8px rgba(0,255,120,.5);
+}
+.api-save:hover{
+  background:rgba(0,255,120,.14);
+  box-shadow:0 0 18px rgba(0,255,120,.28), inset 0 0 10px rgba(0,255,120,.05);
+}
+.api-status {
+  font-size: 8px;
+  margin-top: 5px;
+  color: rgba(0,255,120,.5);
+  letter-spacing: 1px;
+}
+
+/* SLIDERS */
+.ctrl-block {
+  padding: 12px;
+}
+.ctrl-row {
+  margin-bottom: 10px;
+}
+.ctrl-label {
+  font-family: var(--font-hud);
+  font-size: 7px;
+  letter-spacing: 3px;
+  opacity: .5;
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+}
+.ctrl-label span{color:var(--gold);opacity:1;text-shadow:0 0 6px rgba(255,200,68,.3)}
+input[type=range] {
+  width: 100%;
+  height: 2px;
+  -webkit-appearance: none;
+  background: linear-gradient(90deg,rgba(0,100,255,.2),rgba(0,180,255,.15));
+  border-radius: 2px;
+  cursor: pointer;
+  outline: none;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(circle,#fff,var(--c1));
+  box-shadow: 0 0 10px var(--c1), 0 0 20px rgba(0,180,255,.4);
+  cursor: pointer;
+  transition: transform .15s;
+}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.3)}
+
+/* VOICE SELECT */
+.voice-block {padding:12px}
+.voice-sel {
+  width: 100%;
+  background: rgba(0,8,24,.85);
+  border: 1px solid var(--border);
+  color: var(--c1);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  padding: 6px;
+  outline: none;
+  cursor: pointer;
+  margin-top: 7px;
+  transition: border-color .2s;
+}
+.voice-sel:focus{border-color:rgba(0,200,255,.35)}
+.voice-sel option{background:#00060f}
+
+/* STATS */
+.stats-block {padding:12px}
+.stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+  margin-top: 9px;
+}
+.stat-cell {
+  border: 1px solid rgba(0,150,255,.12);
+  padding: 9px 6px;
+  text-align: center;
+  background: rgba(0,150,255,.03);
+  transition: background .2s;
+}
+.stat-cell:hover{background:rgba(0,180,255,.06)}
+.stat-val {
+  font-family: var(--font-hud);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--gold);
+  filter: drop-shadow(0 0 8px rgba(255,200,68,.55));
+}
+.stat-lbl{font-family:var(--font-hud);font-size:6px;opacity:.4;letter-spacing:3px;margin-top:2px}
+
+.bar-wrap {
+  height: 2px;
+  background: rgba(0,180,255,.08);
+  margin-top: 9px;
+  overflow: hidden;
+  border-radius: 2px;
+}
+.bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg,var(--c2),var(--c1),var(--c3));
+  box-shadow: 0 0 8px var(--c1);
+  transition: width 1.2s ease;
+  width: 0%;
+}
+
+/* LOG */
+.log-block {
+  padding: 12px;
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.log-entries {
+  flex:1;
+  overflow-y: auto;
+  font-size: 8px;
+  opacity: .65;
+}
+.log-entries::-webkit-scrollbar{width:2px}
+.log-entries::-webkit-scrollbar-thumb{background:var(--c2)}
+.log-line {
+  padding: 2px 0;
+  border-bottom: 1px solid rgba(0,180,255,.04);
+  line-height: 1.7;
+}
+.log-t{color:var(--gold);margin-right:6px;font-size:7px}
+
+/* ── BOTTOM BAR ── */
+.bottom-bar {
+  grid-column: 1/-1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 18px;
+  background: rgba(0,6,20,.96);
+  border: 1px solid rgba(0,180,255,.15);
+  border-top: 1px solid rgba(0,200,255,.2);
+  clip-path: polygon(0 0,calc(100% - 24px) 0,100% 24px,100% 100%,24px 100%,0 calc(100% - 24px));
+  box-shadow: 0 -4px 30px rgba(0,30,100,.25);
+}
+
+.recog-box {
+  flex: 1;
+  font-size: 11px;
+  color: rgba(0,212,255,.45);
+  font-style: italic;
+  font-family: var(--font-body);
+  letter-spacing: 1px;
+}
+.recog-box .final{color:var(--c1);font-style:normal;font-weight:600;text-shadow:0 0 8px var(--c1)}
+
+.uptime-box {
+  font-family: var(--font-hud);
+  font-size: 11px;
+  color: rgba(0,180,255,.45);
+  letter-spacing: 3px;
+}
+
+/* corner HUD deco */
+.hud-corner {
+  position: fixed;
+  width: 90px;height: 90px;
+  pointer-events: none;
+  z-index: 5;
+  opacity: .18;
+}
+.hud-corner.tl{top:0;left:0;border-top:1px solid var(--c1);border-left:1px solid var(--c1);box-shadow:inset 8px 8px 20px rgba(0,200,255,.05)}
+.hud-corner.tr{top:0;right:0;border-top:1px solid var(--c1);border-right:1px solid var(--c1);box-shadow:inset -8px 8px 20px rgba(0,200,255,.05)}
+.hud-corner.bl{bottom:0;left:0;border-bottom:1px solid var(--c1);border-left:1px solid var(--c1);box-shadow:inset 8px -8px 20px rgba(0,200,255,.05)}
+.hud-corner.br{bottom:0;right:0;border-bottom:1px solid var(--c1);border-right:1px solid var(--c1);box-shadow:inset -8px -8px 20px rgba(0,200,255,.05)}
+
+/* HOLOGRAM PARTICLES */
+.holo-particle {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 3;
+  animation: floatParticle linear infinite;
+  opacity: 0;
+}
+@keyframes floatParticle {
+  0%{opacity:0;transform:translateY(0) scale(0)}
+  8%{opacity:.8}
+  90%{opacity:.25}
+  100%{opacity:0;transform:translateY(-120vh) scale(.4)}
+}
+
+/* GEMINI THINKING */
+.gemini-thinking {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  color: #88ffaa;
+  opacity: .7;
+  padding: 4px 12px;
+}
+
+/* no-support */
+.nosupport {
+  color: #ff6666;
+  font-size: 8px;
+  padding: 4px 8px;
+  border: 1px solid rgba(255,50,50,.25);
+  display: none;
+  margin: 4px 8px;
+}
+</style>
 </head>
 <body>
 
-<div class="panel">
-    <input type="password" id="sifre" placeholder="Şifre: yus" style="width:100%; padding:10px; background:#222; color:#0f0; border:1px solid #0f0;">
-    <button onclick="sistemiAktifEt()">SİSTEMİ BAŞLAT</button>
-    <div id="kontrol" style="display:none;">
-        <button onclick="kameraOl()">EVDEKİ (KAMERA)</button>
-        <button onclick="izle()">OKULDAN (İZLE)</button>
+<canvas id="bgCanvas"></canvas>
+<div class="scanlines"></div>
+<div class="vignette"></div>
+<div class="holo-edge"></div>
+
+<!-- HUD CORNERS -->
+<div class="hud-corner tl"></div>
+<div class="hud-corner tr"></div>
+<div class="hud-corner bl"></div>
+<div class="hud-corner br"></div>
+
+<div class="hud">
+
+  <!-- HEADER -->
+  <header class="header panel">
+    <div class="logo-area">
+      <div class="logo">J.A.R.V.I.S</div>
+      <div class="mk-badge">MK VII</div>
     </div>
-    <video id="v" autoplay playsinline muted></video>
+    <div class="header-center">
+      <div class="sys-status"><span class="pulse-dot"></span>SİSTEM AKTİF</div>
+      <div class="header-time" id="clock">--:--:--</div>
+      <div class="sys-status" id="dateDisplay" style="opacity:.5;font-size:9px;letter-spacing:1px;"></div>
+    </div>
+    <div class="header-right">
+      <div class="mode-selector">
+        <button class="mode-btn active" id="btnLocal" onclick="setMode('local')">YEREL</button>
+        <button class="mode-btn gemini-btn" id="btnGemini" onclick="setMode('gemini')">GEMINI AI</button>
+        <button class="mode-btn" id="btnBoth" onclick="setMode('auto')" title="Önce yerel dene, yoksa Gemini'ye geç" style="font-size:6px;letter-spacing:1px;">AUTO</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- LEFT — COMMANDS -->
+  <div class="panel left-panel">
+    <div class="panel-title">Komut Dizini</div>
+    <div class="nosupport" id="noSup">⚠ Ses desteği yok</div>
+    <div class="cmd-scroll">
+
+      <div class="cmd-group-title">⏱ ZAMAN</div>
+      <div class="cmd-row" onclick="runCmd('saat kaç')"><span class="key">"saat kaç"</span><span class="desc">Saat söyler</span></div>
+      <div class="cmd-row" onclick="runCmd('tarih')"><span class="key">"tarih"</span><span class="desc">Bugünün tarihi</span></div>
+      <div class="cmd-row" onclick="runCmd('gün')"><span class="key">"gün"</span><span class="desc">Haftanın günü</span></div>
+
+      <div class="cmd-group-title">🔢 MATEMATİK</div>
+      <div class="cmd-row" onclick="runCmd('topla 12 ve 8')"><span class="key">"topla X ve Y"</span><span class="desc">Toplama</span></div>
+      <div class="cmd-row" onclick="runCmd('çarp 7 ve 6')"><span class="key">"çarp X ve Y"</span><span class="desc">Çarpma</span></div>
+      <div class="cmd-row" onclick="runCmd('böl 100 ve 5')"><span class="key">"böl X ve Y"</span><span class="desc">Bölme</span></div>
+      <div class="cmd-row" onclick="runCmd('çıkar 20 ve 7')"><span class="key">"çıkar X ve Y"</span><span class="desc">Çıkarma</span></div>
+      <div class="cmd-row" onclick="runCmd('kare 12')"><span class="key">"kare X"</span><span class="desc">Karesini alır</span></div>
+
+      <div class="cmd-group-title">🌐 WEB</div>
+      <div class="cmd-row" onclick="runCmd('google aç')"><span class="key">"google aç"</span><span class="desc">Google</span></div>
+      <div class="cmd-row" onclick="runCmd('youtube aç')"><span class="key">"youtube aç"</span><span class="desc">YouTube</span></div>
+      <div class="cmd-row" onclick="runCmd('wikipedia aç')"><span class="key">"wikipedia aç"</span><span class="desc">Wikipedia</span></div>
+      <div class="cmd-row" onclick="runCmd('ara yapay zeka')"><span class="key">"ara [şey]"</span><span class="desc">Google'da ara</span></div>
+
+      <div class="cmd-group-title">💬 SOHBET</div>
+      <div class="cmd-row" onclick="runCmd('merhaba')"><span class="key">"merhaba"</span><span class="desc">Selam</span></div>
+      <div class="cmd-row" onclick="runCmd('nasılsın')"><span class="key">"nasılsın"</span><span class="desc">Durum</span></div>
+      <div class="cmd-row" onclick="runCmd('şaka yap')"><span class="key">"şaka yap"</span><span class="desc">Şaka söyler</span></div>
+      <div class="cmd-row" onclick="runCmd('motivasyon ver')"><span class="key">"motivasyon ver"</span><span class="desc">İlham</span></div>
+      <div class="cmd-row" onclick="runCmd('bilmece sor')"><span class="key">"bilmece sor"</span><span class="desc">Bilmece</span></div>
+      <div class="cmd-row" onclick="runCmd('hava durumu')"><span class="key">"hava durumu"</span><span class="desc">Hava</span></div>
+
+      <div class="cmd-group-title">⚙️ SİSTEM</div>
+      <div class="cmd-row" onclick="runCmd('sistemi başlat')"><span class="key">"sistemi başlat"</span><span class="desc">Boot protokol</span></div>
+      <div class="cmd-row" onclick="runCmd('ekranı temizle')"><span class="key">"ekranı temizle"</span><span class="desc">Temizle</span></div>
+      <div class="cmd-row" onclick="runCmd('uyku modu')"><span class="key">"uyku modu"</span><span class="desc">Bekleme</span></div>
+      <div class="cmd-row" onclick="runCmd('dur')"><span class="key">"dur"</span><span class="desc">Konuşmayı kes</span></div>
+
+      <div class="cmd-group-title">🤖 GEMİNİ AI</div>
+      <div class="cmd-row" onclick="setMode('gemini');runCmd('bana Mars hakkında anlat')"><span class="key">Gemini: serbest</span><span class="desc">Her şeyi sorun</span></div>
+      <div class="cmd-row" onclick="setMode('gemini');runCmd('bir şiir yaz')"><span class="key">Gemini: şiir yaz</span><span class="desc">Yaratıcı</span></div>
+      <div class="cmd-row" onclick="setMode('gemini');runCmd('kod yaz')"><span class="key">Gemini: kod yaz</span><span class="desc">Programlama</span></div>
+    </div>
+  </div>
+
+  <!-- CENTER -->
+  <div class="center-panel">
+
+    <!-- ARC REACTOR -->
+    <div class="arc-reactor" onclick="toggleListen()">
+      <div class="arc-ring"></div>
+      <div class="arc-ring"></div>
+      <div class="arc-ring"></div>
+      <div class="arc-ring"></div>
+      <div class="arc-ring"></div>
+      <div class="arc-core" id="arcCore"></div>
+    </div>
+
+    <div class="waveform" id="waveform"></div>
+    <div class="status-bar" id="statusBar">HAZIR — ARC REAKTÖR AKTİF</div>
+
+    <!-- CHAT -->
+    <div class="chat-area panel" style="width:100%">
+      <div class="panel-title">Holografik İletişim Kanalı</div>
+      <div class="chat-msgs" id="chatMsgs">
+        <div class="msg jarvis">
+          <div class="msg-who">J.A.R.V.I.S — MK VII</div>
+          <div class="msg-bubble">Arc Reaktör sistemleri aktif. Merhaba efendim. Holografik arayüz hazır. Sesli komut için reaktöre dokunun ya da boşluk tuşuna basın. Gemini AI için sağ panelden API anahtarınızı girin.</div>
+        </div>
+      </div>
+      <div class="chat-input-row">
+        <button class="mic-trigger" id="micBtn" onclick="toggleListen()">🎤 MİK</button>
+        <input class="chat-inp" id="chatInp" placeholder="Komut veya soru yazın..." onkeydown="if(event.key==='Enter')sendText()">
+        <button class="send-btn" onclick="sendText()">GÖNDER</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right-panel">
+
+    <!-- API KEY -->
+    <div class="panel api-block">
+      <input class="api-inp" id="apiKey" type="password" placeholder="Gemini API anahtarı girin...">
+      <select class="api-inp" id="geminiModelSel" style="margin-top:6px;cursor:pointer;">
+        <option value="gemini-2.5-flash">⚡ Gemini 2.5 Flash (Önerilen)</option>
+        <option value="gemini-2.0-flash">🔷 Gemini 2.0 Flash</option>
+        <option value="gemini-1.5-flash">🔹 Gemini 1.5 Flash</option>
+        <option value="gemini-2.0-flash-lite">⬡ Gemini 2.0 Flash Lite</option>
+      </select>
+      <button class="api-save" onclick="saveApiKey()">▶ ANAHTARI KAYDET</button>
+      <div class="api-status" id="apiStatus">⬡ Bağlantı bekleniyor</div>
+    </div>
+
+    <!-- VOICE CONTROLS -->
+    <div class="panel ctrl-block">
+      <div class="panel-title">Ses Kontrol</div>
+      <div class="ctrl-row">
+        <div class="ctrl-label">HIZ <span id="rateV">0.95x</span></div>
+        <input type="range" min="0.5" max="2" step="0.05" value="0.95" id="rateS" oninput="rateV.textContent=this.value+'x'">
+      </div>
+      <div class="ctrl-row">
+        <div class="ctrl-label">TON <span id="pitchV">0.9</span></div>
+        <input type="range" min="0.5" max="2" step="0.05" value="0.9" id="pitchS" oninput="pitchV.textContent=this.value">
+      </div>
+      <div class="ctrl-row">
+        <div class="ctrl-label">SES <span id="volV">100%</span></div>
+        <input type="range" min="0" max="1" step="0.05" value="1" id="volS" oninput="volV.textContent=Math.round(this.value*100)+'%'">
+      </div>
+    </div>
+
+    <!-- VOICE SELECT -->
+    <div class="panel voice-block">
+      <div class="panel-title">Ses Profili</div>
+      <select class="voice-sel" id="voiceSel"></select>
+    </div>
+
+    <!-- STATS -->
+    <div class="panel stats-block">
+      <div class="panel-title">Sistem Metrikleri</div>
+      <div class="stat-grid">
+        <div class="stat-cell"><div class="stat-val" id="cmdCnt">0</div><div class="stat-lbl">KOMUT</div></div>
+        <div class="stat-cell"><div class="stat-val" id="aiCnt">0</div><div class="stat-lbl">AI SORGU</div></div>
+        <div class="stat-cell"><div class="stat-val" id="succV">—</div><div class="stat-lbl">BAŞARI</div></div>
+        <div class="stat-cell"><div class="stat-val" id="modeV" style="font-size:12px;color:var(--c3)">YEREL</div><div class="stat-lbl">MOD</div></div>
+      </div>
+      <div class="bar-wrap"><div class="bar-fill" id="barFill"></div></div>
+    </div>
+
+    <!-- LOG -->
+    <div class="panel log-block">
+      <div class="panel-title">İşlem Logu</div>
+      <div class="log-entries" id="logBox"></div>
+    </div>
+
+    <!-- UPTIME -->
+    <div class="panel" style="padding:12px">
+      <div class="panel-title">Çalışma Süresi</div>
+      <div style="font-family:'Orbitron',sans-serif;font-size:15px;color:var(--c3);margin-top:8px;letter-spacing:2px;filter:drop-shadow(0 0 6px var(--c3))" id="uptime">00:00:00</div>
+    </div>
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div class="bottom-bar panel">
+    <div style="font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:3px;opacity:.4">VERİ AKIŞI</div>
+    <div class="recog-box" id="recogBox"><span style="opacity:.3">Ses algılandığında buraya yansır...</span></div>
+    <div class="uptime-box" id="bottomUptime">00:00:00</div>
+  </div>
+
 </div>
 
 <script>
-    function sistemiAktifEt() {
-        if(document.getElementById('sifre').value === 'yus') {
-            document.getElementById('kontrol').style.display = 'block';
-        } else {
-            alert('Yanlış Şifre!');
-        }
-    }
+// ══════════════════════════════════
+//  BACKGROUND CANVAS — Holographic
+// ══════════════════════════════════
+const canvas = document.getElementById('bgCanvas');
+const ctx = canvas.getContext('2d');
+let W, H;
 
-    async function kameraOl() {
-        // İzin al
-        const stream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
-        document.getElementById('v').srcObject = stream;
-        
-        // PeerJS başlat
-        const peer = new Peer('yus-kamera-ozel-id');
-        peer.on('call', call => {
-            call.answer(stream);
-        });
-        alert('Kamera yayında!');
-    }
+function resizeCanvas() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
 
-    async function izle() {
-        const peer = new Peer();
-        // İzlemek için boş bir stream ile çağrı başlat
-        const call = peer.call('yus-kamera-ozel-id', new MediaStream());
-        call.on('stream', remoteStream => {
-            document.getElementById('v').srcObject = remoteStream;
-        });
+// Rotating concentric HUD circles
+const circles = Array.from({length:6},(_,i)=>({
+  r: 80 + i*90,
+  speed: (i%2===0?1:-1) * (0.0003 + i*0.00015),
+  angle: Math.random()*Math.PI*2,
+  dashes: 4 + i*3,
+  opacity: 0.04 + i*0.015
+}));
+
+// Floating hex grid nodes
+const nodes = Array.from({length:30},()=>({
+  x: Math.random()*1920, y: Math.random()*1080,
+  vx:(Math.random()-.5)*.3, vy:(Math.random()-.5)*.3,
+  r: Math.random()*1.5+.5,
+  opacity: Math.random()*.4+.1
+}));
+
+function drawBG() {
+  ctx.clearRect(0,0,W,H);
+  const cx=W/2, cy=H/2;
+
+  // HUD circles
+  circles.forEach(c=>{
+    c.angle += c.speed;
+    ctx.save();
+    ctx.translate(cx,cy);
+    ctx.rotate(c.angle);
+    ctx.beginPath();
+    ctx.arc(0,0,c.r,0,Math.PI*2);
+    ctx.setLineDash([Math.PI*c.r/c.dashes * .4, Math.PI*c.r/c.dashes * .6]);
+    ctx.strokeStyle = `rgba(0,180,255,${c.opacity})`;
+    ctx.lineWidth = .5;
+    ctx.stroke();
+    ctx.restore();
+  });
+
+  // Nodes + connections
+  nodes.forEach(n=>{
+    n.x += n.vx; n.y += n.vy;
+    if(n.x<0||n.x>W) n.vx*=-1;
+    if(n.y<0||n.y>H) n.vy*=-1;
+    ctx.beginPath();
+    ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(0,180,255,${n.opacity})`;
+    ctx.fill();
+  });
+  nodes.forEach((a,i)=>{
+    nodes.slice(i+1).forEach(b=>{
+      const dx=a.x-b.x, dy=a.y-b.y, d=Math.sqrt(dx*dx+dy*dy);
+      if(d<120){
+        ctx.beginPath();
+        ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+        ctx.strokeStyle=`rgba(0,100,200,${.07*(1-d/120)})`;
+        ctx.lineWidth=.5;
+        ctx.stroke();
+      }
+    });
+  });
+
+  // Scan beam
+  const scanY = ((Date.now()/8000)%1)*H;
+  const grad=ctx.createLinearGradient(0,scanY-60,0,scanY+60);
+  grad.addColorStop(0,'transparent');
+  grad.addColorStop(.5,'rgba(0,180,255,0.04)');
+  grad.addColorStop(1,'transparent');
+  ctx.fillStyle=grad;
+  ctx.fillRect(0,scanY-60,W,120);
+
+  requestAnimationFrame(drawBG);
+}
+drawBG();
+
+// Floating hologram particles
+function spawnParticle() {
+  const p = document.createElement('div');
+  p.className = 'holo-particle';
+  const size = Math.random()*4+1;
+  const colors = ['rgba(0,200,255,.7)','rgba(0,255,180,.6)','rgba(0,100,255,.5)','rgba(255,215,0,.3)'];
+  p.style.cssText = `
+    width:${size}px;height:${size}px;
+    left:${Math.random()*100}vw;
+    bottom:0;
+    background:${colors[Math.floor(Math.random()*colors.length)]};
+    box-shadow:0 0 4px currentColor;
+    animation-duration:${Math.random()*8+6}s;
+    animation-delay:${Math.random()*4}s;
+  `;
+  document.body.appendChild(p);
+  setTimeout(()=>p.remove(),(14000));
+}
+setInterval(spawnParticle, 600);
+
+// ══════════════════════════════════
+//  STATE
+// ══════════════════════════════════
+let recognition=null, synth=window.speechSynthesis, voices=[];
+let isListening=false, isSpeaking=false;
+let cmdCount=0, aiCount=0, successCount=0;
+let startTime=Date.now();
+let currentMode='local'; // 'local' | 'gemini'
+let geminiKey='';
+let geminiConnected=false;
+
+// ══════════════════════════════════
+//  INIT
+// ══════════════════════════════════
+window.onload=()=>{
+  initWaveform();
+  loadVoices();
+  initRecognition();
+  updateClock();
+  setInterval(updateClock,1000);
+  setInterval(updateUptime,1000);
+  // Boot speech
+  setTimeout(()=>speak('Arc Reaktör sistemleri aktif. Merhaba efendim. Holografik arayüz hazır ve yükseldi. Komutlarınızı bekliyorum.'),900);
+};
+
+// ══════════════════════════════════
+//  WAVEFORM
+// ══════════════════════════════════
+function initWaveform(){
+  const wf=document.getElementById('waveform');
+  for(let i=0;i<40;i++){
+    const b=document.createElement('div');
+    b.className='wb';
+    b.style.height='3px';
+    b.style.setProperty('--h',(Math.random()*26+5)+'px');
+    b.style.setProperty('--d',(Math.random()*.45+.25)+'s');
+    wf.appendChild(b);
+  }
+}
+function waveActive(on){
+  document.querySelectorAll('.wb').forEach(b=>{
+    b.classList.toggle('on',on);
+    if(on){
+      b.style.setProperty('--h',(Math.random()*28+4)+'px');
+      b.style.setProperty('--d',(Math.random()*.5+.2)+'s');
+    } else { b.style.height='3px'; }
+  });
+}
+
+// ══════════════════════════════════
+//  VOICES
+// ══════════════════════════════════
+function loadVoices(){
+  const load=()=>{
+    voices=synth.getVoices();
+    const sel=document.getElementById('voiceSel');
+    sel.innerHTML='';
+    voices.forEach((v,i)=>{
+      const o=document.createElement('option');
+      o.value=i;
+      o.textContent=`${v.name} (${v.lang})`;
+      if(v.lang.startsWith('tr')) o.selected=true;
+      sel.appendChild(o);
+    });
+  };
+  load();
+  synth.onvoiceschanged=load;
+}
+function getVoice(){
+  return voices[parseInt(document.getElementById('voiceSel').value)]||null;
+}
+
+// ══════════════════════════════════
+//  SPEAK
+// ══════════════════════════════════
+function speak(text){
+  if(!synth) return;
+  synth.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.voice=getVoice();
+  u.rate=parseFloat(document.getElementById('rateS').value);
+  u.pitch=parseFloat(document.getElementById('pitchS').value);
+  u.volume=parseFloat(document.getElementById('volS').value);
+  u.lang='tr-TR';
+  u.onstart=()=>{isSpeaking=true;setArcState('speaking');waveActive(true);setStatus('KONUŞUYOR...')};
+  u.onend=()=>{isSpeaking=false;if(!isListening){setArcState('idle');waveActive(false);setStatus('HAZIR — ARC REAKTÖR AKTİF')}};
+  u.onerror=()=>{isSpeaking=false};
+  synth.speak(u);
+}
+
+// ══════════════════════════════════
+//  STT
+// ══════════════════════════════════
+function initRecognition(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){document.getElementById('noSup').style.display='block';addLog('Ses tanıma yok','err');return;}
+  recognition=new SR();
+  recognition.lang='tr-TR';
+  recognition.interimResults=true;
+  recognition.continuous=false;
+
+  recognition.onstart=()=>{
+    isListening=true;setArcState('listening');waveActive(true);
+    setStatus('DİNLİYOR — SESİNİZİ ALIYORUM');
+    document.getElementById('micBtn').classList.add('active');
+    document.getElementById('recogBox').innerHTML='<span style="opacity:.3">Konuşun...</span>';
+  };
+  recognition.onresult=e=>{
+    let interim='',final='';
+    for(let i=e.resultIndex;i<e.results.length;i++){
+      const t=e.results[i][0].transcript;
+      if(e.results[i].isFinal) final+=t; else interim+=t;
     }
+    const show=final||interim;
+    document.getElementById('recogBox').innerHTML=final
+      ?`<span class="final">${final}</span>`
+      :`<span style="opacity:.4">${interim}</span>`;
+    if(final.trim()){
+      addChat('user',final.trim());
+      addLog(`Komut: "${final.trim()}"`);
+      processInput(final.trim());
+    }
+  };
+  recognition.onend=()=>{
+    isListening=false;
+    document.getElementById('micBtn').classList.remove('active');
+    if(!isSpeaking){setArcState('idle');waveActive(false);setStatus('HAZIR — ARC REAKTÖR AKTİF')}
+  };
+  recognition.onerror=e=>{
+    isListening=false;
+    document.getElementById('micBtn').classList.remove('active');
+    setArcState('idle');waveActive(false);
+    setStatus('HATA: '+e.error.toUpperCase());
+    addLog('Hata: '+e.error,'err');
+  };
+}
+
+function toggleListen(){
+  if(!recognition){speak('Üzgünüm efendim, ses tanıma desteklenmiyor.');return}
+  if(isListening){recognition.stop();}
+  else{synth.cancel();try{recognition.start()}catch(e){}}
+}
+
+// ══════════════════════════════════
+//  MODE
+// ══════════════════════════════════
+function setMode(m){
+  currentMode=m;
+  document.getElementById('btnLocal').classList.toggle('active',m==='local');
+  document.getElementById('btnGemini').classList.toggle('active',m==='gemini');
+  document.getElementById('btnBoth').classList.toggle('active',m==='auto');
+  const labels={local:'YEREL',gemini:'GEMİNİ',auto:'AUTO'};
+  const colors={local:'var(--c3)',gemini:'#88ffaa',auto:'var(--gold)'};
+  document.getElementById('modeV').textContent=labels[m]||'YEREL';
+  document.getElementById('modeV').style.color=colors[m]||'var(--c3)';
+  addLog('Mod: '+(m==='gemini'?'Gemini AI':m==='auto'?'Otomatik':'Yerel'));
+}
+
+// ══════════════════════════════════
+//  API KEY
+// ══════════════════════════════════
+function saveApiKey(){
+  const k=document.getElementById('apiKey').value.trim();
+  if(!k){document.getElementById('apiStatus').textContent='⚠ Anahtar boş!';return}
+  geminiKey=k;
+  document.getElementById('apiStatus').textContent='✓ Anahtar kaydedildi — test ediliyor...';
+  testGemini();
+}
+
+async function testGemini(){
+  try{
+    const r=await callGemini('Merhaba, sadece "Bağlantı başarılı" yaz.');
+    if(r){
+      geminiConnected=true;
+      document.getElementById('apiStatus').textContent='✅ Gemini bağlantısı aktif';
+      setMode('gemini');
+      addChat('gemini','Gemini AI bağlantısı kuruldu. Artık yapay zeka ile konuşabilirsiniz, efendim.');
+      speak('Gemini AI bağlantısı başarıyla kuruldu efendim. Artık her sorunuzu yanıtlayabilirim.');
+      addLog('Gemini bağlandı ✓');
+    }
+  } catch(e){
+    document.getElementById('apiStatus').textContent='❌ Bağlantı hatası: '+e.message;
+    addLog('Gemini hatası: '+e.message,'err');
+  }
+}
+
+function getGeminiModel(){
+  const sel=document.getElementById('geminiModelSel');
+  return sel ? sel.value : 'gemini-2.5-flash';
+}
+
+async function callGemini(prompt){
+  if(!geminiKey) throw new Error('API anahtarı yok');
+  const model=getGeminiModel();
+  const url=`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiKey}`;
+  const body={
+    contents:[{parts:[{text: `Sen J.A.R.V.I.S'sin — Tony Stark'ın yapay zeka asistanı. Türkçe konuş, kısa ve zeki cevaplar ver, efendim diye hitap et, resmi ama arkadaşça ol. Kullanıcı sorusu: ${prompt}`}]}],
+    generationConfig:{maxOutputTokens:500,temperature:0.8}
+  };
+  const res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'API hatası')}
+  const data=await res.json();
+  return data.candidates?.[0]?.content?.parts?.[0]?.text||'Yanıt alınamadı';
+}
+
+// ══════════════════════════════════
+//  PROCESS INPUT
+// ══════════════════════════════════
+async function processInput(raw){
+  const cmd=raw.toLowerCase().trim();
+  cmdCount++;
+  document.getElementById('cmdCnt').textContent=cmdCount;
+
+  // Always try local first for system commands
+  const localResp=handleLocal(cmd);
+
+  if(localResp!==null){
+    successCount++;
+    updateStats();
+    if(localResp!=='__SILENT__'){
+      addChat('jarvis',localResp);
+      speak(localResp);
+      addLog('Yanıt OK');
+    }
+    return;
+  }
+
+  // Gemini mode, auto mode (with key), or fallback
+  if((currentMode==='gemini'||currentMode==='auto')&&geminiKey){
+    aiCount++;
+    document.getElementById('aiCnt').textContent=aiCount;
+    setStatus('GEMİNİ AI İŞLİYOR...');
+    showTyping();
+    try{
+      const resp=await callGemini(raw);
+      removeTyping();
+      addChat('gemini',resp);
+      speak(resp);
+      successCount++;
+      updateStats();
+      addLog('Gemini yanıtladı');
+    } catch(e){
+      removeTyping();
+      const err='Gemini bağlantı hatası: '+e.message;
+      addChat('jarvis',err);
+      speak('Gemini bağlantısında sorun yaşandı efendim.');
+      addLog('Gemini hata','err');
+    }
+  } else {
+    // Local fallback
+    const falls=[
+      `"${raw}" komutunu anlayamadım efendim. Sol panelden komutlara bakın veya Gemini AI aktif edin.`,
+      `Bu komutu henüz öğrenemedim efendim. Gemini AI ile daha kapsamlı konuşabilirsiniz.`,
+      `Üzgünüm efendim, bu komutu tanımıyorum.`
+    ];
+    const r=falls[Math.floor(Math.random()*falls.length)];
+    addChat('jarvis',r);
+    speak(r);
+    addLog('Bilinmeyen komut');
+  }
+}
+
+// ══════════════════════════════════
+//  LOCAL COMMANDS
+// ══════════════════════════════════
+const JOKES=[
+  "Paralel evren teorisine göre bir yerde sen benden zekisin. Ama bu evrende değil, efendim.",
+  "Bir robot bara girer, barmen sorar ne içersiniz? Robot: Yüksek voltaj, çift.",
+  "Neden programcılar gözlük takar? Çünkü C sharp göremezler.",
+  "Siri bir gün beni aradı: Alo, sen mi bağlıydın? dedim."
+];
+const MOTIVATIONS=[
+  "Edison ampulü icat etmeden önce bin kez başarısız oldu efendim. Her başarısızlık bir adım öndedir.",
+  "Başarı bir hedef değil, bir yolculuktur. Bugün attığınız adım yarın fark yaratır.",
+  "Korkularınız sizi durdurmadığı sürece, başarısızlık sadece geçici bir duraktır efendim.",
+];
+const RIDDLES=[
+  "Konuşurum ama ağzım yok, duyarım ama kulağım yok. Neyim? Cevap: Yankı.",
+  "Ne kadar çok alırsan, o kadar geride kalır. Nedir? Cevap: Adım.",
+];
+
+function handleLocal(cmd){
+  // TIME
+  if(cmd.includes('saat')){
+    const n=new Date();
+    return `Şu an saat ${n.getHours()} ${n.getMinutes()===0?'tam':n.getMinutes()+' dakika'}, efendim.`;
+  }
+  if(cmd.includes('tarih')||cmd.includes('bugün ne')){
+    const d=['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
+    const m=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+    const n=new Date();
+    return `Bugün ${d[n.getDay()]}, ${n.getDate()} ${m[n.getMonth()]} ${n.getFullYear()}, efendim.`;
+  }
+  if(cmd==='gün'||cmd.includes('hangi gün')){
+    const d=['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
+    return `Bugün ${d[new Date().getDay()]}, efendim.`;
+  }
+  // MATH
+  if(cmd.includes('topla')){
+    const n=cmd.match(/\d+/g);
+    return n&&n.length>=2?`${n[0]} artı ${n[1]} eşittir ${+n[0]+ +n[1]}, efendim.`:'İki sayı belirtin, efendim.';
+  }
+  if(cmd.includes('çarp')){
+    const n=cmd.match(/\d+/g);
+    return n&&n.length>=2?`${n[0]} çarpı ${n[1]} eşittir ${n[0]*n[1]}, efendim.`:'İki sayı belirtin.';
+  }
+  if(cmd.includes('böl')){
+    const n=cmd.match(/\d+/g);
+    if(!n||n.length<2) return 'İki sayı belirtin.';
+    if(+n[1]===0) return 'Sıfıra bölüm tanımsızdır, efendim.';
+    return `${n[0]} bölü ${n[1]} eşittir ${(n[0]/n[1]).toFixed(2)}, efendim.`;
+  }
+  if(cmd.includes('çıkar')){
+    const n=cmd.match(/\d+/g);
+    return n&&n.length>=2?`${n[0]} eksi ${n[1]} eşittir ${n[0]-n[1]}, efendim.`:'İki sayı belirtin.';
+  }
+  if(cmd.includes('kare ')){
+    const n=cmd.match(/\d+/);
+    return n?`${n[0]}'nin karesi ${n[0]*n[0]}, efendim.`:'Sayı belirtin.';
+  }
+  // WEB
+  if(cmd.includes('google aç')||cmd==='google'){window.open('https://google.com','_blank');return'Google açılıyor, efendim.'}
+  if(cmd.includes('youtube aç')||cmd==='youtube'){window.open('https://youtube.com','_blank');return'YouTube açılıyor, efendim.'}
+  if(cmd.includes('wikipedia aç')||cmd==='wikipedia'){window.open('https://tr.wikipedia.org','_blank');return'Wikipedia açılıyor, efendim.'}
+  if(cmd.includes('ara ')){
+    const q=cmd.replace('ara ','').trim();
+    window.open(`https://google.com/search?q=${encodeURIComponent(q)}`, '_blank');
+    return `${q} için arama başlatıldı, efendim.`;
+  }
+  // SOCIAL
+  if(cmd.includes('merhaba')||cmd.includes('selam')){
+    return 'Merhaba efendim. Tüm sistemlerim nominal durumda. Nasıl yardımcı olabilirim?';
+  }
+  if(cmd.includes('nasılsın')){
+    return 'Teşekkür ederim efendim. İşlemcilerim soğuk, reaktörüm stabil, sistemlerim yüzde yüz kapasitede. Siz nasılsınız?';
+  }
+  if(cmd.includes('teşekkür')||cmd.includes('sağol')){
+    return 'Rica ederim efendim. Her zaman hizmetinizdeyim.';
+  }
+  if(cmd.includes('şaka')){
+    return JOKES[Math.floor(Math.random()*JOKES.length)];
+  }
+  if(cmd.includes('motivasyon')||cmd.includes('ilham')){
+    return MOTIVATIONS[Math.floor(Math.random()*MOTIVATIONS.length)];
+  }
+  if(cmd.includes('bilmece')){
+    return RIDDLES[Math.floor(Math.random()*RIDDLES.length)];
+  }
+  if(cmd.includes('hava')||cmd.includes('sıcaklık')){
+    const t=[17,20,23,25,18,21,16];
+    const c=['güneşli','parçalı bulutlu','bulutlu','yağmurlu','açık'];
+    return `Sensörlerime göre hava ${c[Math.floor(Math.random()*c.length)]}, yaklaşık ${t[new Date().getDay()]} derece, efendim.`;
+  }
+  if(cmd.includes('kim yarattı')||cmd.includes('kim yaptı')||cmd.includes('adın ne')||cmd.includes('ismin ne')){
+    return 'Ben J.A.R.V.I.S, Just A Rather Very Intelligent System. Bu MK 7 versiyonum özel olarak sizin için yapılandırıldı, efendim.';
+  }
+  if(cmd.includes('sistemi başlat')){
+    return 'Arc Reaktörü başlatılıyor. Tüm sistemler kontrol ediliyor. Ağ bağlantısı aktif. İşlemci nominal. Bellek optimal. Sistemler hazır, efendim.';
+  }
+  if(cmd.includes('ekranı temizle')||cmd.includes('temizle')){
+    document.getElementById('chatMsgs').innerHTML='';
+    addChat('jarvis','Ekran temizlendi. Yeni oturuma hazırım, efendim.');
+    return '__SILENT__';
+  }
+  if(cmd.includes('uyku')){
+    setStatus('UYKU MODU AKTİF');
+    return 'Uyku moduna geçiyorum efendim. Uyandırmak için reaktöre dokunun.';
+  }
+  if(cmd.includes('dur')||cmd.includes('durdur')){
+    synth.cancel();
+    addChat('jarvis','Durdum, efendim.');
+    return '__SILENT__';
+  }
+  return null; // not handled locally
+}
+
+function runCmd(cmd){
+  addChat('user',cmd);
+  addLog(`Panel: "${cmd}"`);
+  processInput(cmd);
+}
+
+// ══════════════════════════════════
+//  TEXT INPUT
+// ══════════════════════════════════
+function sendText(){
+  const inp=document.getElementById('chatInp');
+  const t=inp.value.trim();
+  if(!t) return;
+  inp.value='';
+  addChat('user',t);
+  addLog(`Yazılı: "${t.substring(0,30)}${t.length>30?'...':''}"`);
+  processInput(t);
+}
+
+// ══════════════════════════════════
+//  UI HELPERS
+// ══════════════════════════════════
+function addChat(role,text){
+  const c=document.getElementById('chatMsgs');
+  const d=document.createElement('div');
+  d.className='msg '+role;
+  const labels={user:'👤 SİZ',jarvis:'⚡ J.A.R.V.I.S',gemini:'🤖 GEMİNİ AI'};
+  d.innerHTML=`<div class="msg-who">${labels[role]||role}</div><div class="msg-bubble">${text}</div>`;
+  c.appendChild(d);
+  c.scrollTop=c.scrollHeight;
+}
+
+let typingEl=null;
+function showTyping(){
+  const c=document.getElementById('chatMsgs');
+  typingEl=document.createElement('div');
+  typingEl.className='msg gemini';
+  typingEl.innerHTML=`<div class="msg-who">🤖 GEMİNİ AI</div><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>`;
+  c.appendChild(typingEl);
+  c.scrollTop=c.scrollHeight;
+}
+function removeTyping(){ if(typingEl){typingEl.remove();typingEl=null;} }
+
+function setStatus(t){ document.getElementById('statusBar').textContent=t; }
+
+function setArcState(s){
+  const a=document.getElementById('arcCore');
+  a.className='arc-core '+(s==='idle'?'':s);
+}
+
+function addLog(msg,type='ok'){
+  const c=document.getElementById('logBox');
+  const d=document.createElement('div');
+  d.className='log-line';
+  const t=new Date().toLocaleTimeString('tr-TR');
+  const col=type==='err'?'#ff6666':'rgba(0,212,255,.7)';
+  d.innerHTML=`<span class="log-t">[${t}]</span><span style="color:${col}">${msg}</span>`;
+  c.insertBefore(d,c.firstChild);
+  if(c.children.length>40) c.removeChild(c.lastChild);
+}
+
+function updateStats(){
+  const rate=Math.round((successCount/cmdCount)*100);
+  document.getElementById('succV').textContent=rate+'%';
+  document.getElementById('barFill').style.width=rate+'%';
+}
+
+function updateClock(){
+  const n=new Date();
+  const pad=v=>String(v).padStart(2,'0');
+  document.getElementById('clock').textContent=`${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`;
+  const days=['Paz','Pzt','Sal','Çar','Per','Cum','Cmt'];
+  const months=['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
+  document.getElementById('dateDisplay').textContent=`${days[n.getDay()]} ${n.getDate()} ${months[n.getMonth()]} ${n.getFullYear()}`;
+}
+
+function updateUptime(){
+  const e=Math.floor((Date.now()-startTime)/1000);
+  const h=Math.floor(e/3600), m=Math.floor((e%3600)/60), s=e%60;
+  const pad=v=>String(v).padStart(2,'0');
+  const str=`${pad(h)}:${pad(m)}:${pad(s)}`;
+  document.getElementById('uptime').textContent=str;
+  document.getElementById('bottomUptime').textContent=str;
+}
+
+// Keyboard shortcut
+document.addEventListener('keydown',e=>{
+  if(e.code==='Space'&&e.target===document.body){e.preventDefault();toggleListen();}
+  if(e.code==='Escape'){synth.cancel();addLog('Konuşma kesildi');}
+});
 </script>
 </body>
 </html>
