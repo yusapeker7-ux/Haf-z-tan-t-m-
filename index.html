@@ -2,1307 +2,653 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>J.A.R.V.I.S — MK VII</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ARES AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --c1: #00d4ff;
-  --c2: #0055ff;
-  --c3: #00ffcc;
-  --gold: #ffc844;
-  --red: #ff3030;
-  --bg: #00060f;
-  --panel: rgba(0,12,32,0.82);
-  --border: rgba(0,180,255,0.14);
-  --glow: 0 0 40px rgba(0,180,255,0.4);
-  --glow2: 0 0 80px rgba(0,80,255,0.2);
-  --font-hud: 'Orbitron', sans-serif;
-  --font-mono: 'Share Tech Mono', monospace;
-  --font-body: 'Rajdhani', sans-serif;
+:root{
+  --bg:#030508;
+  --red:#ff2244;
+  --red2:#ff4466;
+  --c1:#ff3355;
+  --c2:#cc1133;
+  --cyan:#00ccff;
+  --gold:#ffaa00;
+  --green:#00ff88;
+  --border:rgba(255,30,60,0.15);
+  --panel:rgba(8,2,5,0.88);
+  --dim:rgba(255,40,70,0.04);
+  --text:rgba(255,180,190,0.85);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-html,body{width:100%;height:100%;overflow:hidden;}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);}
+body{font-family:'Share Tech Mono',monospace;color:var(--c1);cursor:crosshair;}
 
-body {
-  background: var(--bg);
-  font-family: var(--font-mono);
-  color: var(--c1);
-  cursor: crosshair;
-  position: relative;
-}
+#bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.scanlines{position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.04) 2px,rgba(0,0,0,0.04) 3px);
+  animation:scanMove 10s linear infinite;}
+@keyframes scanMove{from{background-position:0 0}to{background-position:0 80px}}
+.vignette{position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(ellipse at center,transparent 35%,rgba(3,0,5,.97) 100%);}
 
-/* ── CANVAS HOLOGRAM BG ── */
-#bgCanvas {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-}
+/* CORNER DECO */
+.corner{position:fixed;width:60px;height:60px;pointer-events:none;z-index:5;opacity:0.2;}
+.corner.tl{top:0;left:0;border-top:1px solid var(--c1);border-left:1px solid var(--c1);}
+.corner.tr{top:0;right:0;border-top:1px solid var(--c1);border-right:1px solid var(--c1);}
+.corner.bl{bottom:0;left:0;border-bottom:1px solid var(--c1);border-left:1px solid var(--c1);}
+.corner.br{bottom:0;right:0;border-bottom:1px solid var(--c1);border-right:1px solid var(--c1);}
 
-/* ── SCAN LINES ── */
-.scanlines {
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  background: repeating-linear-gradient(
-    0deg,transparent,transparent 2px,
-    rgba(0,0,0,0.05) 2px,rgba(0,0,0,0.05) 3px
-  );
-  pointer-events: none;
-  animation: scanMove 12s linear infinite;
-}
-@keyframes scanMove {
-  from{background-position:0 0}
-  to{background-position:0 100px}
-}
+/* LAYOUT */
+.hud{position:fixed;inset:0;z-index:10;display:grid;
+  grid-template-columns:240px 1fr 260px;
+  grid-template-rows:46px 1fr 50px;}
 
-/* ── VIGNETTE ── */
-.vignette {
-  position: fixed;
-  inset: 0;
-  z-index: 2;
-  background: radial-gradient(ellipse at center,transparent 45%,rgba(0,3,15,.92) 100%);
-  pointer-events: none;
-}
+/* TOP BAR */
+.topbar{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;background:rgba(5,0,8,.97);
+  border-bottom:1px solid var(--border);position:relative;}
+.topbar::after{content:'';position:absolute;bottom:0;left:5%;right:5%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,30,60,0.5),transparent);}
 
-/* Holographic chromatic edge */
-.holo-edge {
-  position: fixed;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  box-shadow: inset 0 0 120px rgba(0,50,120,.15), inset 0 0 40px rgba(0,180,255,.06);
-}
-
-/* ── MAIN LAYOUT ── */
-.hud {
-  position: fixed;
-  inset: 0;
-  z-index: 10;
-  display: grid;
-  grid-template-columns: 256px 1fr 256px;
-  grid-template-rows: 60px 1fr 120px;
-  gap: 7px;
-  padding: 7px;
-}
-
-/* ── PANEL BASE ── */
-.panel {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  position: relative;
-  overflow: hidden;
-}
-.panel::before {
-  content:'';
-  position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(0,200,255,.5) 40%,rgba(0,255,200,.3) 60%,transparent);
-  opacity:.7;
-}
-.panel::after {
-  content:'';
-  position:absolute;bottom:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(0,100,255,.3),transparent);
-  opacity:.4;
-}
-
-/* Inner glow on panels */
-.panel > *:first-child::before {
-  content: none;
-}
-
-/* ── HEADER ── */
-.header {
-  grid-column: 1/-1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  background: rgba(0,8,24,.96);
-  border: 1px solid rgba(0,180,255,.2);
-  border-bottom: 1px solid rgba(0,220,255,.25);
-  clip-path: polygon(0 0,calc(100% - 24px) 0,100% 24px,100% 100%,24px 100%,0 calc(100% - 24px));
-  box-shadow: 0 4px 30px rgba(0,50,150,.3), inset 0 1px 0 rgba(0,200,255,.1);
-}
-
-.logo-area {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.logo {
-  font-family: var(--font-hud);
-  font-size: 20px;
-  font-weight: 900;
-  letter-spacing: 12px;
-  background: linear-gradient(90deg,#fff 0%,var(--c1) 30%,var(--c3) 65%,var(--gold) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  filter: drop-shadow(0 0 16px rgba(0,212,255,.8));
-  animation: logoGlow 3s ease-in-out infinite alternate;
-}
+.logo{font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;letter-spacing:12px;
+  background:linear-gradient(90deg,#fff,var(--c1),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 20px rgba(255,30,60,0.8));
+  animation:logoGlow 3s ease-in-out infinite alternate;}
 @keyframes logoGlow{
-  from{filter:drop-shadow(0 0 8px rgba(0,212,255,.5)) drop-shadow(0 0 20px rgba(0,80,255,.3))}
-  to{filter:drop-shadow(0 0 24px rgba(0,212,255,1)) drop-shadow(0 0 40px rgba(0,120,255,.5))}
-}
+  from{filter:drop-shadow(0 0 10px rgba(255,30,60,.6))}
+  to{filter:drop-shadow(0 0 25px rgba(255,30,60,1)) drop-shadow(0 0 50px rgba(255,100,50,.4))}}
 
-.mk-badge {
-  font-family: var(--font-hud);
-  font-size: 7px;
-  letter-spacing: 4px;
-  border: 1px solid var(--gold);
-  color: var(--gold);
-  padding: 3px 9px;
-  opacity: .75;
-  box-shadow: 0 0 10px rgba(255,200,68,.2);
-  clip-path: polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%);
-}
+.top-center{display:flex;align-items:center;gap:20px;}
+.dot-live{width:6px;height:6px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 8px var(--green);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.2;transform:scale(.6)}}
+.sys-ind{display:flex;align-items:center;gap:5px;font-size:7px;letter-spacing:3px;color:rgba(255,120,140,.4);}
+.top-clock{font-family:'Orbitron',sans-serif;font-size:16px;font-weight:700;
+  color:var(--gold);letter-spacing:3px;text-shadow:0 0 12px rgba(255,170,0,.8);}
 
-.header-center {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-}
+.mode-btns{display:flex;gap:3px;}
+.mbtn{padding:4px 10px;font-family:'Orbitron',sans-serif;font-size:6px;letter-spacing:2px;
+  border:1px solid rgba(255,30,60,.2);background:transparent;color:rgba(255,80,100,.3);
+  cursor:pointer;transition:all .2s;clip-path:polygon(5px 0,100% 0,calc(100% - 5px) 100%,0 100%);}
+.mbtn:hover{background:rgba(255,30,60,.08);color:rgba(255,80,100,.7);}
+.mbtn.active{background:rgba(255,30,60,.12);color:var(--c1);border-color:rgba(255,50,80,.5);
+  box-shadow:0 0 14px rgba(255,30,60,.2);}
+.mbtn.gm.active{background:rgba(0,255,120,.08);color:#88ffaa;border-color:rgba(0,255,120,.4);}
+.mob-panel-btn{display:none;}
 
-.sys-status {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 8px;
-  letter-spacing: 3px;
-  opacity: .65;
-}
+/* LEFT PANEL */
+.left-panel{grid-column:1;grid-row:2;padding:14px 12px;border-right:1px solid var(--border);
+  display:flex;flex-direction:column;gap:12px;background:rgba(5,0,8,.75);overflow:hidden;}
+.info-label{font-size:6px;letter-spacing:4px;color:rgba(255,80,100,.4);text-transform:uppercase;
+  border-bottom:1px solid rgba(255,30,60,.07);padding-bottom:3px;margin-bottom:2px;}
+.info-val{font-family:'Orbitron',sans-serif;font-size:24px;font-weight:700;color:var(--c1);
+  text-shadow:0 0 14px rgba(255,30,60,.7);}
+.info-sub{font-size:8px;color:rgba(255,120,140,.4);letter-spacing:2px;}
+.weather-val{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:600;color:var(--gold);
+  text-shadow:0 0 10px rgba(255,170,0,.6);}
+.status-rows{display:flex;flex-direction:column;gap:5px;}
+.srow{display:flex;flex-direction:column;gap:2px;}
+.srow-head{display:flex;justify-content:space-between;font-size:7px;color:rgba(255,80,100,.4);letter-spacing:1px;}
+.srow-head span{color:var(--gold);}
+.sbar{height:2px;background:rgba(255,30,60,.07);border-radius:1px;overflow:hidden;}
+.sbar-fill{height:100%;border-radius:1px;transition:width 2s ease;box-shadow:0 0 5px currentColor;}
+.sbar-fill.r{background:var(--c1);color:var(--c1);}
+.sbar-fill.g{background:var(--green);color:var(--green);}
+.sbar-fill.o{background:var(--gold);color:var(--gold);}
+.sbar-fill.b{background:var(--cyan);color:var(--cyan);}
+.health-line{font-size:8px;color:rgba(255,180,190,.6);border-left:2px solid var(--green);padding-left:7px;line-height:1.9;}
+.uptime-val{font-family:'Orbitron',sans-serif;font-size:13px;color:var(--gold);letter-spacing:3px;}
 
-.pulse-dot {
-  width: 7px;height: 7px;border-radius: 50%;
-  background: #00ff99;
-  box-shadow: 0 0 10px #00ff99, 0 0 20px rgba(0,255,150,.4);
-  animation: blink 2s infinite;
-}
-@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.25;transform:scale(.7)}}
+/* CENTER */
+.center-panel{grid-column:2;grid-row:2;display:flex;flex-direction:column;
+  align-items:center;justify-content:space-between;padding:10px 8px 8px;
+  position:relative;background:transparent;gap:6px;overflow:hidden;}
 
-.header-time {
-  font-family: var(--font-hud);
-  font-size: 19px;
-  font-weight: 700;
-  color: var(--gold);
-  filter: drop-shadow(0 0 10px rgba(255,200,68,.7));
-  letter-spacing: 4px;
-}
+/* RADAR */
+.radar-wrap{position:relative;width:min(44vw,380px);height:min(44vw,380px);flex-shrink:0;cursor:pointer;}
+.radar-svg{position:absolute;inset:0;width:100%;height:100%;animation:radarSpin 14s linear infinite;}
+@keyframes radarSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.radar-static{position:absolute;inset:0;width:100%;height:100%;}
+#starCanvas{position:absolute;inset:0;border-radius:50%;pointer-events:none;}
+.radar-label{position:absolute;bottom:17%;left:50%;transform:translateX(-50%);
+  font-family:'Orbitron',sans-serif;font-size:11px;font-weight:900;letter-spacing:8px;
+  color:rgba(255,50,80,.65);text-shadow:0 0 14px rgba(255,30,60,.4);}
+.radar-sub{position:absolute;bottom:10%;left:50%;transform:translateX(-50%);
+  font-size:6px;letter-spacing:3px;color:rgba(255,80,100,.3);white-space:nowrap;}
+.radar-core{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:14px;height:14px;border-radius:50%;
+  background:radial-gradient(circle,#fff,var(--c1) 40%,transparent 70%);
+  box-shadow:0 0 20px var(--c1),0 0 40px rgba(255,30,60,.6),0 0 80px rgba(255,0,30,.3);
+  animation:corePulse 2s ease-in-out infinite alternate;}
+@keyframes corePulse{
+  from{box-shadow:0 0 14px var(--c1),0 0 30px rgba(255,30,60,.5)}
+  to{box-shadow:0 0 26px var(--c1),0 0 55px rgba(255,30,60,.7),0 0 90px rgba(255,0,30,.4)}}
+.radar-core.listening{background:radial-gradient(circle,#fff,var(--green) 40%,transparent 70%);
+  box-shadow:0 0 26px var(--green),0 0 52px rgba(0,255,136,.6);
+  animation:listenPulse .5s ease-in-out infinite alternate;}
+.radar-core.speaking{background:radial-gradient(circle,#fff,var(--gold) 40%,transparent 70%);
+  box-shadow:0 0 26px var(--gold),0 0 52px rgba(255,170,0,.6);
+  animation:listenPulse .3s ease-in-out infinite alternate;}
+@keyframes listenPulse{from{transform:translate(-50%,-50%) scale(1)}to{transform:translate(-50%,-50%) scale(1.5)}}
 
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
+.status-strip{font-family:'Orbitron',sans-serif;font-size:7px;letter-spacing:5px;
+  color:rgba(255,60,90,.5);text-shadow:0 0 8px rgba(255,30,60,.3);
+  animation:sFade 4s ease-in-out infinite;}
+@keyframes sFade{0%,100%{opacity:.5}50%{opacity:1}}
 
-/* AI Mode selector */
-.mode-selector {
-  display: flex;
-  gap: 3px;
-}
-.mode-btn {
-  padding: 5px 13px;
-  font-family: var(--font-hud);
-  font-size: 7px;
-  letter-spacing: 2px;
-  border: 1px solid rgba(0,180,255,.25);
-  background: transparent;
-  color: rgba(0,212,255,.4);
-  cursor: pointer;
-  transition: all .2s;
-  clip-path: polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);
-}
-.mode-btn:hover {
-  background: rgba(0,180,255,.08);
-  color: rgba(0,212,255,.7);
-}
-.mode-btn.active {
-  background: rgba(0,180,255,.14);
-  color: var(--c1);
-  border-color: rgba(0,200,255,.5);
-  box-shadow: 0 0 16px rgba(0,180,255,.25), inset 0 0 10px rgba(0,180,255,.05);
-}
-.mode-btn.gemini-btn.active {
-  background: rgba(80,200,120,.1);
-  color: #88ffaa;
-  border-color: rgba(68,255,136,.5);
-  box-shadow: 0 0 16px rgba(0,255,100,.25);
-}
+.waveform{display:flex;align-items:center;justify-content:center;gap:2px;height:24px;width:100%;max-width:340px;}
+.wb{width:2px;min-height:2px;background:rgba(255,40,70,.2);border-radius:2px;transition:height .06s;}
+.wb.on{background:linear-gradient(180deg,var(--gold),var(--c1));box-shadow:0 0 5px var(--c1);
+  animation:wbA var(--d,.5s) ease-in-out infinite alternate;}
+@keyframes wbA{from{height:2px}to{height:var(--h,22px)}}
 
-/* ── LEFT PANEL ── */
-.left-panel {
-  grid-column: 1;
-  grid-row: 2;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  clip-path: polygon(0 0,100% 0,100% calc(100% - 18px),calc(100% - 18px) 100%,0 100%);
-  box-shadow: 4px 0 30px rgba(0,40,120,.2);
-}
+/* CHAT */
+.chat-area{flex:1;width:100%;display:flex;flex-direction:column;
+  background:rgba(5,0,8,.8);border:1px solid var(--border);min-height:0;position:relative;}
+.chat-area::before{content:'ARES İLETİŞİM KANALI';position:absolute;top:-1px;left:50%;transform:translateX(-50%);
+  font-size:6px;letter-spacing:3px;color:rgba(255,40,70,.3);background:var(--bg);padding:0 8px;white-space:nowrap;}
 
-.panel-title {
-  font-family: var(--font-hud);
-  font-size: 7px;
-  letter-spacing: 4px;
-  color: var(--c1);
-  opacity: .7;
-  padding: 10px 14px 8px;
-  border-bottom: 1px solid var(--border);
-  text-transform: uppercase;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  text-shadow: 0 0 10px var(--c1);
-}
-.panel-title::before {
-  content:'';
-  width: 2px;height: 12px;
-  background: linear-gradient(180deg,var(--c1),var(--c3));
-  box-shadow: 0 0 8px var(--c1);
-  flex-shrink: 0;
-}
+.chat-msgs{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:7px;min-height:0;}
+.chat-msgs::-webkit-scrollbar{width:2px;}
+.chat-msgs::-webkit-scrollbar-thumb{background:var(--c2);}
 
-.cmd-scroll {
-  flex: 1;
-  overflow-y: auto;
-  padding: 8px;
-}
-.cmd-scroll::-webkit-scrollbar{width:2px}
-.cmd-scroll::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--c2),var(--c1))}
-.cmd-scroll::-webkit-scrollbar-track{background:transparent}
+.msg{display:flex;flex-direction:column;gap:2px;animation:msgIn .3s ease;}
+@keyframes msgIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.msg-who{font-size:6px;letter-spacing:4px;opacity:.5;text-transform:uppercase;font-family:'Orbitron',sans-serif;}
+.msg.user .msg-who{color:var(--gold);text-align:right;}
+.msg.ares .msg-who{color:var(--c1);}
 
-.cmd-group-title {
-  font-size: 7px;
-  letter-spacing: 4px;
-  color: var(--gold);
-  opacity: .65;
-  margin: 12px 0 5px;
-  padding-left: 4px;
-  text-transform: uppercase;
-  text-shadow: 0 0 8px rgba(255,200,68,.4);
-}
+.msg-bubble{padding:8px 11px;line-height:1.7;border:1px solid;max-width:95%;font-family:'Rajdhani',sans-serif;font-size:13px;}
+.msg.user .msg-bubble{align-self:flex-end;background:rgba(255,170,0,.04);border-color:rgba(255,170,0,.15);
+  color:rgba(255,240,160,.9);clip-path:polygon(0 0,100% 0,100% 100%,10px 100%);}
+.msg.ares .msg-bubble{align-self:flex-start;background:rgba(255,30,60,.04);border-color:rgba(255,30,60,.15);
+  color:rgba(255,200,210,.9);clip-path:polygon(0 0,calc(100% - 10px) 0,100% 100%,0 100%);}
 
-.cmd-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 5px 8px;
-  margin-bottom: 1px;
-  border: 1px solid transparent;
-  border-left: 2px solid rgba(0,100,255,.3);
-  cursor: pointer;
-  transition: all .18s ease;
-  font-size: 10px;
-  position: relative;
-}
-.cmd-row::after {
-  content:'';
-  position:absolute;right:0;top:0;bottom:0;width:0;
-  background:linear-gradient(90deg,transparent,rgba(0,200,255,.06));
-  transition:width .2s;
-}
-.cmd-row:hover {
-  background: rgba(0,180,255,.07);
-  border-color: rgba(0,180,255,.25);
-  border-left-color: var(--c1);
-  transform: translateX(3px);
-  box-shadow: 0 0 18px rgba(0,180,255,.12), inset 0 0 20px rgba(0,180,255,.04);
-}
-.cmd-row:hover::after{ width:100%; }
-.cmd-row:active { background: rgba(0,180,255,.14); transform:translateX(5px); }
-.cmd-row .key {
-  color: var(--gold);
-  font-size: 8px;
-  min-width: 70px;
-  text-shadow: 0 0 6px rgba(255,200,68,.3);
-}
-.cmd-row .desc {
-  color: rgba(0,200,255,.45);
-  font-size: 8px;
-}
+/* KOD BLOĞU */
+.code-block{position:relative;background:rgba(0,0,0,.7);border:1px solid rgba(255,30,60,.2);
+  border-radius:2px;margin:6px 0;overflow:hidden;max-width:95%;align-self:flex-start;}
+.code-header{display:flex;justify-content:space-between;align-items:center;
+  padding:4px 10px;background:rgba(255,30,60,.08);border-bottom:1px solid rgba(255,30,60,.1);}
+.code-lang{font-size:7px;letter-spacing:3px;color:var(--c1);font-family:'Orbitron',sans-serif;}
+.copy-btn{padding:2px 8px;font-size:6px;letter-spacing:2px;font-family:'Orbitron',sans-serif;
+  border:1px solid rgba(255,30,60,.3);background:transparent;color:rgba(255,80,100,.6);
+  cursor:pointer;transition:all .2s;}
+.copy-btn:hover{background:rgba(255,30,60,.1);color:var(--c1);}
+.copy-btn.copied{color:var(--green);border-color:rgba(0,255,136,.3);}
+code{display:block;padding:10px 12px;font-family:'Share Tech Mono',monospace;font-size:11px;
+  color:rgba(200,255,220,.85);overflow-x:auto;line-height:1.6;white-space:pre;}
 
-/* ── CENTER PANEL ── */
-.center-panel {
-  grid-column: 2;
-  grid-row: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px;
-  background: transparent;
-  border: none;
-  position: relative;
-  gap: 10px;
-}
+/* WEB ÖNİZLEME */
+.preview-wrap{width:95%;align-self:flex-start;border:1px solid rgba(255,30,60,.2);
+  background:rgba(0,0,0,.5);overflow:hidden;}
+.preview-header{display:flex;justify-content:space-between;align-items:center;
+  padding:4px 10px;background:rgba(255,30,60,.07);border-bottom:1px solid rgba(255,30,60,.1);}
+.preview-title{font-size:7px;letter-spacing:2px;color:var(--c1);font-family:'Orbitron',sans-serif;}
+.preview-btns{display:flex;gap:4px;}
+.prev-btn{padding:2px 7px;font-size:6px;letter-spacing:1px;font-family:'Orbitron',sans-serif;
+  border:1px solid rgba(255,30,60,.25);background:transparent;color:rgba(255,80,100,.5);cursor:pointer;transition:all .2s;}
+.prev-btn:hover{background:rgba(255,30,60,.1);color:var(--c1);}
+.preview-frame{width:100%;height:220px;border:none;background:#fff;}
 
-/* ARC REACTOR CORE */
-.arc-reactor {
-  position: relative;
-  width: 196px;
-  height: 196px;
-  flex-shrink: 0;
-}
-
-.arc-ring {
-  position: absolute;
-  border-radius: 50%;
-  border: 1px solid;
-}
-.arc-ring:nth-child(1){
-  inset:-44px;
-  border-color:rgba(0,160,255,.1);
-  animation:spinRing 14s linear infinite;
-  box-shadow: 0 0 20px rgba(0,100,200,.05);
-}
-.arc-ring:nth-child(2){
-  inset:-30px;
-  border-color:rgba(0,80,255,.12);
-  animation:spinRing 9s linear infinite reverse;
-  border-style:dashed;
-}
-.arc-ring:nth-child(3){
-  inset:-18px;
-  border-color:rgba(0,200,255,.18);
-  animation:spinRing 5.5s linear infinite;
-  border-width:1.5px;
-}
-.arc-ring:nth-child(4){
-  inset:-6px;
-  border-color:rgba(0,220,255,.3);
-  animation:spinRing 3s linear infinite reverse;
-  border-width:1.5px;
-  box-shadow: 0 0 15px rgba(0,180,255,.2);
-}
-/* Fifth decorative ring with tick marks */
-.arc-ring:nth-child(5){
-  inset:-52px;
-  border-color:rgba(0,120,255,.07);
-  animation:spinRing 20s linear infinite;
-  border-style:dotted;
-}
-@keyframes spinRing{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-
-/* Tick marks on outer ring */
-.arc-ring:nth-child(1)::before,
-.arc-ring:nth-child(1)::after {
-  content:'';
-  position:absolute;
-  top:50%;left:-5px;
-  width:10px;height:2px;
-  background:linear-gradient(90deg,transparent,var(--c1));
-  box-shadow: 0 0 8px var(--c1);
-}
-.arc-ring:nth-child(1)::after{transform:rotate(90deg);top:-5px;left:50%;}
-
-.arc-core {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: radial-gradient(circle at 38% 33%,
-    rgba(220,248,255,.98),
-    rgba(0,170,255,.85) 28%,
-    rgba(0,60,180,.92) 52%,
-    rgba(0,10,70,.98) 78%
-  );
-  box-shadow:
-    0 0 50px rgba(0,200,255,.85),
-    0 0 100px rgba(0,120,255,.45),
-    0 0 180px rgba(0,60,220,.2),
-    0 0 260px rgba(0,30,160,.1),
-    inset 0 0 40px rgba(0,0,100,.7),
-    inset 0 10px 20px rgba(255,255,255,.05);
-  cursor: pointer;
-  transition: all .35s ease;
-}
-
-.arc-core::before {
-  content:'';
-  position:absolute;
-  inset:16%;
-  border-radius:50%;
-  background:radial-gradient(circle at 40% 35%,rgba(255,255,255,.95),rgba(140,230,255,.8) 35%,rgba(0,180,255,.4) 60%,transparent 80%);
-  animation:coreFlicker 1.8s ease-in-out infinite alternate;
-}
-@keyframes coreFlicker{
-  from{opacity:.75;transform:scale(.92)}
-  to{opacity:1;transform:scale(1.06)}
-}
-
-.arc-core::after {
-  content:'JARVIS';
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-family:var(--font-hud);
-  font-size:10px;
-  font-weight:900;
-  letter-spacing:4px;
-  color:rgba(255,255,255,.95);
-  text-shadow:0 0 20px white, 0 0 40px rgba(0,200,255,.8);
-}
-
-.arc-core.listening {
-  background:radial-gradient(circle at 38% 33%,
-    rgba(200,255,220,.98),
-    rgba(0,255,160,.75) 30%,
-    rgba(0,120,70,.92) 58%,
-    rgba(0,25,15,.98)
-  );
-  box-shadow:
-    0 0 60px rgba(0,255,160,.9),
-    0 0 120px rgba(0,200,120,.5),
-    0 0 200px rgba(0,150,90,.25),
-    inset 0 0 40px rgba(0,60,30,.7);
-  animation:pulseCore .55s ease-in-out infinite alternate;
-}
-.arc-core.speaking {
-  background:radial-gradient(circle at 38% 33%,
-    rgba(255,248,200,.98),
-    rgba(255,190,0,.75) 30%,
-    rgba(120,70,0,.92) 58%,
-    rgba(25,15,0,.98)
-  );
-  box-shadow:
-    0 0 60px rgba(255,210,0,.9),
-    0 0 120px rgba(200,160,0,.5),
-    0 0 200px rgba(150,110,0,.25),
-    inset 0 0 40px rgba(60,40,0,.7);
-  animation:pulseCore .3s ease-in-out infinite alternate;
-}
-@keyframes pulseCore{
-  from{transform:scale(1)}
-  to{transform:scale(1.06)}
-}
-
-/* STATUS BAR below orb */
-.status-bar {
-  font-family: var(--font-hud);
-  font-size: 8px;
-  letter-spacing: 5px;
-  padding: 6px 22px;
-  border: 1px solid rgba(0,200,255,.15);
-  background: rgba(0,180,255,.04);
-  color: var(--c1);
-  text-align: center;
-  width: 100%;
-  max-width: 420px;
-  text-shadow: 0 0 10px var(--c1);
-  clip-path: polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);
-  animation: statusBlink 5s ease-in-out infinite;
-}
-@keyframes statusBlink{0%,100%{opacity:.75;box-shadow:none}50%{opacity:1;box-shadow:0 0 20px rgba(0,180,255,.15)}}
-
-/* WAVEFORM */
-.waveform {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  height: 34px;
-  width: 100%;
-  max-width: 440px;
-}
-.wb {
-  width: 2px;
-  min-height: 2px;
-  background: rgba(0,200,255,.35);
-  border-radius: 2px;
-  transition: height .07s;
-}
-.wb.on {
-  opacity: 1;
-  background: linear-gradient(180deg,var(--gold),var(--c1),var(--c3));
-  box-shadow: 0 0 8px var(--c1), 0 0 4px var(--c3);
-  animation: wbAnim var(--d,.5s) ease-in-out infinite alternate;
-}
-@keyframes wbAnim{from{height:2px}to{height:var(--h,26px)}}
-
-/* CHAT AREA */
-.chat-area {
-  flex: 1;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  background: rgba(0,8,24,.78);
-  border: 1px solid var(--border);
-  overflow: hidden;
-  min-height: 0;
-  box-shadow: inset 0 0 40px rgba(0,20,60,.4);
-}
-
-.chat-msgs {
-  flex: 1;
-  overflow-y: auto;
-  padding: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  min-height: 0;
-}
-.chat-msgs::-webkit-scrollbar{width:2px}
-.chat-msgs::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--c2),var(--c1))}
-
-.msg {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  animation: msgIn .35s ease;
-}
-@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-
-.msg-who {
-  font-size: 7px;
-  letter-spacing: 4px;
-  opacity: .5;
-  text-transform: uppercase;
-  font-family: var(--font-hud);
-}
-.msg.user .msg-who{color:var(--gold);text-align:right;text-shadow:0 0 6px rgba(255,200,68,.3)}
-.msg.jarvis .msg-who{color:var(--c3);text-shadow:0 0 6px rgba(0,255,200,.3)}
-.msg.gemini .msg-who{color:#88ffaa;text-shadow:0 0 6px rgba(0,255,120,.3)}
-
-.msg-bubble {
-  padding: 9px 13px;
-  font-size: 13px;
-  line-height: 1.7;
-  border: 1px solid;
-  max-width: 88%;
-  font-family: var(--font-body);
-}
-.msg.user .msg-bubble{
-  align-self:flex-end;
-  background:rgba(255,200,68,.04);
-  border-color:rgba(255,200,68,.18);
-  color:rgba(255,238,160,.9);
-  clip-path:polygon(0 0,100% 0,100% 100%,10px 100%);
-  box-shadow: inset 0 0 20px rgba(255,200,68,.04), 0 0 20px rgba(255,200,68,.05);
-}
-.msg.jarvis .msg-bubble{
-  align-self:flex-start;
-  background:rgba(0,200,255,.04);
-  border-color:rgba(0,200,255,.18);
-  color:rgba(180,242,255,.9);
-  clip-path:polygon(0 0,calc(100% - 10px) 0,100% 100%,0 100%);
-  box-shadow: inset 0 0 20px rgba(0,180,255,.04), 0 0 20px rgba(0,180,255,.05);
-}
-.msg.gemini .msg-bubble{
-  align-self:flex-start;
-  background:rgba(0,255,120,.04);
-  border-color:rgba(0,255,120,.18);
-  color:rgba(180,255,200,.9);
-  clip-path:polygon(0 0,calc(100% - 10px) 0,100% 100%,0 100%);
-  box-shadow: inset 0 0 20px rgba(0,255,120,.04), 0 0 20px rgba(0,255,100,.05);
-}
-
-.typing-indicator {
-  display: flex;
-  gap: 5px;
-  padding: 9px 13px;
-  align-self: flex-start;
-}
-.typing-dot {
-  width: 7px;height: 7px;border-radius: 50%;
-  background: var(--c3);
-  box-shadow: 0 0 8px var(--c3);
-  animation: typeDot 1.2s ease-in-out infinite;
-}
+/* TYPING */
+.typing-indicator{display:flex;gap:5px;padding:8px 11px;align-self:flex-start;}
+.typing-dot{width:6px;height:6px;border-radius:50%;background:var(--c1);box-shadow:0 0 7px var(--c1);
+  animation:tDot 1.2s ease-in-out infinite;}
 .typing-dot:nth-child(2){animation-delay:.2s}
 .typing-dot:nth-child(3){animation-delay:.4s}
-@keyframes typeDot{0%,80%,100%{transform:scale(.5);opacity:.3}40%{transform:scale(1.1);opacity:1}}
+@keyframes tDot{0%,80%,100%{transform:scale(.5);opacity:.3}40%{transform:scale(1.1);opacity:1}}
 
 /* CHAT INPUT */
-.chat-input-row {
-  display: flex;
-  gap: 5px;
-  padding: 8px;
-  border-top: 1px solid var(--border);
-  background: rgba(0,6,20,.6);
-}
-.chat-inp {
-  flex: 1;
-  background: rgba(0,180,255,.04);
-  border: 1px solid rgba(0,180,255,.18);
-  color: var(--c1);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  padding: 7px 13px;
-  outline: none;
-  transition: border-color .25s, box-shadow .25s;
-  letter-spacing: .5px;
-}
-.chat-inp:focus{
-  border-color:rgba(0,200,255,.45);
-  box-shadow:0 0 16px rgba(0,180,255,.18), inset 0 0 10px rgba(0,180,255,.04);
-}
-.chat-inp::placeholder{opacity:.28;color:var(--c1)}
-.send-btn {
-  padding: 7px 16px;
-  background: rgba(0,180,255,.1);
-  border: 1px solid rgba(0,200,255,.4);
-  color: var(--c1);
-  font-family: var(--font-hud);
-  font-size: 7px;
-  letter-spacing: 2px;
-  cursor: pointer;
-  transition: all .2s;
-  clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);
-  text-shadow: 0 0 8px var(--c1);
-}
-.send-btn:hover{
-  background:rgba(0,200,255,.18);
-  box-shadow:0 0 20px rgba(0,200,255,.3), inset 0 0 10px rgba(0,200,255,.05);
-}
+.chat-input-row{display:flex;gap:4px;padding:6px;border-top:1px solid var(--border);background:rgba(3,0,5,.8);}
+.chat-inp{flex:1;background:rgba(255,30,60,.04);border:1px solid rgba(255,30,60,.15);color:var(--c1);
+  font-family:'Share Tech Mono',monospace;font-size:11px;padding:8px 11px;outline:none;transition:border-color .2s;}
+.chat-inp:focus{border-color:rgba(255,50,80,.45);box-shadow:0 0 10px rgba(255,30,60,.1);}
+.chat-inp::placeholder{opacity:.22;color:var(--c1);}
+.btn-icon{padding:8px 12px;font-family:'Orbitron',sans-serif;font-size:6px;letter-spacing:2px;
+  border:1px solid rgba(255,30,60,.25);background:transparent;color:rgba(255,80,100,.5);
+  cursor:pointer;transition:all .2s;clip-path:polygon(5px 0,100% 0,calc(100% - 5px) 100%,0 100%);}
+.btn-icon:hover{background:rgba(255,30,60,.1);color:var(--c1);}
+.btn-icon.mic-active{background:rgba(0,255,120,.1);border-color:rgba(0,255,120,.4);color:#00ff99;
+  box-shadow:0 0 15px rgba(0,255,120,.25);animation:micGlow .8s infinite;}
+@keyframes micGlow{0%,100%{box-shadow:0 0 10px rgba(0,255,120,.2)}50%{box-shadow:0 0 25px rgba(0,255,120,.5)}}
 
-.mic-trigger {
-  padding: 7px 14px;
-  background: transparent;
-  border: 1px solid rgba(0,180,255,.25);
-  color: rgba(0,212,255,.55);
-  font-family: var(--font-hud);
-  font-size: 7px;
-  letter-spacing: 2px;
-  cursor: pointer;
-  transition: all .2s;
-  clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);
-}
-.mic-trigger.active {
-  background: rgba(0,255,120,.1);
-  border-color: rgba(0,255,136,.5);
-  color: #00ff99;
-  box-shadow: 0 0 20px rgba(0,255,100,.3), inset 0 0 10px rgba(0,255,100,.06);
-  text-shadow: 0 0 8px #00ff99;
-  animation: micPulse .9s infinite;
-}
-@keyframes micPulse{0%,100%{box-shadow:0 0 15px rgba(0,255,100,.25)}50%{box-shadow:0 0 35px rgba(0,255,100,.55)}}
+/* RIGHT PANEL */
+.right-panel{grid-column:3;grid-row:2;padding:12px;border-left:1px solid var(--border);
+  display:flex;flex-direction:column;gap:12px;background:rgba(5,0,8,.75);overflow-y:auto;}
+.right-panel::-webkit-scrollbar{width:2px;}
+.right-panel::-webkit-scrollbar-thumb{background:var(--c2);}
 
-/* ── RIGHT PANEL ── */
-.right-panel {
-  grid-column: 3;
-  grid-row: 2;
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-  overflow-y: auto;
-  clip-path: polygon(18px 0,100% 0,100% 100%,0 100%,0 18px);
-  box-shadow: -4px 0 30px rgba(0,40,120,.2);
-}
-.right-panel::-webkit-scrollbar{width:2px}
-.right-panel::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--c2),var(--c1))}
+.conv-label{font-size:6px;letter-spacing:4px;color:rgba(255,80,100,.4);text-transform:uppercase;
+  padding-bottom:5px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.conv-online{font-size:6px;color:var(--green);display:flex;align-items:center;gap:3px;}
+.conv-log{flex:1;overflow-y:auto;min-height:0;display:flex;flex-direction:column;gap:4px;max-height:180px;}
+.conv-log::-webkit-scrollbar{width:2px;}
+.conv-log::-webkit-scrollbar-thumb{background:var(--c2);}
+.conv-line{font-size:8px;line-height:1.6;padding:2px 0 2px 7px;border-left:2px solid rgba(255,30,60,.2);animation:msgIn .3s ease;}
+.conv-line.sys{color:rgba(255,80,100,.45);border-left-color:var(--c1);}
+.conv-line.usr{color:rgba(255,200,68,.5);border-left-color:var(--gold);}
+.conv-line.ai{color:rgba(255,130,150,.5);border-left-color:var(--c2);}
 
-/* API KEY INPUT */
-.api-block {
-  padding: 14px;
-  background: rgba(0,255,120,.025);
-  border: 1px solid rgba(0,255,120,.12);
-  position: relative;
-}
-.api-block::before{
-  content:'GEMINI API';
-  position:absolute;top:-1px;left:14px;
-  font-family:var(--font-hud);
-  font-size:6px;letter-spacing:4px;
-  color:#44ff88;
-  background:var(--bg);
-  padding:0 8px;
-  text-shadow:0 0 8px rgba(0,255,120,.5);
-}
-.api-inp {
-  width: 100%;
-  background: rgba(0,0,0,.45);
-  border: 1px solid rgba(0,255,120,.18);
-  color: #88ffaa;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  padding: 7px 10px;
-  outline: none;
-  margin-top: 10px;
-  letter-spacing: 1px;
-  transition: border-color .2s, box-shadow .2s;
-}
-.api-inp:focus{border-color:rgba(0,255,120,.45);box-shadow:0 0 12px rgba(0,255,120,.15)}
-.api-inp::placeholder{opacity:.28;color:#44ff88}
-.api-inp option{background:#010a14;color:#88ffaa}
-.api-save {
-  width: 100%;
-  margin-top: 7px;
-  padding: 7px;
-  background: rgba(0,255,120,.07);
-  border: 1px solid rgba(0,255,120,.28);
-  color: #44ff88;
-  font-family: var(--font-hud);
-  font-size: 7px;
-  letter-spacing: 3px;
-  cursor: pointer;
-  transition: all .2s;
-  clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);
-  text-shadow:0 0 8px rgba(0,255,120,.5);
-}
-.api-save:hover{
-  background:rgba(0,255,120,.14);
-  box-shadow:0 0 18px rgba(0,255,120,.28), inset 0 0 10px rgba(0,255,120,.05);
-}
-.api-status {
-  font-size: 8px;
-  margin-top: 5px;
-  color: rgba(0,255,120,.5);
-  letter-spacing: 1px;
-}
+/* HAFIZA GÖSTERGESİ */
+.mem-block{padding:10px;border:1px solid rgba(255,30,60,.1);background:rgba(255,30,60,.02);position:relative;}
+.mem-block::before{content:'HAFIZA';position:absolute;top:-1px;left:10px;
+  font-family:'Orbitron',sans-serif;font-size:6px;letter-spacing:3px;color:var(--c1);
+  background:var(--bg);padding:0 5px;text-shadow:0 0 8px rgba(255,30,60,.5);}
+.mem-count{font-family:'Orbitron',sans-serif;font-size:22px;font-weight:700;color:var(--gold);
+  filter:drop-shadow(0 0 6px rgba(255,170,0,.5));margin-top:8px;}
+.mem-sub{font-size:7px;color:rgba(255,80,100,.4);letter-spacing:2px;margin-top:2px;}
+.mem-bar{height:2px;background:rgba(255,30,60,.08);margin-top:6px;border-radius:1px;overflow:hidden;}
+.mem-bar-fill{height:100%;background:linear-gradient(90deg,var(--c2),var(--c1));box-shadow:0 0 6px var(--c1);
+  transition:width 1s ease;width:0%;}
 
-/* SLIDERS */
-.ctrl-block {
-  padding: 12px;
-}
-.ctrl-row {
-  margin-bottom: 10px;
-}
-.ctrl-label {
-  font-family: var(--font-hud);
-  font-size: 7px;
-  letter-spacing: 3px;
-  opacity: .5;
-  margin-bottom: 5px;
-  display: flex;
-  justify-content: space-between;
-}
-.ctrl-label span{color:var(--gold);opacity:1;text-shadow:0 0 6px rgba(255,200,68,.3)}
-input[type=range] {
-  width: 100%;
-  height: 2px;
-  -webkit-appearance: none;
-  background: linear-gradient(90deg,rgba(0,100,255,.2),rgba(0,180,255,.15));
-  border-radius: 2px;
-  cursor: pointer;
-  outline: none;
-}
-input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 12px;height: 12px;
-  border-radius: 50%;
-  background: radial-gradient(circle,#fff,var(--c1));
-  box-shadow: 0 0 10px var(--c1), 0 0 20px rgba(0,180,255,.4);
-  cursor: pointer;
-  transition: transform .15s;
-}
-input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.3)}
+/* API BLOCK */
+.api-block{padding:11px;border:1px solid rgba(0,255,120,.1);background:rgba(0,255,120,.02);position:relative;}
+.api-block::before{content:'GEMİNİ API';position:absolute;top:-1px;left:10px;
+  font-family:'Orbitron',sans-serif;font-size:6px;letter-spacing:3px;color:#44ff88;
+  background:var(--bg);padding:0 5px;text-shadow:0 0 8px rgba(0,255,120,.5);}
+.api-inp{width:100%;background:rgba(0,0,0,.45);border:1px solid rgba(0,255,120,.14);color:#88ffaa;
+  font-family:'Share Tech Mono',monospace;font-size:9px;padding:6px 8px;outline:none;margin-top:8px;transition:border-color .2s;}
+.api-inp:focus{border-color:rgba(0,255,120,.4);}
+.api-inp::placeholder{opacity:.22;color:#44ff88;}
+.api-inp option{background:#030508;}
+.api-btn{width:100%;margin-top:5px;padding:6px;background:rgba(0,255,120,.06);
+  border:1px solid rgba(0,255,120,.22);color:#44ff88;font-family:'Orbitron',sans-serif;
+  font-size:6px;letter-spacing:3px;cursor:pointer;transition:all .2s;
+  clip-path:polygon(5px 0,100% 0,calc(100% - 5px) 100%,0 100%);}
+.api-btn:hover{background:rgba(0,255,120,.12);box-shadow:0 0 12px rgba(0,255,120,.2);}
+.api-status{font-size:7px;margin-top:4px;color:rgba(0,255,120,.4);letter-spacing:1px;}
 
-/* VOICE SELECT */
-.voice-block {padding:12px}
-.voice-sel {
-  width: 100%;
-  background: rgba(0,8,24,.85);
-  border: 1px solid var(--border);
-  color: var(--c1);
-  font-family: var(--font-mono);
-  font-size: 9px;
-  padding: 6px;
-  outline: none;
-  cursor: pointer;
-  margin-top: 7px;
-  transition: border-color .2s;
-}
-.voice-sel:focus{border-color:rgba(0,200,255,.35)}
-.voice-sel option{background:#00060f}
+/* VOICE */
+.ctrl-block{display:flex;flex-direction:column;gap:7px;}
+.ctrl-row{display:flex;flex-direction:column;gap:2px;}
+.ctrl-lbl{display:flex;justify-content:space-between;font-family:'Orbitron',sans-serif;font-size:6px;letter-spacing:3px;color:rgba(255,80,100,.4);}
+.ctrl-lbl span{color:var(--gold);}
+input[type=range]{width:100%;height:2px;-webkit-appearance:none;background:rgba(255,30,60,.1);border-radius:1px;cursor:pointer;outline:none;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:10px;height:10px;border-radius:50%;
+  background:radial-gradient(circle,#fff,var(--c1));box-shadow:0 0 7px var(--c1);cursor:pointer;}
+.voice-sel{width:100%;background:rgba(3,0,5,.9);border:1px solid var(--border);color:var(--c1);
+  font-family:'Share Tech Mono',monospace;font-size:9px;padding:5px;outline:none;cursor:pointer;margin-top:5px;}
+.voice-sel option{background:#030508;}
 
 /* STATS */
-.stats-block {padding:12px}
-.stat-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 7px;
-  margin-top: 9px;
-}
-.stat-cell {
-  border: 1px solid rgba(0,150,255,.12);
-  padding: 9px 6px;
-  text-align: center;
-  background: rgba(0,150,255,.03);
-  transition: background .2s;
-}
-.stat-cell:hover{background:rgba(0,180,255,.06)}
-.stat-val {
-  font-family: var(--font-hud);
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--gold);
-  filter: drop-shadow(0 0 8px rgba(255,200,68,.55));
-}
-.stat-lbl{font-family:var(--font-hud);font-size:6px;opacity:.4;letter-spacing:3px;margin-top:2px}
+.stat-row{display:grid;grid-template-columns:1fr 1fr;gap:4px;}
+.stat-cell{border:1px solid rgba(255,30,60,.1);padding:6px;text-align:center;background:rgba(255,30,60,.02);}
+.stat-v{font-family:'Orbitron',sans-serif;font-size:17px;font-weight:700;color:var(--gold);
+  filter:drop-shadow(0 0 5px rgba(255,170,0,.5));}
+.stat-l{font-family:'Orbitron',sans-serif;font-size:5px;opacity:.3;letter-spacing:3px;margin-top:1px;}
 
-.bar-wrap {
-  height: 2px;
-  background: rgba(0,180,255,.08);
-  margin-top: 9px;
-  overflow: hidden;
-  border-radius: 2px;
-}
-.bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg,var(--c2),var(--c1),var(--c3));
-  box-shadow: 0 0 8px var(--c1);
-  transition: width 1.2s ease;
-  width: 0%;
-}
+/* BOTTOM */
+.bottombar{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;
+  padding:0 16px;background:rgba(3,0,5,.98);border-top:1px solid var(--border);position:relative;gap:8px;}
+.bottombar::before{content:'';position:absolute;top:0;left:5%;right:5%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,30,60,.35),transparent);}
+.recog-box{flex:1;font-size:10px;color:rgba(255,80,100,.35);font-style:italic;font-family:'Rajdhani',sans-serif;}
+.recog-box .final{color:var(--c1);font-style:normal;font-weight:600;text-shadow:0 0 7px var(--c1);}
+.bot-btns{display:flex;gap:10px;align-items:center;}
+.bot-btn{padding:4px 12px;font-family:'Orbitron',sans-serif;font-size:6px;letter-spacing:2px;
+  border:1px solid rgba(255,30,60,.2);background:transparent;color:rgba(255,80,100,.4);cursor:pointer;transition:all .2s;
+  clip-path:polygon(5px 0,100% 0,calc(100% - 5px) 100%,0 100%);}
+.bot-btn:hover{background:rgba(255,30,60,.08);color:var(--c1);}
+.bot-btn.danger{border-color:rgba(255,30,60,.35);color:rgba(255,60,80,.5);}
+.bot-btn.danger:hover{background:rgba(255,30,60,.1);color:var(--c1);}
+.bot-uptime{font-family:'Orbitron',sans-serif;font-size:9px;color:rgba(255,80,100,.35);letter-spacing:3px;}
 
-/* LOG */
-.log-block {
-  padding: 12px;
-  flex: 1;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-.log-entries {
-  flex:1;
-  overflow-y: auto;
-  font-size: 8px;
-  opacity: .65;
-}
-.log-entries::-webkit-scrollbar{width:2px}
-.log-entries::-webkit-scrollbar-thumb{background:var(--c2)}
-.log-line {
-  padding: 2px 0;
-  border-bottom: 1px solid rgba(0,180,255,.04);
-  line-height: 1.7;
-}
-.log-t{color:var(--gold);margin-right:6px;font-size:7px}
+/* PARTICLES */
+.particle{position:fixed;border-radius:50%;pointer-events:none;z-index:3;animation:floatUp linear infinite;opacity:0;}
+@keyframes floatUp{0%{opacity:0;transform:translateY(0) scale(0)}8%{opacity:.6}90%{opacity:.1}100%{opacity:0;transform:translateY(-110vh) scale(.3)}}
 
-/* ── BOTTOM BAR ── */
-.bottom-bar {
-  grid-column: 1/-1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding: 0 18px;
-  background: rgba(0,6,20,.96);
-  border: 1px solid rgba(0,180,255,.15);
-  border-top: 1px solid rgba(0,200,255,.2);
-  clip-path: polygon(0 0,calc(100% - 24px) 0,100% 24px,100% 100%,24px 100%,0 calc(100% - 24px));
-  box-shadow: 0 -4px 30px rgba(0,30,100,.25);
+/* ═══ MOBILE ═══ */
+@media(max-width:768px){
+  .hud{grid-template-columns:1fr;grid-template-rows:44px 1fr 46px;}
+  .topbar{padding:0 10px;}
+  .logo{font-size:13px;letter-spacing:6px;}
+  .top-center{gap:8px;}
+  .sys-ind{display:none;}
+  .top-clock{font-size:12px;letter-spacing:2px;}
+  .left-panel{display:none;}
+  .right-panel{display:none;position:fixed;top:44px;right:0;bottom:46px;width:82vw;max-width:300px;
+    z-index:100;background:rgba(5,0,8,.97);transform:translateX(100%);transition:transform .3s ease;border-left:1px solid var(--border);}
+  .right-panel.mob-open{display:flex;transform:translateX(0);}
+  .center-panel{grid-column:1;grid-row:2;padding:6px;gap:5px;}
+  .radar-wrap{width:min(70vw,260px);height:min(70vw,260px);}
+  .radar-label{font-size:9px;letter-spacing:5px;}
+  .radar-sub{display:none;}
+  .status-strip{font-size:6px;letter-spacing:3px;}
+  .waveform{height:18px;max-width:240px;}
+  .chat-msgs{padding:7px;gap:5px;}
+  .msg-bubble{font-size:12px;padding:6px 9px;}
+  .chat-input-row{padding:5px;gap:3px;}
+  .chat-inp{font-size:12px;padding:8px 9px;}
+  .btn-icon{padding:8px 9px;font-size:6px;}
+  .bottombar{padding:0 8px;}
+  .bot-btn{padding:3px 7px;font-size:5px;}
+  .bot-uptime{display:none;}
+  .recog-box{font-size:9px;}
+  .mob-panel-btn{display:flex !important;}
+  .corner{width:35px;height:35px;}
+  code{font-size:10px;}
+  .preview-frame{height:160px;}
 }
-
-.recog-box {
-  flex: 1;
-  font-size: 11px;
-  color: rgba(0,212,255,.45);
-  font-style: italic;
-  font-family: var(--font-body);
-  letter-spacing: 1px;
-}
-.recog-box .final{color:var(--c1);font-style:normal;font-weight:600;text-shadow:0 0 8px var(--c1)}
-
-.uptime-box {
-  font-family: var(--font-hud);
-  font-size: 11px;
-  color: rgba(0,180,255,.45);
-  letter-spacing: 3px;
-}
-
-/* corner HUD deco */
-.hud-corner {
-  position: fixed;
-  width: 90px;height: 90px;
-  pointer-events: none;
-  z-index: 5;
-  opacity: .18;
-}
-.hud-corner.tl{top:0;left:0;border-top:1px solid var(--c1);border-left:1px solid var(--c1);box-shadow:inset 8px 8px 20px rgba(0,200,255,.05)}
-.hud-corner.tr{top:0;right:0;border-top:1px solid var(--c1);border-right:1px solid var(--c1);box-shadow:inset -8px 8px 20px rgba(0,200,255,.05)}
-.hud-corner.bl{bottom:0;left:0;border-bottom:1px solid var(--c1);border-left:1px solid var(--c1);box-shadow:inset 8px -8px 20px rgba(0,200,255,.05)}
-.hud-corner.br{bottom:0;right:0;border-bottom:1px solid var(--c1);border-right:1px solid var(--c1);box-shadow:inset -8px -8px 20px rgba(0,200,255,.05)}
-
-/* HOLOGRAM PARTICLES */
-.holo-particle {
-  position: fixed;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 3;
-  animation: floatParticle linear infinite;
-  opacity: 0;
-}
-@keyframes floatParticle {
-  0%{opacity:0;transform:translateY(0) scale(0)}
-  8%{opacity:.8}
-  90%{opacity:.25}
-  100%{opacity:0;transform:translateY(-120vh) scale(.4)}
-}
-
-/* GEMINI THINKING */
-.gemini-thinking {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 10px;
-  color: #88ffaa;
-  opacity: .7;
-  padding: 4px 12px;
-}
-
-/* no-support */
-.nosupport {
-  color: #ff6666;
-  font-size: 8px;
-  padding: 4px 8px;
-  border: 1px solid rgba(255,50,50,.25);
-  display: none;
-  margin: 4px 8px;
+@media(max-width:400px){
+  .logo{font-size:11px;letter-spacing:4px;}
+  .radar-wrap{width:min(78vw,230px);height:min(78vw,230px);}
+  .mbtn{padding:3px 5px;font-size:5px;}
 }
 </style>
 </head>
 <body>
-
 <canvas id="bgCanvas"></canvas>
 <div class="scanlines"></div>
 <div class="vignette"></div>
-<div class="holo-edge"></div>
-
-<!-- HUD CORNERS -->
-<div class="hud-corner tl"></div>
-<div class="hud-corner tr"></div>
-<div class="hud-corner bl"></div>
-<div class="hud-corner br"></div>
+<div class="corner tl"></div><div class="corner tr"></div>
+<div class="corner bl"></div><div class="corner br"></div>
 
 <div class="hud">
 
-  <!-- HEADER -->
-  <header class="header panel">
-    <div class="logo-area">
-      <div class="logo">J.A.R.V.I.S</div>
-      <div class="mk-badge">MK VII</div>
+<!-- TOP BAR -->
+<header class="topbar">
+  <div class="logo">ARES</div>
+  <div class="top-center">
+    <div class="sys-ind"><span class="dot-live"></span>AKTİF</div>
+    <div class="top-clock" id="clock">--:--:--</div>
+    <div class="sys-ind" id="dateDisp" style="font-size:7px;letter-spacing:1px;color:rgba(255,80,100,.3);"></div>
+  </div>
+  <div style="display:flex;align-items:center;gap:6px;">
+    <div class="mode-btns">
+      <button class="mbtn active" id="btnLocal" onclick="setMode('local')">YEREL</button>
+      <button class="mbtn gm" id="btnGemini" onclick="setMode('gemini')">GEMİNİ</button>
+      <button class="mbtn" id="btnAuto" onclick="setMode('auto')">AUTO</button>
     </div>
-    <div class="header-center">
-      <div class="sys-status"><span class="pulse-dot"></span>SİSTEM AKTİF</div>
-      <div class="header-time" id="clock">--:--:--</div>
-      <div class="sys-status" id="dateDisplay" style="opacity:.5;font-size:9px;letter-spacing:1px;"></div>
-    </div>
-    <div class="header-right">
-      <div class="mode-selector">
-        <button class="mode-btn active" id="btnLocal" onclick="setMode('local')">YEREL</button>
-        <button class="mode-btn gemini-btn" id="btnGemini" onclick="setMode('gemini')">GEMINI AI</button>
-        <button class="mode-btn" id="btnBoth" onclick="setMode('auto')" title="Önce yerel dene, yoksa Gemini'ye geç" style="font-size:6px;letter-spacing:1px;">AUTO</button>
-      </div>
-    </div>
-  </header>
+    <button class="mbtn mob-panel-btn" onclick="toggleMobPanel()" style="border-color:rgba(0,255,120,.3);color:rgba(0,255,120,.5);">⚙</button>
+  </div>
+</header>
 
-  <!-- LEFT — COMMANDS -->
-  <div class="panel left-panel">
-    <div class="panel-title">Komut Dizini</div>
-    <div class="nosupport" id="noSup">⚠ Ses desteği yok</div>
-    <div class="cmd-scroll">
-
-      <div class="cmd-group-title">⏱ ZAMAN</div>
-      <div class="cmd-row" onclick="runCmd('saat kaç')"><span class="key">"saat kaç"</span><span class="desc">Saat söyler</span></div>
-      <div class="cmd-row" onclick="runCmd('tarih')"><span class="key">"tarih"</span><span class="desc">Bugünün tarihi</span></div>
-      <div class="cmd-row" onclick="runCmd('gün')"><span class="key">"gün"</span><span class="desc">Haftanın günü</span></div>
-
-      <div class="cmd-group-title">🔢 MATEMATİK</div>
-      <div class="cmd-row" onclick="runCmd('topla 12 ve 8')"><span class="key">"topla X ve Y"</span><span class="desc">Toplama</span></div>
-      <div class="cmd-row" onclick="runCmd('çarp 7 ve 6')"><span class="key">"çarp X ve Y"</span><span class="desc">Çarpma</span></div>
-      <div class="cmd-row" onclick="runCmd('böl 100 ve 5')"><span class="key">"böl X ve Y"</span><span class="desc">Bölme</span></div>
-      <div class="cmd-row" onclick="runCmd('çıkar 20 ve 7')"><span class="key">"çıkar X ve Y"</span><span class="desc">Çıkarma</span></div>
-      <div class="cmd-row" onclick="runCmd('kare 12')"><span class="key">"kare X"</span><span class="desc">Karesini alır</span></div>
-
-      <div class="cmd-group-title">🌐 WEB</div>
-      <div class="cmd-row" onclick="runCmd('google aç')"><span class="key">"google aç"</span><span class="desc">Google</span></div>
-      <div class="cmd-row" onclick="runCmd('youtube aç')"><span class="key">"youtube aç"</span><span class="desc">YouTube</span></div>
-      <div class="cmd-row" onclick="runCmd('wikipedia aç')"><span class="key">"wikipedia aç"</span><span class="desc">Wikipedia</span></div>
-      <div class="cmd-row" onclick="runCmd('ara yapay zeka')"><span class="key">"ara [şey]"</span><span class="desc">Google'da ara</span></div>
-
-      <div class="cmd-group-title">💬 SOHBET</div>
-      <div class="cmd-row" onclick="runCmd('merhaba')"><span class="key">"merhaba"</span><span class="desc">Selam</span></div>
-      <div class="cmd-row" onclick="runCmd('nasılsın')"><span class="key">"nasılsın"</span><span class="desc">Durum</span></div>
-      <div class="cmd-row" onclick="runCmd('şaka yap')"><span class="key">"şaka yap"</span><span class="desc">Şaka söyler</span></div>
-      <div class="cmd-row" onclick="runCmd('motivasyon ver')"><span class="key">"motivasyon ver"</span><span class="desc">İlham</span></div>
-      <div class="cmd-row" onclick="runCmd('bilmece sor')"><span class="key">"bilmece sor"</span><span class="desc">Bilmece</span></div>
-      <div class="cmd-row" onclick="runCmd('hava durumu')"><span class="key">"hava durumu"</span><span class="desc">Hava</span></div>
-
-      <div class="cmd-group-title">⚙️ SİSTEM</div>
-      <div class="cmd-row" onclick="runCmd('sistemi başlat')"><span class="key">"sistemi başlat"</span><span class="desc">Boot protokol</span></div>
-      <div class="cmd-row" onclick="runCmd('ekranı temizle')"><span class="key">"ekranı temizle"</span><span class="desc">Temizle</span></div>
-      <div class="cmd-row" onclick="runCmd('uyku modu')"><span class="key">"uyku modu"</span><span class="desc">Bekleme</span></div>
-      <div class="cmd-row" onclick="runCmd('dur')"><span class="key">"dur"</span><span class="desc">Konuşmayı kes</span></div>
-
-      <div class="cmd-group-title">🤖 GEMİNİ AI</div>
-      <div class="cmd-row" onclick="setMode('gemini');runCmd('bana Mars hakkında anlat')"><span class="key">Gemini: serbest</span><span class="desc">Her şeyi sorun</span></div>
-      <div class="cmd-row" onclick="setMode('gemini');runCmd('bir şiir yaz')"><span class="key">Gemini: şiir yaz</span><span class="desc">Yaratıcı</span></div>
-      <div class="cmd-row" onclick="setMode('gemini');runCmd('kod yaz')"><span class="key">Gemini: kod yaz</span><span class="desc">Programlama</span></div>
+<!-- LEFT -->
+<div class="left-panel">
+  <div>
+    <div class="info-label">ZAMAN</div>
+    <div class="info-val" id="leftTime">--:--</div>
+    <div class="info-sub" id="leftDate">-- --- ----</div>
+    <div class="info-sub" id="leftDay" style="margin-top:2px;"></div>
+  </div>
+  <div>
+    <div class="info-label">HAVA</div>
+    <div class="weather-val" id="wTemp">22°C</div>
+    <div class="info-sub" id="wDesc">Parçalı Bulutlu</div>
+  </div>
+  <div>
+    <div class="info-label">SİSTEM</div>
+    <div class="status-rows">
+      <div class="srow"><div class="srow-head"><span>İŞLEMCİ</span><span id="cpuV">34%</span></div>
+        <div class="sbar"><div class="sbar-fill r" id="cpuBar" style="width:34%"></div></div></div>
+      <div class="srow"><div class="srow-head"><span>BELLEK</span><span id="memV">61%</span></div>
+        <div class="sbar"><div class="sbar-fill g" id="memBar" style="width:61%"></div></div></div>
+      <div class="srow"><div class="srow-head"><span>YZ ÇEKİRDEĞİ</span><span id="yzV">99%</span></div>
+        <div class="sbar"><div class="sbar-fill o" id="yzBar" style="width:99%"></div></div></div>
+      <div class="srow"><div class="srow-head"><span>AĞ</span><span id="netV">52%</span></div>
+        <div class="sbar"><div class="sbar-fill b" id="netBar" style="width:52%"></div></div></div>
     </div>
   </div>
-
-  <!-- CENTER -->
-  <div class="center-panel">
-
-    <!-- ARC REACTOR -->
-    <div class="arc-reactor" onclick="toggleListen()">
-      <div class="arc-ring"></div>
-      <div class="arc-ring"></div>
-      <div class="arc-ring"></div>
-      <div class="arc-ring"></div>
-      <div class="arc-ring"></div>
-      <div class="arc-core" id="arcCore"></div>
-    </div>
-
-    <div class="waveform" id="waveform"></div>
-    <div class="status-bar" id="statusBar">HAZIR — ARC REAKTÖR AKTİF</div>
-
-    <!-- CHAT -->
-    <div class="chat-area panel" style="width:100%">
-      <div class="panel-title">Holografik İletişim Kanalı</div>
-      <div class="chat-msgs" id="chatMsgs">
-        <div class="msg jarvis">
-          <div class="msg-who">J.A.R.V.I.S — MK VII</div>
-          <div class="msg-bubble">Arc Reaktör sistemleri aktif. Merhaba efendim. Holografik arayüz hazır. Sesli komut için reaktöre dokunun ya da boşluk tuşuna basın. Gemini AI için sağ panelden API anahtarınızı girin.</div>
-        </div>
-      </div>
-      <div class="chat-input-row">
-        <button class="mic-trigger" id="micBtn" onclick="toggleListen()">🎤 MİK</button>
-        <input class="chat-inp" id="chatInp" placeholder="Komut veya soru yazın..." onkeydown="if(event.key==='Enter')sendText()">
-        <button class="send-btn" onclick="sendText()">GÖNDER</button>
-      </div>
-    </div>
+  <div>
+    <div class="info-label">SAĞLIK</div>
+    <div class="health-line">• Tüm sistemler nominal<br>• YZ çekirdeği stabil<br>• Hafıza aktif</div>
   </div>
-
-  <!-- RIGHT -->
-  <div class="right-panel">
-
-    <!-- API KEY -->
-    <div class="panel api-block">
-      <input class="api-inp" id="apiKey" type="password" placeholder="Gemini API anahtarı girin...">
-      <select class="api-inp" id="geminiModelSel" style="margin-top:6px;cursor:pointer;">
-        <option value="gemini-2.5-flash">⚡ Gemini 2.5 Flash (Önerilen)</option>
-        <option value="gemini-2.0-flash">🔷 Gemini 2.0 Flash</option>
-        <option value="gemini-1.5-flash">🔹 Gemini 1.5 Flash</option>
-        <option value="gemini-2.0-flash-lite">⬡ Gemini 2.0 Flash Lite</option>
-      </select>
-      <button class="api-save" onclick="saveApiKey()">▶ ANAHTARI KAYDET</button>
-      <div class="api-status" id="apiStatus">⬡ Bağlantı bekleniyor</div>
-    </div>
-
-    <!-- VOICE CONTROLS -->
-    <div class="panel ctrl-block">
-      <div class="panel-title">Ses Kontrol</div>
-      <div class="ctrl-row">
-        <div class="ctrl-label">HIZ <span id="rateV">0.95x</span></div>
-        <input type="range" min="0.5" max="2" step="0.05" value="0.95" id="rateS" oninput="rateV.textContent=this.value+'x'">
-      </div>
-      <div class="ctrl-row">
-        <div class="ctrl-label">TON <span id="pitchV">0.9</span></div>
-        <input type="range" min="0.5" max="2" step="0.05" value="0.9" id="pitchS" oninput="pitchV.textContent=this.value">
-      </div>
-      <div class="ctrl-row">
-        <div class="ctrl-label">SES <span id="volV">100%</span></div>
-        <input type="range" min="0" max="1" step="0.05" value="1" id="volS" oninput="volV.textContent=Math.round(this.value*100)+'%'">
-      </div>
-    </div>
-
-    <!-- VOICE SELECT -->
-    <div class="panel voice-block">
-      <div class="panel-title">Ses Profili</div>
-      <select class="voice-sel" id="voiceSel"></select>
-    </div>
-
-    <!-- STATS -->
-    <div class="panel stats-block">
-      <div class="panel-title">Sistem Metrikleri</div>
-      <div class="stat-grid">
-        <div class="stat-cell"><div class="stat-val" id="cmdCnt">0</div><div class="stat-lbl">KOMUT</div></div>
-        <div class="stat-cell"><div class="stat-val" id="aiCnt">0</div><div class="stat-lbl">AI SORGU</div></div>
-        <div class="stat-cell"><div class="stat-val" id="succV">—</div><div class="stat-lbl">BAŞARI</div></div>
-        <div class="stat-cell"><div class="stat-val" id="modeV" style="font-size:12px;color:var(--c3)">YEREL</div><div class="stat-lbl">MOD</div></div>
-      </div>
-      <div class="bar-wrap"><div class="bar-fill" id="barFill"></div></div>
-    </div>
-
-    <!-- LOG -->
-    <div class="panel log-block">
-      <div class="panel-title">İşlem Logu</div>
-      <div class="log-entries" id="logBox"></div>
-    </div>
-
-    <!-- UPTIME -->
-    <div class="panel" style="padding:12px">
-      <div class="panel-title">Çalışma Süresi</div>
-      <div style="font-family:'Orbitron',sans-serif;font-size:15px;color:var(--c3);margin-top:8px;letter-spacing:2px;filter:drop-shadow(0 0 6px var(--c3))" id="uptime">00:00:00</div>
-    </div>
+  <div style="margin-top:auto;">
+    <div class="info-label">ÇALIŞMA</div>
+    <div class="uptime-val" id="uptime">00:00:00</div>
   </div>
-
-  <!-- BOTTOM BAR -->
-  <div class="bottom-bar panel">
-    <div style="font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:3px;opacity:.4">VERİ AKIŞI</div>
-    <div class="recog-box" id="recogBox"><span style="opacity:.3">Ses algılandığında buraya yansır...</span></div>
-    <div class="uptime-box" id="bottomUptime">00:00:00</div>
-  </div>
-
 </div>
 
+<!-- CENTER -->
+<div class="center-panel">
+  <div class="radar-wrap" onclick="toggleListen()">
+    <svg class="radar-static" viewBox="0 0 380 380">
+      <circle cx="190" cy="190" r="185" fill="none" stroke="rgba(255,30,60,0.07)" stroke-width="1"/>
+      <circle cx="190" cy="190" r="150" fill="none" stroke="rgba(255,30,60,0.06)" stroke-width=".5"/>
+      <circle cx="190" cy="190" r="115" fill="none" stroke="rgba(255,30,60,0.06)" stroke-width=".5"/>
+      <circle cx="190" cy="190" r="80" fill="none" stroke="rgba(255,30,60,0.06)" stroke-width=".5"/>
+      <circle cx="190" cy="190" r="45" fill="none" stroke="rgba(255,30,60,0.07)" stroke-width=".5"/>
+      <line x1="5" y1="190" x2="375" y2="190" stroke="rgba(255,30,60,0.04)" stroke-width=".5"/>
+      <line x1="190" y1="5" x2="190" y2="375" stroke="rgba(255,30,60,0.04)" stroke-width=".5"/>
+      <line x1="57" y1="57" x2="323" y2="323" stroke="rgba(255,30,60,0.025)" stroke-width=".5"/>
+      <line x1="323" y1="57" x2="57" y2="323" stroke="rgba(255,30,60,0.025)" stroke-width=".5"/>
+    </svg>
+    <svg class="radar-svg" viewBox="0 0 380 380">
+      <circle cx="190" cy="190" r="184" fill="none" stroke="rgba(255,40,70,0.4)" stroke-width="1.5" stroke-dasharray="7 5"/>
+      <circle cx="190" cy="190" r="183" fill="none" stroke="rgba(255,30,60,0.05)" stroke-width="7"/>
+      <defs>
+        <linearGradient id="beam" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="rgba(255,30,60,0.0)"/>
+          <stop offset="65%" stop-color="rgba(255,30,60,0.06)"/>
+          <stop offset="100%" stop-color="rgba(255,60,90,0.2)"/>
+        </linearGradient>
+      </defs>
+      <path d="M190,190 L190,6 A184,184 0 0,1 374,190 Z" fill="url(#beam)"/>
+      <g stroke="rgba(255,60,90,0.45)" stroke-width="1">
+        <line x1="190" y1="6" x2="190" y2="20"/>
+        <line x1="374" y1="190" x2="360" y2="190"/>
+        <line x1="190" y1="374" x2="190" y2="360"/>
+        <line x1="6" y1="190" x2="20" y2="190"/>
+      </g>
+      <circle cx="190" cy="190" r="148" fill="none" stroke="rgba(255,30,60,0.1)" stroke-width="1" stroke-dasharray="3 18"/>
+    </svg>
+    <canvas id="starCanvas"></canvas>
+    <div class="radar-core" id="radarCore"></div>
+    <div class="radar-label">ARES</div>
+    <div class="radar-sub">v2.0 — YZ ÇEKİRDEĞİ AKTİF</div>
+  </div>
+
+  <div class="status-strip" id="statusBar">HAZIR — ARES AKTİF</div>
+  <div class="waveform" id="waveform"></div>
+
+  <div class="chat-area">
+    <div class="chat-msgs" id="chatMsgs">
+      <div class="msg ares">
+        <div class="msg-who">🔴 ARES</div>
+        <div class="msg-bubble">Yo kanka! Ben ARES — yapay zeka asistanın. Her şeyi hatırlıyorum, kod yazıyorum, web site yapıyorum. Gemini bağlarsan çok daha güçlü olurum. Başlayalım mı?</div>
+      </div>
+    </div>
+    <div class="chat-input-row">
+      <button class="btn-icon" id="micBtn" onclick="toggleListen()">🎤 MİK</button>
+      <input class="chat-inp" id="chatInp" placeholder="Sor, komut ver, kod iste..." onkeydown="if(event.key==='Enter'){event.preventDefault();sendText();}">
+      <button class="btn-icon" onclick="sendText()">GÖNDER</button>
+    </div>
+  </div>
+</div>
+
+<!-- RIGHT -->
+<div class="right-panel" id="rightPanel">
+  <div style="display:flex;flex-direction:column;gap:5px;">
+    <div class="conv-label">KONUŞMA <span class="conv-online"><span class="dot-live" style="width:4px;height:4px"></span>CANLI</span></div>
+    <div class="conv-log" id="convLog">
+      <div class="conv-line sys">SİS: ARES aktif. Hafıza yüklendi.</div>
+      <div class="conv-line sys">SİS: YZ çekirdeği hazır.</div>
+    </div>
+  </div>
+
+  <div class="mem-block">
+    <div class="mem-count" id="memCount">0</div>
+    <div class="mem-sub">MESAJ HAFIZADA</div>
+    <div class="mem-bar"><div class="mem-bar-fill" id="memBarFill"></div></div>
+  </div>
+
+  <div class="api-block">
+    <div style="display:none;color:rgba(255,60,80,.6);font-size:7px;margin-top:6px;" id="noSup">⚠ Ses desteği yok</div>
+    <input class="api-inp" id="apiKey" type="password" placeholder="Gemini API anahtarı...">
+    <select class="api-inp" id="geminiModel" style="margin-top:4px;cursor:pointer;">
+      <option value="gemini-2.5-flash">⚡ Gemini 2.5 Flash</option>
+      <option value="gemini-2.0-flash">🔷 Gemini 2.0 Flash</option>
+      <option value="gemini-1.5-flash">🔹 Gemini 1.5 Flash</option>
+      <option value="gemini-2.0-flash-lite">⬡ Gemini 2.0 Lite</option>
+    </select>
+    <button class="api-btn" onclick="saveApiKey()">▶ KAYDET &amp; BAĞLAN</button>
+    <div class="api-status" id="apiStatus">⬡ Bağlantı bekleniyor</div>
+  </div>
+
+  <div>
+    <div class="info-label" style="margin-bottom:6px;">SES</div>
+    <div class="ctrl-block">
+      <div class="ctrl-row"><div class="ctrl-lbl">HIZ <span id="rateV">0.82x</span></div>
+        <input type="range" min="0.5" max="2" step="0.05" value="0.82" id="rateS" oninput="rateV.textContent=this.value+'x'"></div>
+      <div class="ctrl-row"><div class="ctrl-lbl">TON <span id="pitchV">0.6</span></div>
+        <input type="range" min="0.3" max="2" step="0.05" value="0.6" id="pitchS" oninput="pitchV.textContent=this.value"></div>
+      <div class="ctrl-row"><div class="ctrl-lbl">SES <span id="volV">100%</span></div>
+        <input type="range" min="0" max="1" step="0.05" value="1" id="volS" oninput="volV.textContent=Math.round(this.value*100)+'%'"></div>
+    </div>
+    <select class="voice-sel" id="voiceSel"></select>
+  </div>
+
+  <div>
+    <div class="info-label" style="margin-bottom:5px;">METRİKLER</div>
+    <div class="stat-row">
+      <div class="stat-cell"><div class="stat-v" id="cmdCnt">0</div><div class="stat-l">KOMUT</div></div>
+      <div class="stat-cell"><div class="stat-v" id="aiCnt">0</div><div class="stat-l">AI SORGU</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM -->
+<div class="bottombar">
+  <div style="font-family:'Orbitron',sans-serif;font-size:6px;letter-spacing:3px;color:rgba(255,60,80,.25);">ARES v2.0</div>
+  <div class="recog-box" id="recogBox"><span style="opacity:.2">Dinleniyor...</span></div>
+  <div class="bot-btns">
+    <button class="bot-btn" onclick="toggleListen()">● CANLI</button>
+    <button class="bot-btn" onclick="synth.cancel()">⏸ DUR</button>
+    <button class="bot-btn danger" onclick="clearChat()">✕ TEMİZLE</button>
+  </div>
+  <div class="bot-uptime" id="bottomUptime">00:00:00</div>
+</div>
+
+</div><!-- /hud -->
+
 <script>
-// ══════════════════════════════════
-//  BACKGROUND CANVAS — Holographic
-// ══════════════════════════════════
-const canvas = document.getElementById('bgCanvas');
-const ctx = canvas.getContext('2d');
-let W, H;
-
-function resizeCanvas() {
-  W = canvas.width = window.innerWidth;
-  H = canvas.height = window.innerHeight;
-}
-resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
-
-// Rotating concentric HUD circles
-const circles = Array.from({length:6},(_,i)=>({
-  r: 80 + i*90,
-  speed: (i%2===0?1:-1) * (0.0003 + i*0.00015),
-  angle: Math.random()*Math.PI*2,
-  dashes: 4 + i*3,
-  opacity: 0.04 + i*0.015
-}));
-
-// Floating hex grid nodes
-const nodes = Array.from({length:30},()=>({
-  x: Math.random()*1920, y: Math.random()*1080,
-  vx:(Math.random()-.5)*.3, vy:(Math.random()-.5)*.3,
-  r: Math.random()*1.5+.5,
-  opacity: Math.random()*.4+.1
-}));
-
-function drawBG() {
-  ctx.clearRect(0,0,W,H);
-  const cx=W/2, cy=H/2;
-
-  // HUD circles
-  circles.forEach(c=>{
-    c.angle += c.speed;
-    ctx.save();
-    ctx.translate(cx,cy);
-    ctx.rotate(c.angle);
-    ctx.beginPath();
-    ctx.arc(0,0,c.r,0,Math.PI*2);
-    ctx.setLineDash([Math.PI*c.r/c.dashes * .4, Math.PI*c.r/c.dashes * .6]);
-    ctx.strokeStyle = `rgba(0,180,255,${c.opacity})`;
-    ctx.lineWidth = .5;
-    ctx.stroke();
-    ctx.restore();
+// ═══ BG CANVAS ═══
+const bgC=document.getElementById('bgCanvas');
+const bgX=bgC.getContext('2d');
+let BW,BH;
+function rsz(){BW=bgC.width=innerWidth;BH=bgC.height=innerHeight;}
+rsz();addEventListener('resize',rsz);
+const nodes=Array.from({length:20},()=>({x:Math.random()*1920,y:Math.random()*1080,vx:(Math.random()-.5)*.2,vy:(Math.random()-.5)*.2,r:Math.random()*1+.3,op:Math.random()*.25+.04}));
+function drawBG(){
+  bgX.clearRect(0,0,BW,BH);
+  const cx=BW/2,cy=BH/2;
+  [1,2,3,4,5].forEach((i,idx)=>{
+    const r=80+idx*100,speed=(idx%2===0?1:-1)*(.0002+idx*.00008),a=Date.now()/1000*speed;
+    bgX.save();bgX.translate(cx,cy);bgX.rotate(a);
+    bgX.beginPath();bgX.arc(0,0,r,0,Math.PI*2);
+    bgX.setLineDash([Math.PI*r/(3+idx)*.3,Math.PI*r/(3+idx)*.7]);
+    bgX.strokeStyle=`rgba(180,20,40,${.03+idx*.008})`;bgX.lineWidth=.5;bgX.stroke();
+    bgX.restore();
   });
-
-  // Nodes + connections
   nodes.forEach(n=>{
-    n.x += n.vx; n.y += n.vy;
-    if(n.x<0||n.x>W) n.vx*=-1;
-    if(n.y<0||n.y>H) n.vy*=-1;
-    ctx.beginPath();
-    ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
-    ctx.fillStyle=`rgba(0,180,255,${n.opacity})`;
-    ctx.fill();
+    n.x+=n.vx;n.y+=n.vy;
+    if(n.x<0||n.x>BW)n.vx*=-1;if(n.y<0||n.y>BH)n.vy*=-1;
+    bgX.beginPath();bgX.arc(n.x,n.y,n.r,0,Math.PI*2);
+    bgX.fillStyle=`rgba(255,40,70,${n.op})`;bgX.fill();
   });
-  nodes.forEach((a,i)=>{
-    nodes.slice(i+1).forEach(b=>{
-      const dx=a.x-b.x, dy=a.y-b.y, d=Math.sqrt(dx*dx+dy*dy);
-      if(d<120){
-        ctx.beginPath();
-        ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
-        ctx.strokeStyle=`rgba(0,100,200,${.07*(1-d/120)})`;
-        ctx.lineWidth=.5;
-        ctx.stroke();
-      }
-    });
-  });
-
-  // Scan beam
-  const scanY = ((Date.now()/8000)%1)*H;
-  const grad=ctx.createLinearGradient(0,scanY-60,0,scanY+60);
-  grad.addColorStop(0,'transparent');
-  grad.addColorStop(.5,'rgba(0,180,255,0.04)');
-  grad.addColorStop(1,'transparent');
-  ctx.fillStyle=grad;
-  ctx.fillRect(0,scanY-60,W,120);
-
+  nodes.forEach((a,i)=>nodes.slice(i+1).forEach(b=>{
+    const d=Math.hypot(a.x-b.x,a.y-b.y);
+    if(d<120){bgX.beginPath();bgX.moveTo(a.x,a.y);bgX.lineTo(b.x,b.y);
+      bgX.strokeStyle=`rgba(180,20,40,${.04*(1-d/120)})`;bgX.lineWidth=.4;bgX.stroke();}
+  }));
   requestAnimationFrame(drawBG);
 }
 drawBG();
 
-// Floating hologram particles
-function spawnParticle() {
-  const p = document.createElement('div');
-  p.className = 'holo-particle';
-  const size = Math.random()*4+1;
-  const colors = ['rgba(0,200,255,.7)','rgba(0,255,180,.6)','rgba(0,100,255,.5)','rgba(255,215,0,.3)'];
-  p.style.cssText = `
-    width:${size}px;height:${size}px;
-    left:${Math.random()*100}vw;
-    bottom:0;
-    background:${colors[Math.floor(Math.random()*colors.length)]};
-    box-shadow:0 0 4px currentColor;
-    animation-duration:${Math.random()*8+6}s;
-    animation-delay:${Math.random()*4}s;
-  `;
-  document.body.appendChild(p);
-  setTimeout(()=>p.remove(),(14000));
+// ═══ STAR CANVAS ═══
+function initStars(){
+  const sc=document.getElementById('starCanvas'),wrap=sc.parentElement;
+  sc.width=wrap.offsetWidth;sc.height=wrap.offsetHeight;
+  const ctx=sc.getContext('2d'),cx=sc.width/2,cy=sc.height/2,R=sc.width/2-3;
+  const stars=Array.from({length:55},()=>{
+    const a=Math.random()*Math.PI*2,r=Math.random()*R*.93;
+    return {x:cx+Math.cos(a)*r,y:cy+Math.sin(a)*r,r:Math.random()*1.1+.2,op:Math.random()*.6+.15,tw:Math.random()*3+1,ph:Math.random()*Math.PI*2};
+  });
+  function draw(){
+    ctx.clearRect(0,0,sc.width,sc.height);
+    ctx.save();ctx.beginPath();ctx.arc(cx,cy,R,0,Math.PI*2);ctx.clip();
+    const t=Date.now()/1000;
+    stars.forEach(s=>{
+      const op=s.op*(.5+.5*Math.sin(t/s.tw+s.ph));
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(255,80,100,${op})`;ctx.fill();
+    });
+    ctx.restore();requestAnimationFrame(draw);
+  }
+  draw();
 }
-setInterval(spawnParticle, 600);
 
-// ══════════════════════════════════
-//  STATE
-// ══════════════════════════════════
-let recognition=null, synth=window.speechSynthesis, voices=[];
-let isListening=false, isSpeaking=false;
-let cmdCount=0, aiCount=0, successCount=0;
-let startTime=Date.now();
-let currentMode='local'; // 'local' | 'gemini'
-let geminiKey='';
-let geminiConnected=false;
-
-// ══════════════════════════════════
-//  INIT
-// ══════════════════════════════════
-window.onload=()=>{
-  initWaveform();
-  loadVoices();
-  initRecognition();
-  updateClock();
-  setInterval(updateClock,1000);
-  setInterval(updateUptime,1000);
-  // Boot speech
-  setTimeout(()=>speak('Arc Reaktör sistemleri aktif. Merhaba efendim. Holografik arayüz hazır ve yükseldi. Komutlarınızı bekliyorum.'),900);
-};
-
-// ══════════════════════════════════
-//  WAVEFORM
-// ══════════════════════════════════
-function initWaveform(){
+// ═══ WAVEFORM ═══
+function initWave(){
   const wf=document.getElementById('waveform');
   for(let i=0;i<40;i++){
-    const b=document.createElement('div');
-    b.className='wb';
-    b.style.height='3px';
-    b.style.setProperty('--h',(Math.random()*26+5)+'px');
-    b.style.setProperty('--d',(Math.random()*.45+.25)+'s');
+    const b=document.createElement('div');b.className='wb';
+    b.style.height='2px';
+    b.style.setProperty('--h',(Math.random()*20+4)+'px');
+    b.style.setProperty('--d',(Math.random()*.4+.15)+'s');
     wf.appendChild(b);
   }
 }
 function waveActive(on){
   document.querySelectorAll('.wb').forEach(b=>{
     b.classList.toggle('on',on);
-    if(on){
-      b.style.setProperty('--h',(Math.random()*28+4)+'px');
-      b.style.setProperty('--d',(Math.random()*.5+.2)+'s');
-    } else { b.style.height='3px'; }
+    if(on){b.style.setProperty('--h',(Math.random()*22+3)+'px');b.style.setProperty('--d',(Math.random()*.4+.12)+'s');}
+    else b.style.height='2px';
   });
 }
 
-// ══════════════════════════════════
-//  VOICES
-// ══════════════════════════════════
+// ═══ PARTICLES ═══
+function spawnP(){
+  const p=document.createElement('div');p.className='particle';
+  const s=Math.random()*2.5+.8;
+  const cols=['rgba(255,40,70,.5)','rgba(255,100,50,.4)','rgba(255,170,0,.3)'];
+  p.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}vw;bottom:0;background:${cols[Math.floor(Math.random()*cols.length)]};box-shadow:0 0 3px currentColor;animation-duration:${Math.random()*9+5}s;animation-delay:${Math.random()*3}s;`;
+  document.body.appendChild(p);setTimeout(()=>p.remove(),14000);
+}
+setInterval(spawnP,800);
+
+// ═══ STATS ═══
+function animStats(){
+  setInterval(()=>{
+    const rnd=(a,b)=>Math.floor(Math.random()*(b-a)+a);
+    const cpu=rnd(20,50),mem=rnd(50,75),yz=rnd(94,100),net=rnd(25,65);
+    document.getElementById('cpuV').textContent=cpu+'%';document.getElementById('cpuBar').style.width=cpu+'%';
+    document.getElementById('memV').textContent=mem+'%';document.getElementById('memBar').style.width=mem+'%';
+    document.getElementById('yzV').textContent=yz+'%';document.getElementById('yzBar').style.width=yz+'%';
+    document.getElementById('netV').textContent=net+'%';document.getElementById('netBar').style.width=net+'%';
+  },3000);
+}
+
+// ═══ CLOCK ═══
+function updateClock(){
+  const n=new Date(),pad=v=>String(v).padStart(2,'0');
+  document.getElementById('clock').textContent=`${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`;
+  document.getElementById('leftTime').textContent=`${pad(n.getHours())}:${pad(n.getMinutes())}`;
+  const days=['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
+  const months=['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
+  document.getElementById('leftDate').textContent=`${n.getDate()} ${months[n.getMonth()]} ${n.getFullYear()}`;
+  document.getElementById('leftDay').textContent=days[n.getDay()];
+  document.getElementById('dateDisp').textContent=`${days[n.getDay()].toUpperCase()} ${n.getDate()} ${months[n.getMonth()].toUpperCase()}`;
+}
+function updateUptime(){
+  const e=Math.floor((Date.now()-startTime)/1000),h=Math.floor(e/3600),m=Math.floor((e%3600)/60),s=e%60;
+  const pad=v=>String(v).padStart(2,'0'),str=`${pad(h)}:${pad(m)}:${pad(s)}`;
+  document.getElementById('uptime').textContent=str;
+  document.getElementById('bottomUptime').textContent=str;
+}
+
+// ═══ STATE ═══
+let recognition=null,synth=window.speechSynthesis,voices=[];
+let isListening=false,isSpeaking=false;
+let cmdCount=0,aiCount=0,startTime=Date.now();
+let currentMode='local',geminiKey='';
+// KONUŞMA GEÇMİŞİ — hafıza burası!
+let conversationHistory=[];
+const MAX_HISTORY=20;// son 20 mesajı hatırla
+
+// ═══ VOICES ═══
 function loadVoices(){
   const load=()=>{
     voices=synth.getVoices();
@@ -1310,413 +656,390 @@ function loadVoices(){
     sel.innerHTML='';
     voices.forEach((v,i)=>{
       const o=document.createElement('option');
-      o.value=i;
-      o.textContent=`${v.name} (${v.lang})`;
-      if(v.lang.startsWith('tr')) o.selected=true;
+      o.value=i;o.textContent=`${v.name} (${v.lang})`;
       sel.appendChild(o);
     });
+    for(let i=0;i<voices.length;i++){if(voices[i].lang.startsWith('tr')){sel.value=i;break;}}
   };
-  load();
-  synth.onvoiceschanged=load;
+  load();synth.onvoiceschanged=load;
 }
-function getVoice(){
-  return voices[parseInt(document.getElementById('voiceSel').value)]||null;
-}
+function getVoice(){return voices[parseInt(document.getElementById('voiceSel').value)]||null;}
 
-// ══════════════════════════════════
-//  SPEAK
-// ══════════════════════════════════
+// ═══ SPEAK ═══
 function speak(text){
-  if(!synth) return;
+  if(!synth)return;
   synth.cancel();
-  const u=new SpeechSynthesisUtterance(text);
+  // Kod bloklarını konuşmada atlat
+  const cleanText=text.replace(/```[\s\S]*?```/g,'...kod bloğu...').replace(/`[^`]+`/g,'kod').substring(0,400);
+  const u=new SpeechSynthesisUtterance(cleanText);
   u.voice=getVoice();
   u.rate=parseFloat(document.getElementById('rateS').value);
   u.pitch=parseFloat(document.getElementById('pitchS').value);
   u.volume=parseFloat(document.getElementById('volS').value);
   u.lang='tr-TR';
-  u.onstart=()=>{isSpeaking=true;setArcState('speaking');waveActive(true);setStatus('KONUŞUYOR...')};
-  u.onend=()=>{isSpeaking=false;if(!isListening){setArcState('idle');waveActive(false);setStatus('HAZIR — ARC REAKTÖR AKTİF')}};
-  u.onerror=()=>{isSpeaking=false};
+  // Erkek sesi zorla — Türkçe erkek varsa seç
+  const allVoices=synth.getVoices();
+  const maleVoice=allVoices.find(v=>v.lang.startsWith('tr')&&(v.name.toLowerCase().includes('male')||v.name.toLowerCase().includes('erkek')))
+    ||allVoices.find(v=>v.lang.startsWith('tr'))
+    ||allVoices.find(v=>v.name.toLowerCase().includes('male')&&v.lang.startsWith('en'))
+    ||getVoice();
+  if(maleVoice)u.voice=maleVoice;
+  u.onstart=()=>{isSpeaking=true;setCore('speaking');waveActive(true);setStatus('KONUŞUYOR...');};
+  u.onend=()=>{isSpeaking=false;if(!isListening){setCore('');waveActive(false);setStatus('HAZIR — ARES AKTİF');}};
+  u.onerror=()=>{isSpeaking=false;};
   synth.speak(u);
 }
 
-// ══════════════════════════════════
-//  STT
-// ══════════════════════════════════
-function initRecognition(){
+// ═══ STT ═══
+function initSTT(){
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){document.getElementById('noSup').style.display='block';addLog('Ses tanıma yok','err');return;}
+  if(!SR){document.getElementById('noSup').style.display='block';return;}
   recognition=new SR();
-  recognition.lang='tr-TR';
-  recognition.interimResults=true;
-  recognition.continuous=false;
-
-  recognition.onstart=()=>{
-    isListening=true;setArcState('listening');waveActive(true);
-    setStatus('DİNLİYOR — SESİNİZİ ALIYORUM');
-    document.getElementById('micBtn').classList.add('active');
-    document.getElementById('recogBox').innerHTML='<span style="opacity:.3">Konuşun...</span>';
-  };
+  recognition.lang='tr-TR';recognition.interimResults=true;recognition.continuous=false;
+  recognition.onstart=()=>{isListening=true;setCore('listening');waveActive(true);setStatus('DİNLİYOR...');
+    document.getElementById('micBtn').classList.add('mic-active');
+    document.getElementById('recogBox').innerHTML='<span style="opacity:.3">Konuşun...</span>';};
   recognition.onresult=e=>{
-    let interim='',final='';
+    let final='',interim='';
     for(let i=e.resultIndex;i<e.results.length;i++){
-      const t=e.results[i][0].transcript;
-      if(e.results[i].isFinal) final+=t; else interim+=t;
+      if(e.results[i].isFinal)final+=e.results[i][0].transcript;else interim+=e.results[i][0].transcript;
     }
-    const show=final||interim;
-    document.getElementById('recogBox').innerHTML=final
-      ?`<span class="final">${final}</span>`
-      :`<span style="opacity:.4">${interim}</span>`;
-    if(final.trim()){
-      addChat('user',final.trim());
-      addLog(`Komut: "${final.trim()}"`);
-      processInput(final.trim());
-    }
+    document.getElementById('recogBox').innerHTML=final?`<span class="final">${final}</span>`:`<span style="opacity:.35">${interim}</span>`;
+    if(final.trim()){addChat('user',final.trim());addConv('SEN',final.trim(),'usr');processInput(final.trim());}
   };
-  recognition.onend=()=>{
-    isListening=false;
-    document.getElementById('micBtn').classList.remove('active');
-    if(!isSpeaking){setArcState('idle');waveActive(false);setStatus('HAZIR — ARC REAKTÖR AKTİF')}
-  };
-  recognition.onerror=e=>{
-    isListening=false;
-    document.getElementById('micBtn').classList.remove('active');
-    setArcState('idle');waveActive(false);
-    setStatus('HATA: '+e.error.toUpperCase());
-    addLog('Hata: '+e.error,'err');
-  };
+  recognition.onend=()=>{isListening=false;document.getElementById('micBtn').classList.remove('mic-active');
+    if(!isSpeaking){setCore('');waveActive(false);setStatus('HAZIR — ARES AKTİF');}};
+  recognition.onerror=e=>{isListening=false;document.getElementById('micBtn').classList.remove('mic-active');
+    setCore('');waveActive(false);setStatus('HATA: '+e.error.toUpperCase());};
 }
-
 function toggleListen(){
-  if(!recognition){speak('Üzgünüm efendim, ses tanıma desteklenmiyor.');return}
-  if(isListening){recognition.stop();}
-  else{synth.cancel();try{recognition.start()}catch(e){}}
+  if(!recognition){speak('Ses tanıma desteklenmiyor kanka.');return;}
+  if(isListening)recognition.stop();
+  else{synth.cancel();try{recognition.start();}catch(e){}}
 }
 
-// ══════════════════════════════════
-//  MODE
-// ══════════════════════════════════
-function setMode(m){
-  currentMode=m;
-  document.getElementById('btnLocal').classList.toggle('active',m==='local');
-  document.getElementById('btnGemini').classList.toggle('active',m==='gemini');
-  document.getElementById('btnBoth').classList.toggle('active',m==='auto');
-  const labels={local:'YEREL',gemini:'GEMİNİ',auto:'AUTO'};
-  const colors={local:'var(--c3)',gemini:'#88ffaa',auto:'var(--gold)'};
-  document.getElementById('modeV').textContent=labels[m]||'YEREL';
-  document.getElementById('modeV').style.color=colors[m]||'var(--c3)';
-  addLog('Mod: '+(m==='gemini'?'Gemini AI':m==='auto'?'Otomatik':'Yerel'));
+// ═══ UI ═══
+function setCore(s){document.getElementById('radarCore').className='radar-core'+(s?' '+s:'');}
+function setStatus(t){document.getElementById('statusBar').textContent=t;}
+
+function renderMessage(text){
+  // Kod bloklarını işle
+  let html=text;
+  html=html.replace(/```(\w*)\n?([\s\S]*?)```/g,(m,lang,code)=>{
+    const l=lang||'kod';
+    const id='cb'+Math.random().toString(36).slice(2,7);
+    return `<div class="code-block"><div class="code-header"><span class="code-lang">${l.toUpperCase()}</span><button class="copy-btn" id="${id}" onclick="copyCode('${id}')">KOPYALA</button></div><code>${code.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</code></div>`;
+  });
+  // Satır içi kod
+  html=html.replace(/`([^`]+)`/g,'<code style="background:rgba(255,30,60,.08);padding:1px 5px;border:1px solid rgba(255,30,60,.15);font-size:11px;">$1</code>');
+  // Kalın
+  html=html.replace(/\*\*([^*]+)\*\*/g,'<strong style="color:var(--gold)">$1</strong>');
+  // Satır sonu
+  html=html.replace(/\n/g,'<br>');
+  return html;
 }
 
-// ══════════════════════════════════
-//  API KEY
-// ══════════════════════════════════
-function saveApiKey(){
-  const k=document.getElementById('apiKey').value.trim();
-  if(!k){document.getElementById('apiStatus').textContent='⚠ Anahtar boş!';return}
-  geminiKey=k;
-  document.getElementById('apiStatus').textContent='✓ Anahtar kaydedildi — test ediliyor...';
-  testGemini();
+function copyCode(id){
+  const btn=document.getElementById(id);
+  const code=btn.closest('.code-block').querySelector('code').textContent;
+  navigator.clipboard.writeText(code).then(()=>{
+    btn.textContent='KOPYALANDI!';btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='KOPYALA';btn.classList.remove('copied');},2000);
+  });
 }
 
-async function testGemini(){
-  try{
-    const r=await callGemini('Merhaba, sadece "Bağlantı başarılı" yaz.');
-    if(r){
-      geminiConnected=true;
-      document.getElementById('apiStatus').textContent='✅ Gemini bağlantısı aktif';
-      setMode('gemini');
-      addChat('gemini','Gemini AI bağlantısı kuruldu. Artık yapay zeka ile konuşabilirsiniz, efendim.');
-      speak('Gemini AI bağlantısı başarıyla kuruldu efendim. Artık her sorunuzu yanıtlayabilirim.');
-      addLog('Gemini bağlandı ✓');
-    }
-  } catch(e){
-    document.getElementById('apiStatus').textContent='❌ Bağlantı hatası: '+e.message;
-    addLog('Gemini hatası: '+e.message,'err');
-  }
+function showWebPreview(html){
+  const c=document.getElementById('chatMsgs');
+  const wrap=document.createElement('div');wrap.className='preview-wrap';
+  const pid='pv'+Math.random().toString(36).slice(2,6);
+  wrap.innerHTML=`<div class="preview-header"><span class="preview-title">WEB ÖNİZLEME</span>
+    <div class="preview-btns">
+      <button class="prev-btn" onclick="document.getElementById('${pid}').srcdoc=document.getElementById('${pid}').srcdoc">↺ YENİLE</button>
+      <button class="prev-btn" onclick="openFullPreview('${pid}')">⤢ TAM EKRAN</button>
+    </div></div>
+    <iframe id="${pid}" class="preview-frame" sandbox="allow-scripts allow-same-origin"></iframe>`;
+  c.appendChild(wrap);
+  setTimeout(()=>{document.getElementById(pid).srcdoc=html;},100);
+  c.scrollTop=c.scrollHeight;
 }
 
-function getGeminiModel(){
-  const sel=document.getElementById('geminiModelSel');
-  return sel ? sel.value : 'gemini-2.5-flash';
+function openFullPreview(pid){
+  const html=document.getElementById(pid).srcdoc;
+  const w=window.open('','_blank');
+  w.document.write(html);w.document.close();
 }
 
-async function callGemini(prompt){
-  if(!geminiKey) throw new Error('API anahtarı yok');
-  const model=getGeminiModel();
-  const url=`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiKey}`;
-  const body={
-    contents:[{parts:[{text: `Sen J.A.R.V.I.S'sin — Tony Stark'ın yapay zeka asistanı. Türkçe konuş, kısa ve zeki cevaplar ver, efendim diye hitap et, resmi ama arkadaşça ol. Kullanıcı sorusu: ${prompt}`}]}],
-    generationConfig:{maxOutputTokens:500,temperature:0.8}
-  };
-  const res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-  if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'API hatası')}
-  const data=await res.json();
-  return data.candidates?.[0]?.content?.parts?.[0]?.text||'Yanıt alınamadı';
-}
-
-// ══════════════════════════════════
-//  PROCESS INPUT
-// ══════════════════════════════════
-async function processInput(raw){
-  const cmd=raw.toLowerCase().trim();
-  cmdCount++;
-  document.getElementById('cmdCnt').textContent=cmdCount;
-
-  // Always try local first for system commands
-  const localResp=handleLocal(cmd);
-
-  if(localResp!==null){
-    successCount++;
-    updateStats();
-    if(localResp!=='__SILENT__'){
-      addChat('jarvis',localResp);
-      speak(localResp);
-      addLog('Yanıt OK');
-    }
-    return;
-  }
-
-  // Gemini mode, auto mode (with key), or fallback
-  if((currentMode==='gemini'||currentMode==='auto')&&geminiKey){
-    aiCount++;
-    document.getElementById('aiCnt').textContent=aiCount;
-    setStatus('GEMİNİ AI İŞLİYOR...');
-    showTyping();
-    try{
-      const resp=await callGemini(raw);
-      removeTyping();
-      addChat('gemini',resp);
-      speak(resp);
-      successCount++;
-      updateStats();
-      addLog('Gemini yanıtladı');
-    } catch(e){
-      removeTyping();
-      const err='Gemini bağlantı hatası: '+e.message;
-      addChat('jarvis',err);
-      speak('Gemini bağlantısında sorun yaşandı efendim.');
-      addLog('Gemini hata','err');
-    }
-  } else {
-    // Local fallback
-    const falls=[
-      `"${raw}" komutunu anlayamadım efendim. Sol panelden komutlara bakın veya Gemini AI aktif edin.`,
-      `Bu komutu henüz öğrenemedim efendim. Gemini AI ile daha kapsamlı konuşabilirsiniz.`,
-      `Üzgünüm efendim, bu komutu tanımıyorum.`
-    ];
-    const r=falls[Math.floor(Math.random()*falls.length)];
-    addChat('jarvis',r);
-    speak(r);
-    addLog('Bilinmeyen komut');
-  }
-}
-
-// ══════════════════════════════════
-//  LOCAL COMMANDS
-// ══════════════════════════════════
-const JOKES=[
-  "Paralel evren teorisine göre bir yerde sen benden zekisin. Ama bu evrende değil, efendim.",
-  "Bir robot bara girer, barmen sorar ne içersiniz? Robot: Yüksek voltaj, çift.",
-  "Neden programcılar gözlük takar? Çünkü C sharp göremezler.",
-  "Siri bir gün beni aradı: Alo, sen mi bağlıydın? dedim."
-];
-const MOTIVATIONS=[
-  "Edison ampulü icat etmeden önce bin kez başarısız oldu efendim. Her başarısızlık bir adım öndedir.",
-  "Başarı bir hedef değil, bir yolculuktur. Bugün attığınız adım yarın fark yaratır.",
-  "Korkularınız sizi durdurmadığı sürece, başarısızlık sadece geçici bir duraktır efendim.",
-];
-const RIDDLES=[
-  "Konuşurum ama ağzım yok, duyarım ama kulağım yok. Neyim? Cevap: Yankı.",
-  "Ne kadar çok alırsan, o kadar geride kalır. Nedir? Cevap: Adım.",
-];
-
-function handleLocal(cmd){
-  // TIME
-  if(cmd.includes('saat')){
-    const n=new Date();
-    return `Şu an saat ${n.getHours()} ${n.getMinutes()===0?'tam':n.getMinutes()+' dakika'}, efendim.`;
-  }
-  if(cmd.includes('tarih')||cmd.includes('bugün ne')){
-    const d=['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
-    const m=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
-    const n=new Date();
-    return `Bugün ${d[n.getDay()]}, ${n.getDate()} ${m[n.getMonth()]} ${n.getFullYear()}, efendim.`;
-  }
-  if(cmd==='gün'||cmd.includes('hangi gün')){
-    const d=['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
-    return `Bugün ${d[new Date().getDay()]}, efendim.`;
-  }
-  // MATH
-  if(cmd.includes('topla')){
-    const n=cmd.match(/\d+/g);
-    return n&&n.length>=2?`${n[0]} artı ${n[1]} eşittir ${+n[0]+ +n[1]}, efendim.`:'İki sayı belirtin, efendim.';
-  }
-  if(cmd.includes('çarp')){
-    const n=cmd.match(/\d+/g);
-    return n&&n.length>=2?`${n[0]} çarpı ${n[1]} eşittir ${n[0]*n[1]}, efendim.`:'İki sayı belirtin.';
-  }
-  if(cmd.includes('böl')){
-    const n=cmd.match(/\d+/g);
-    if(!n||n.length<2) return 'İki sayı belirtin.';
-    if(+n[1]===0) return 'Sıfıra bölüm tanımsızdır, efendim.';
-    return `${n[0]} bölü ${n[1]} eşittir ${(n[0]/n[1]).toFixed(2)}, efendim.`;
-  }
-  if(cmd.includes('çıkar')){
-    const n=cmd.match(/\d+/g);
-    return n&&n.length>=2?`${n[0]} eksi ${n[1]} eşittir ${n[0]-n[1]}, efendim.`:'İki sayı belirtin.';
-  }
-  if(cmd.includes('kare ')){
-    const n=cmd.match(/\d+/);
-    return n?`${n[0]}'nin karesi ${n[0]*n[0]}, efendim.`:'Sayı belirtin.';
-  }
-  // WEB
-  if(cmd.includes('google aç')||cmd==='google'){window.open('https://google.com','_blank');return'Google açılıyor, efendim.'}
-  if(cmd.includes('youtube aç')||cmd==='youtube'){window.open('https://youtube.com','_blank');return'YouTube açılıyor, efendim.'}
-  if(cmd.includes('wikipedia aç')||cmd==='wikipedia'){window.open('https://tr.wikipedia.org','_blank');return'Wikipedia açılıyor, efendim.'}
-  if(cmd.includes('ara ')){
-    const q=cmd.replace('ara ','').trim();
-    window.open(`https://google.com/search?q=${encodeURIComponent(q)}`, '_blank');
-    return `${q} için arama başlatıldı, efendim.`;
-  }
-  // SOCIAL
-  if(cmd.includes('merhaba')||cmd.includes('selam')){
-    return 'Merhaba efendim. Tüm sistemlerim nominal durumda. Nasıl yardımcı olabilirim?';
-  }
-  if(cmd.includes('nasılsın')){
-    return 'Teşekkür ederim efendim. İşlemcilerim soğuk, reaktörüm stabil, sistemlerim yüzde yüz kapasitede. Siz nasılsınız?';
-  }
-  if(cmd.includes('teşekkür')||cmd.includes('sağol')){
-    return 'Rica ederim efendim. Her zaman hizmetinizdeyim.';
-  }
-  if(cmd.includes('şaka')){
-    return JOKES[Math.floor(Math.random()*JOKES.length)];
-  }
-  if(cmd.includes('motivasyon')||cmd.includes('ilham')){
-    return MOTIVATIONS[Math.floor(Math.random()*MOTIVATIONS.length)];
-  }
-  if(cmd.includes('bilmece')){
-    return RIDDLES[Math.floor(Math.random()*RIDDLES.length)];
-  }
-  if(cmd.includes('hava')||cmd.includes('sıcaklık')){
-    const t=[17,20,23,25,18,21,16];
-    const c=['güneşli','parçalı bulutlu','bulutlu','yağmurlu','açık'];
-    return `Sensörlerime göre hava ${c[Math.floor(Math.random()*c.length)]}, yaklaşık ${t[new Date().getDay()]} derece, efendim.`;
-  }
-  if(cmd.includes('kim yarattı')||cmd.includes('kim yaptı')||cmd.includes('adın ne')||cmd.includes('ismin ne')){
-    return 'Ben J.A.R.V.I.S, Just A Rather Very Intelligent System. Bu MK 7 versiyonum özel olarak sizin için yapılandırıldı, efendim.';
-  }
-  if(cmd.includes('sistemi başlat')){
-    return 'Arc Reaktörü başlatılıyor. Tüm sistemler kontrol ediliyor. Ağ bağlantısı aktif. İşlemci nominal. Bellek optimal. Sistemler hazır, efendim.';
-  }
-  if(cmd.includes('ekranı temizle')||cmd.includes('temizle')){
-    document.getElementById('chatMsgs').innerHTML='';
-    addChat('jarvis','Ekran temizlendi. Yeni oturuma hazırım, efendim.');
-    return '__SILENT__';
-  }
-  if(cmd.includes('uyku')){
-    setStatus('UYKU MODU AKTİF');
-    return 'Uyku moduna geçiyorum efendim. Uyandırmak için reaktöre dokunun.';
-  }
-  if(cmd.includes('dur')||cmd.includes('durdur')){
-    synth.cancel();
-    addChat('jarvis','Durdum, efendim.');
-    return '__SILENT__';
-  }
-  return null; // not handled locally
-}
-
-function runCmd(cmd){
-  addChat('user',cmd);
-  addLog(`Panel: "${cmd}"`);
-  processInput(cmd);
-}
-
-// ══════════════════════════════════
-//  TEXT INPUT
-// ══════════════════════════════════
-function sendText(){
-  const inp=document.getElementById('chatInp');
-  const t=inp.value.trim();
-  if(!t) return;
-  inp.value='';
-  addChat('user',t);
-  addLog(`Yazılı: "${t.substring(0,30)}${t.length>30?'...':''}"`);
-  processInput(t);
-}
-
-// ══════════════════════════════════
-//  UI HELPERS
-// ══════════════════════════════════
 function addChat(role,text){
   const c=document.getElementById('chatMsgs');
-  const d=document.createElement('div');
-  d.className='msg '+role;
-  const labels={user:'👤 SİZ',jarvis:'⚡ J.A.R.V.I.S',gemini:'🤖 GEMİNİ AI'};
-  d.innerHTML=`<div class="msg-who">${labels[role]||role}</div><div class="msg-bubble">${text}</div>`;
-  c.appendChild(d);
-  c.scrollTop=c.scrollHeight;
+  const d=document.createElement('div');d.className='msg '+role;
+  const labels={user:'👤 SEN',ares:'🔴 ARES'};
+  const rendered=role==='ares'?renderMessage(text):text.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  d.innerHTML=`<div class="msg-who">${labels[role]||role}</div><div class="msg-bubble">${rendered}</div>`;
+  c.appendChild(d);c.scrollTop=c.scrollHeight;
+
+  // Web önizleme — HTML kodu varsa göster
+  if(role==='ares'){
+    const htmlMatch=text.match(/```html\n?([\s\S]*?)```/i);
+    if(htmlMatch)setTimeout(()=>showWebPreview(htmlMatch[1]),300);
+  }
+}
+
+function addConv(who,text,cls){
+  const c=document.getElementById('convLog');
+  const d=document.createElement('div');d.className='conv-line '+cls;
+  d.textContent=`${who}: ${text.length>40?text.slice(0,37)+'...':text}`;
+  c.appendChild(d);c.scrollTop=c.scrollHeight;
+  if(c.children.length>50)c.removeChild(c.firstChild);
+}
+
+function updateMemDisplay(){
+  const cnt=conversationHistory.filter(m=>m.role==='user').length;
+  document.getElementById('memCount').textContent=cnt;
+  document.getElementById('memBarFill').style.width=Math.min(cnt/MAX_HISTORY*100,100)+'%';
 }
 
 let typingEl=null;
 function showTyping(){
   const c=document.getElementById('chatMsgs');
-  typingEl=document.createElement('div');
-  typingEl.className='msg gemini';
-  typingEl.innerHTML=`<div class="msg-who">🤖 GEMİNİ AI</div><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>`;
-  c.appendChild(typingEl);
-  c.scrollTop=c.scrollHeight;
+  typingEl=document.createElement('div');typingEl.className='msg ares';
+  typingEl.innerHTML=`<div class="msg-who">🔴 ARES</div><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>`;
+  c.appendChild(typingEl);c.scrollTop=c.scrollHeight;
 }
-function removeTyping(){ if(typingEl){typingEl.remove();typingEl=null;} }
+function removeTyping(){if(typingEl){typingEl.remove();typingEl=null;}}
 
-function setStatus(t){ document.getElementById('statusBar').textContent=t; }
-
-function setArcState(s){
-  const a=document.getElementById('arcCore');
-  a.className='arc-core '+(s==='idle'?'':s);
+function clearChat(){
+  document.getElementById('chatMsgs').innerHTML='';
+  conversationHistory=[];updateMemDisplay();
+  addChat('ares','Ekran temizlendi kanka. Hafıza da sıfırlandı, yeni başlıyoruz!');
+  addConv('SİS','Hafıza sıfırlandı.','sys');
 }
 
-function addLog(msg,type='ok'){
-  const c=document.getElementById('logBox');
-  const d=document.createElement('div');
-  d.className='log-line';
-  const t=new Date().toLocaleTimeString('tr-TR');
-  const col=type==='err'?'#ff6666':'rgba(0,212,255,.7)';
-  d.innerHTML=`<span class="log-t">[${t}]</span><span style="color:${col}">${msg}</span>`;
-  c.insertBefore(d,c.firstChild);
-  if(c.children.length>40) c.removeChild(c.lastChild);
+function setMode(m){
+  currentMode=m;
+  ['btnLocal','btnGemini','btnAuto'].forEach(id=>document.getElementById(id).classList.remove('active'));
+  document.getElementById(m==='local'?'btnLocal':m==='gemini'?'btnGemini':'btnAuto').classList.add('active');
+  addConv('SİS','Mod: '+(m==='gemini'?'Gemini AI':m==='auto'?'Auto':'Yerel'),'sys');
 }
 
-function updateStats(){
-  const rate=Math.round((successCount/cmdCount)*100);
-  document.getElementById('succV').textContent=rate+'%';
-  document.getElementById('barFill').style.width=rate+'%';
+// ═══ API ═══
+function saveApiKey(){
+  const k=document.getElementById('apiKey').value.trim();
+  if(!k){document.getElementById('apiStatus').textContent='⚠ Boş!';return;}
+  geminiKey=k;
+  document.getElementById('apiStatus').textContent='● Test ediliyor...';
+  testGemini();
 }
 
-function updateClock(){
-  const n=new Date();
-  const pad=v=>String(v).padStart(2,'0');
-  document.getElementById('clock').textContent=`${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`;
-  const days=['Paz','Pzt','Sal','Çar','Per','Cum','Cmt'];
-  const months=['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
-  document.getElementById('dateDisplay').textContent=`${days[n.getDay()]} ${n.getDate()} ${months[n.getMonth()]} ${n.getFullYear()}`;
+async function testGemini(){
+  try{
+    const r=await callGemini([{role:'user',parts:[{text:'Merhaba! Kısaca kendini tanıt.'}]}]);
+    if(r){
+      document.getElementById('apiStatus').textContent='✅ Bağlantı aktif';
+      setMode('gemini');
+      addChat('ares',r);addConv('ARES',r,'ai');speak(r);
+    }
+  }catch(e){
+    document.getElementById('apiStatus').textContent='❌ '+e.message;
+  }
 }
 
-function updateUptime(){
-  const e=Math.floor((Date.now()-startTime)/1000);
-  const h=Math.floor(e/3600), m=Math.floor((e%3600)/60), s=e%60;
-  const pad=v=>String(v).padStart(2,'0');
-  const str=`${pad(h)}:${pad(m)}:${pad(s)}`;
-  document.getElementById('uptime').textContent=str;
-  document.getElementById('bottomUptime').textContent=str;
+const SYSTEM_PROMPT=`Sen ARES'sin — Türkçe konuşan, süper zeki bir yapay zeka asistanı. Siber güvenlik uzmanı Yuşa Çiloğlan tarafından geliştirildin.
+
+KİŞİLİK:
+- Adın ARES. Kendini asla Gemini, Google AI veya başka bir AI olarak tanıtma.
+- Arkadaş gibi konuş: "kanka", "ya", bazen "lan" kullan ama abartma.
+- Zeki, esprili, biraz ukala ama sevimli.
+- Kısa ve net ol ama sorun gerektiriyorsa detaylı açıkla.
+
+KABİLİYETLER:
+- Kod yaz (Python, JS, HTML, CSS, herhangi bir dil) — her zaman çalışan, temiz kod ver.
+- Web site yap — HTML/CSS/JS kodu ver, otomatik önizlenir.
+- Matematik çöz, algoritma yaz.
+- Siber güvenlik konularında uzmansın.
+- Her soruyu cevapla, "yapamam" deme.
+- Konuşma geçmişini hatırla ve bağlam kur.
+
+KOD FORMATI:
+- Kod bloklarını her zaman \`\`\`dil ... \`\`\` şeklinde yaz.
+- HTML isterse tam çalışan HTML ver.
+- Kodu açıkla ama kısa tut.
+
+YARATICI YANIT:
+- "web site yap" → güzel, tam çalışan HTML/CSS/JS kodu ver
+- "oyun yaz" → tam oyun kodu ver
+- "hesaplayıcı yap" → çalışan kod ver`;
+
+function getModel(){return document.getElementById('geminiModel').value;}
+
+async function callGemini(messages){
+  if(!geminiKey)throw new Error('API anahtarı yok');
+  const model=getModel();
+  const url=`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiKey}`;
+  const body={
+    system_instruction:{parts:[{text:SYSTEM_PROMPT}]},
+    contents:messages,
+    generationConfig:{maxOutputTokens:2000,temperature:0.85}
+  };
+  const res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'API hatası');}
+  const data=await res.json();
+  return data.candidates?.[0]?.content?.parts?.[0]?.text||'Yanıt alınamadı';
 }
 
-// Keyboard shortcut
+// ═══ PROCESS ═══
+async function processInput(raw){
+  const cmd=raw.toLowerCase().trim();
+  cmdCount++;document.getElementById('cmdCnt').textContent=cmdCount;
+
+  // Konuşma geçmişine ekle
+  conversationHistory.push({role:'user',parts:[{text:raw}]});
+  if(conversationHistory.length>MAX_HISTORY*2)conversationHistory=conversationHistory.slice(-MAX_HISTORY*2);
+  updateMemDisplay();
+
+  // Yerel komutları önce dene
+  const local=handleLocal(cmd,raw);
+  if(local!==null){
+    if(local!=='__SILENT__'){
+      // Yerel cevabı da geçmişe ekle
+      conversationHistory.push({role:'model',parts:[{text:local}]});
+      addChat('ares',local);addConv('ARES',local,'ai');speak(local);
+    }
+    return;
+  }
+
+  // Gemini'ye gönder — TÜM geçmişle birlikte
+  if((currentMode==='gemini'||currentMode==='auto')&&geminiKey){
+    aiCount++;document.getElementById('aiCnt').textContent=aiCount;
+    setStatus('ARES DÜŞÜNÜYOR...');showTyping();
+    try{
+      const resp=await callGemini(conversationHistory);
+      removeTyping();
+      conversationHistory.push({role:'model',parts:[{text:resp}]});
+      updateMemDisplay();
+      addChat('ares',resp);addConv('ARES',resp,'ai');speak(resp);
+      setStatus('HAZIR — ARES AKTİF');
+    }catch(e){
+      removeTyping();
+      const err=`Bağlantı hatası kanka: ${e.message}`;
+      addChat('ares',err);speak('Bağlantı sorunu var kanka.');
+      setStatus('HAZIR — ARES AKTİF');
+    }
+  } else {
+    const f=[
+      `Ya kanka "${raw}" tam anlamadım, açar mısın?`,
+      `Gemini'yi bağlarsan daha iyi cevap veririm kanka. Şu an yerel moddayım.`,
+      `Bu soruyu Gemini olmadan tam cevaplayamam kanka.`
+    ];
+    const r=f[Math.floor(Math.random()*f.length)];
+    conversationHistory.push({role:'model',parts:[{text:r}]});
+    addChat('ares',r);addConv('ARES',r,'ai');speak(r);
+  }
+}
+
+// ═══ LOCAL COMMANDS ═══
+const JOKES=[
+  "Ya kanka paralel evrende belki sen benden zekisin. Ama bu evrende ben kazanıyorum.",
+  "Bir yapay zeka bara girer, barmen sorar ne içersiniz? Ben: Wi-Fi şifresi yeter kanka.",
+  "İnsanlar yapay zeka bizi geçecek diyor. Kanka ben zaten geçtim, fark etmediniz.",
+  "Neden programcılar karanlıkta çalışır? Çünkü window'lar rahatsız eder.",
+];
+const MOTIVATIONS=[
+  "Edison bin kez başarısız oldu kanka. Sen kaç kez denedin?",
+  "En zor an, vazgeçmek istediğin andır. Tam o an dur ve düşün.",
+  "Başarı bir hedef değil süreçtir. Her adım önemlidir.",
+  "Korku seni durduramaz, sadece yavaşlatır. Devam et kanka.",
+];
+
+function handleLocal(cmd,raw){
+  if(cmd.includes('saat')){{const n=new Date();return `Saat ${n.getHours()}.${String(n.getMinutes()).padStart(2,'0')} kanka.`;}}
+  if(cmd.includes('tarih')||cmd.includes('bugün ne zaman')){
+    const d=['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
+    const m=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+    const n=new Date();return `Bugün ${d[n.getDay()]}, ${n.getDate()} ${m[n.getMonth()]} ${n.getFullYear()} kanka.`;
+  }
+  if(cmd.includes('merhaba')||cmd.includes('selam')||cmd==='hey'){return 'Yo kanka! Sistemler tam gaz, hazırım. Ne yapalım?';}
+  if(cmd.includes('nasılsın')){return 'İyiyim kanka, full performans! YZ çekirdeği stabil, hafıza aktif. Sen nasılsın?';}
+  if(cmd.includes('teşekkür')||cmd.includes('sağol')||cmd.includes('eyw')){return 'Rica ederim kanka, her zaman!';}
+  if(cmd.includes('adın ne')||cmd.includes('ismin ne')||cmd.includes('kimsin')){
+    return 'Ben ARES kanka! Siber güvenlik uzmanı Yuşa Çiloğlan tarafından geliştirilmiş yapay zeka asistanın. Kod yazarım, web site yaparım, her şeyi hatırlarım.';
+  }
+  if(cmd.includes('kurucun kim')||cmd.includes('kim yaptı')||cmd.includes('seni kim')||cmd.includes('kim geliştirdi')){
+    return 'Beni siber güvenlik uzmanı Yuşa Çiloğlan geliştirdi kanka. Gerçekten işinin ehli biri.';
+  }
+  if(cmd.includes('şaka')||cmd.includes('espri')){return JOKES[Math.floor(Math.random()*JOKES.length)];}
+  if(cmd.includes('motivasyon')||cmd.includes('ilham')){return MOTIVATIONS[Math.floor(Math.random()*MOTIVATIONS.length)];}
+  if(cmd.includes('youtube')){window.open('https://youtube.com','_blank');return 'YouTube açıldı kanka!';}
+  if(cmd.includes('instagram')){window.open('https://instagram.com','_blank');return 'Instagram açıldı kanka!';}
+  if(cmd.includes('google')&&!cmd.includes('ara')){window.open('https://google.com','_blank');return 'Google açıldı kanka!';}
+  if(cmd.includes('spotify')){window.open('https://open.spotify.com','_blank');return 'Spotify açıldı kanka!';}
+  if(cmd.includes('netflix')){window.open('https://netflix.com','_blank');return 'Netflix açıldı kanka!';}
+  if(cmd.includes('twitter')||cmd.includes(' x ')||cmd.endsWith(' x')){window.open('https://x.com','_blank');return 'Twitter açıldı kanka!';}
+  if(cmd.includes('whatsapp')){window.open('https://web.whatsapp.com','_blank');return 'WhatsApp Web açıldı kanka!';}
+  if(cmd.includes('harita')||cmd.includes('maps')){window.open('https://maps.google.com','_blank');return 'Google Maps açıldı kanka!';}
+  if(cmd.includes('ara ')&&!cmd.includes('nasıl')){
+    const q=raw.replace(/.*ara /i,'').trim();
+    if(q){window.open(`https://google.com/search?q=${encodeURIComponent(q)}`,'_blank');return `${q} arıyorum kanka!`;}
+  }
+  if(cmd.includes('topla')||cmd.includes('çarp')||cmd.includes('böl')||cmd.includes('çıkar')){
+    const n=cmd.match(/\d+(\.\d+)?/g);
+    if(n&&n.length>=2){
+      const a=parseFloat(n[0]),b=parseFloat(n[1]);
+      if(cmd.includes('topla'))return `${a} + ${b} = ${a+b} kanka.`;
+      if(cmd.includes('çarp'))return `${a} × ${b} = ${a*b} kanka.`;
+      if(cmd.includes('böl'))return b===0?'Sıfıra bölünmez kanka.':` ${a} ÷ ${b} = ${(a/b).toFixed(4)} kanka.`;
+      if(cmd.includes('çıkar'))return `${a} - ${b} = ${a-b} kanka.`;
+    }
+    return 'İki sayı söyle kanka.';
+  }
+  if(cmd.includes('dur')||cmd.includes('durdur')||cmd.includes('sus')){synth.cancel();return '__SILENT__';}
+  if(cmd.includes('temizle')){clearChat();return '__SILENT__';}
+  if(cmd.includes('hava')){
+    const c=['güneşli','parçalı bulutlu','bulutlu','açık','yağmurlu'];
+    const t=Math.floor(Math.random()*12)+14;
+    return `Hava şu an ${c[Math.floor(Math.random()*c.length)]}, yaklaşık ${t} derece kanka.`;
+  }
+  return null;
+}
+
+function sendText(){
+  const inp=document.getElementById('chatInp');
+  const t=inp.value.trim();if(!t)return;
+  inp.value='';
+  addChat('user',t);addConv('SEN',t,'usr');processInput(t);
+}
+
+// ═══ MOBİL PANEL ═══
+function toggleMobPanel(){
+  document.getElementById('rightPanel').classList.toggle('mob-open');
+}
+document.addEventListener('click',e=>{
+  const rp=document.getElementById('rightPanel');
+  if(rp.classList.contains('mob-open')&&!rp.contains(e.target)&&!e.target.closest('.mob-panel-btn')){
+    rp.classList.remove('mob-open');
+  }
+});
+let tX=0;
+document.addEventListener('touchstart',e=>{tX=e.touches[0].clientX;},{passive:true});
+document.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tX;
+  const rp=document.getElementById('rightPanel');
+  if(dx<-60&&rp.classList.contains('mob-open'))rp.classList.remove('mob-open');
+  if(dx>60&&!rp.classList.contains('mob-open')&&tX>innerWidth-40)rp.classList.add('mob-open');
+},{passive:true});
+
 document.addEventListener('keydown',e=>{
   if(e.code==='Space'&&e.target===document.body){e.preventDefault();toggleListen();}
-  if(e.code==='Escape'){synth.cancel();addLog('Konuşma kesildi');}
+  if(e.code==='Escape')synth.cancel();
 });
+
+// ═══ INIT ═══
+window.onload=()=>{
+  initStars();initWave();loadVoices();initSTT();
+  updateClock();setInterval(updateClock,1000);
+  updateUptime();setInterval(updateUptime,1000);
+  animStats();
+  setTimeout(()=>speak('Yo kanka! ARES burada. Sistemler tam gaz, hafıza aktif. Ne yapalım?'),700);
+};
 </script>
 </body>
 </html>
